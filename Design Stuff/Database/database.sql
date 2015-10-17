@@ -6,6 +6,7 @@ baseDamage REAL,
 baseMoveSpeed REAL,
 optionFX INTEGER,
 optionMusic INTEGER,
-optionSoundLevel INTEGER,
+optionSoundLevel REAL,
 optionTilt INTEGER
 );
+
