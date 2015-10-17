@@ -16,6 +16,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        /***********************************
+         * USEFUL FOR TESTING
+         **********************************/
         this.deleteDatabase(DBHelper.DATABASE_NAME);
 
         DBHelper dbHelper = new DBHelper(getApplicationContext());
