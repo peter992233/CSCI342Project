@@ -1,46 +1,16 @@
 package com.example.peter.csci342_groupproject;
 
-import android.graphics.Point;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
 
 public class MainActivity extends AppCompatActivity {
 
-
-    GameView gmv;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
-
-        //This will eventually be moved to a Button callback from MainActivity to start the game
-        Display display = getWindowManager().getDefaultDisplay();
-        Point size = new Point();
-        display.getSize(size);
-        gmv = new GameView(this,size.x,size.y);
-        setContentView(gmv);
-        //End of Eventual Callback
-
-    }
-
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-
-        gmv.Pause();
-
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        gmv.Resume();
+        setContentView(R.layout.activity_main);
     }
 
     @Override
