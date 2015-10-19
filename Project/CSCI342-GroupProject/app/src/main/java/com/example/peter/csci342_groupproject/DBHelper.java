@@ -7,12 +7,13 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class DBHelper extends SQLiteOpenHelper{
 
     public static final String DATABASE_NAME = "gameDB.db";
-    private static final int DATABASE_VERSION = 1; //Change this when you change your database
+    private static final int DATABASE_VERSION = 2; //Change this when you change your database
 
     private static final String MAIN_CREATE = "create table " + MainTable.MainEntry.TABLE_NAME + " ("
             + MainTable.MainEntry.COLUMN_NAME_BASE_LIVES + " integer, "
             + MainTable.MainEntry.COLUMN_NAME_BASE_DAMAGE + " real, "
             + MainTable.MainEntry.COLUMN_NAME_BASE_SPEED + " real, "
+            + MainTable.MainEntry.COLUMN_NAME_PLAYER_CURRENCY + " integer, "
             + MainTable.MainEntry.COLUMN_NAME_OPTION_FX + " integer, "
             + MainTable.MainEntry.COLUMN_NAME_OPTION_MUSIC + " integer, "
             + MainTable.MainEntry.COLUMN_NAME_OPTION_SOUND + " real, "
@@ -38,11 +39,10 @@ public class DBHelper extends SQLiteOpenHelper{
     //When our database version changes, in this case, simply delete the database and recreate it:
     public void onUpgrade(SQLiteDatabase DB, int oldVersion, int newVersion) {
         DB.execSQL("DROP TABLE IF EXISTS " + MainTable.MainEntry.TABLE_NAME);
+        DB.execSQL("DROP TABLE IF EXISTS " + HighScoreTable.HighScoreEntry.TABLE_NAME);
         onCreate(DB);
     }
 
-    //If when a Person is deleted you wish to cascade the delete to all it's Pets, include the following:
-    //(You also need to include ON DELETE CASCADE on the foreign key above when you're creating the Pet table)
     @Override
     public void onOpen(SQLiteDatabase DB) {
         super.onOpen(DB);
