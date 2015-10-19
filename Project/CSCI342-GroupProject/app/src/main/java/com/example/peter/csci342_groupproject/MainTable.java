@@ -12,6 +12,7 @@ public class MainTable {
         public static final String COLUMN_NAME_BASE_LIVES = "baseLives";
         public static final String COLUMN_NAME_BASE_DAMAGE = "baseDamage";
         public static final String COLUMN_NAME_BASE_SPEED = "baseSpeed";
+        public static final String COLUMN_NAME_PLAYER_CURRENCY = "playerCurrency";
         public static final String COLUMN_NAME_OPTION_FX = "optionFX";
         public static final String COLUMN_NAME_OPTION_MUSIC = "optionMusic";
         public static final String COLUMN_NAME_OPTION_SOUND = "optionSound";
