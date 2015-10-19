@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.support.v4.view.MotionEventCompat;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
@@ -221,38 +222,63 @@ public class GameView extends SurfaceView implements Runnable {
 
 
 
-
-
-
     @Override
     public boolean onTouchEvent(MotionEvent motionEvent){
-        switch(motionEvent.getAction() & MotionEvent.ACTION_MASK){
 
-            case MotionEvent.ACTION_DOWN:{
+
+
+
+            switch(motionEvent.getAction() & MotionEvent.ACTION_MASK){
+
+
+                case MotionEvent.ACTION_DOWN:{
                     paused = false;
                     pShip.setMovementState(pShip.STOPPED);
                     //If the touch is in the top 7/8ths of the screen it is counted as movement
-                    if(motionEvent.getY() > screenY - screenY/4){
-                        if(motionEvent.getX() > screenX / 2){
+                    if (motionEvent.getY() > screenY - screenY / 4) {
+                        if (motionEvent.getX() > screenX / 2) {
                             pShip.setMovementState(pShip.RIGHT);
-                        }else{
+                        } else {
                             pShip.setMovementState(pShip.LEFT);
                         }
                     }
 
-                    if(motionEvent.getY() < screenY-screenY/4){
-                        if(projectile.shoot(pShip.getX() + pShip.getWidth()/2,screenY,projectile.UP));
+                    if (motionEvent.getY() < screenY - screenY / 4) {
+                        if (projectile.shoot(pShip.getX() + pShip.getWidth() / 2, screenY, projectile.UP));
+                    }
+                    break;
+                }
+
+                case MotionEvent.ACTION_POINTER_DOWN:{
+                    int index = motionEvent.getActionIndex();
+                    int xPos = (int) MotionEventCompat.getX(motionEvent, index);
+                    int yPos = (int) MotionEventCompat.getY(motionEvent, index);
+
+
+                    paused = false;
+                    pShip.setMovementState(pShip.STOPPED);
+                    //If the touch is in the top 7/8ths of the screen it is counted as movement
+                    if (yPos > screenY - screenY / 4) {
+                        if (xPos > screenX / 2) {
+                            pShip.setMovementState(pShip.RIGHT);
+                        } else {
+                            pShip.setMovementState(pShip.LEFT);
+                        }
                     }
 
-                break;
-            }
+                    if (yPos < screenY - screenY / 4) {
+                        if (projectile.shoot(pShip.getX() + pShip.getWidth() / 2, screenY, projectile.UP));
+                    }
+                    break;
+                }
 
-            case MotionEvent.ACTION_UP:{
-                paused = false;
-                pShip.setMovementState(pShip.STOPPED);
 
-                break;
-            }
+                case MotionEvent.ACTION_UP:{
+                    paused = false;
+                    pShip.setMovementState(pShip.STOPPED);
+
+                    break;
+                }
 
 
         }

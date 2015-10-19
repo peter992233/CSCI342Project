@@ -15,63 +15,75 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:gravity="center_horizontal"
-        android:layout_alignRight="@+id/button"
-        android:layout_alignEnd="@+id/button"
-        android:textSize="35dp" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Start Game"
-        android:id="@+id/button"
-        android:layout_above="@+id/button2"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Upgrades"
-        android:id="@+id/button2"
-        android:layout_above="@+id/button3"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignRight="@+id/button3"
-        android:layout_alignEnd="@+id/button3" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Highscores"
-        android:id="@+id/button3"
-        android:layout_above="@+id/button4"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignRight="@+id/button4"
-        android:layout_alignEnd="@+id/button4" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Options"
-        android:id="@+id/button4"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
+        android:textSize="35dp"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
 
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:layout_height="100dp"
         android:id="@+id/imageView"
         android:layout_below="@+id/textView"
-        android:layout_above="@+id/button"
         android:layout_alignRight="@+id/textView"
         android:layout_alignEnd="@+id/textView"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
         android:background="#a2ffea" />
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/buttLayout"
+        android:layout_below="@+id/imageView">
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/StGame"
+            android:id="@+id/startGameButton"
+            android:layout_above="@+id/button2"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:textSize="10dp" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/Upg"
+            android:id="@+id/UpgradeButton"
+            android:layout_above="@+id/button3"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignRight="@+id/button3"
+            android:layout_alignEnd="@+id/button3"
+            android:textSize="10dp" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/HighScore"
+            android:id="@+id/HighScoreButton"
+            android:layout_above="@+id/button4"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignRight="@+id/button4"
+            android:layout_alignEnd="@+id/button4"
+            android:textSize="10dp" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Options"
+            android:id="@+id/OptionsButton"
+            android:textSize="10dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
+    </LinearLayout>
+
 </RelativeLayout>
