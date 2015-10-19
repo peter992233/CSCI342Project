@@ -51,5 +51,4 @@ public class DBHelper extends SQLiteOpenHelper{
             DB.execSQL("PRAGMA foreign_keys=ON;");
         }
     }
-
 }

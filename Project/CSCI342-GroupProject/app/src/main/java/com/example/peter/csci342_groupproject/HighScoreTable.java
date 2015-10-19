@@ -9,7 +9,7 @@ public class HighScoreTable{
     public static abstract class HighScoreEntry implements BaseColumns {
 
         public static final String TABLE_NAME = "HighScoreTable";
-        public static final String COLUMN_NAME_UserName= "baseLives";
-        public static final String COLUMN_NAME_HighScore = "baseDamage";
+        public static final String COLUMN_NAME_UserName= "userName";
+        public static final String COLUMN_NAME_HighScore = "highScore";
     }
 }
