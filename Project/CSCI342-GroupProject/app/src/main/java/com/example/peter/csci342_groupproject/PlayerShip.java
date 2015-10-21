@@ -35,14 +35,14 @@ public class PlayerShip {
     public PlayerShip(Context context, int screenX, int screenY){
 
         rect = new RectF();
-        width = screenX / 10;
-        height = screenY / 10;
+        width = screenX / 15;
+        height = screenY / 7;
 
         x = screenX / 2;
         y = screenY - 20;
 
         //Create the Bitmap
-        bmp = BitmapFactory.decodeResource(context.getResources(), R.drawable.spitfire);
+        bmp = BitmapFactory.decodeResource(context.getResources(), R.drawable.player);
         bmp = Bitmap.createScaledBitmap(bmp, (int) width, (int) height, false);
 
 
@@ -55,9 +55,7 @@ public class PlayerShip {
         return rect;
     }
 
-    public Bitmap getBmp() {
-        return bmp;
-    }
+    public Bitmap getBmp() { return bmp; }
 
     public float getX() {
         return x;
@@ -74,7 +72,6 @@ public class PlayerShip {
     public float getHeight(){
         return height;
     }
-
 
     public void update(long fps){
 

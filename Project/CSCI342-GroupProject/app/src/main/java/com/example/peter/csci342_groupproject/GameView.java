@@ -104,7 +104,7 @@ public class GameView extends SurfaceView implements Runnable {
 
         //Prepare Bullets
 
-        projectile = new Projectile(screenY);
+        projectile = new Projectile(context, screenY);
 
         //Init bullet Array
         //Build Enemy array
@@ -179,21 +179,22 @@ public class GameView extends SurfaceView implements Runnable {
 
             canvas = ourHolder.lockCanvas();
 
-            canvas.drawColor(Color.argb(255,26,128,182));
-            paint.setColor(Color.argb(255,255,255,255));
-
-            //Draw the Player Ship
-            canvas.drawBitmap(pShip.getBmp(), pShip.getX(),screenY-(pShip.getHeight()*2),paint);
-
-            //Draw the Enemies
+            canvas.drawColor(Color.argb(255, 26, 128, 182));
+            paint.setColor(Color.argb(255, 255, 255, 255));
 
             //Draw the Active Bullets
 
             for(Projectile p : playerBullets ) {
                 if(p.getStatus()){
-                    canvas.drawRect(p.getRect(),paint);
+                    //canvas.drawRect(p.getRect(),paint);
+                    canvas.drawBitmap(p.getBmp(), p.getX(),p.getY(), paint);
                 }
             }
+
+            //Draw the Player Ship
+            canvas.drawBitmap(pShip.getBmp(), pShip.getX(),screenY-(pShip.getHeight()*2),paint);
+
+            //Draw the Enemies
 
             //Draw Score & Lives
 
@@ -258,7 +259,7 @@ public class GameView extends SurfaceView implements Runnable {
 
                             shotTap = true;
                             playerBullets.add(projectile);
-                            projectile = new Projectile(screenY); // reset projectile
+                            projectile = new Projectile(context, screenY); // reset projectile
                         }
                     }
 
@@ -289,7 +290,7 @@ public class GameView extends SurfaceView implements Runnable {
 
                             shotTap = true;
                             playerBullets.add(projectile);
-                            projectile = new Projectile(screenY); // reset projectile
+                            projectile = new Projectile(context, screenY); // reset projectile
                         }
                     }
                     break;
