@@ -8,4 +8,5 @@
     <string name="HighScore">Highscores</string>
     <string name="title_activity_game">GameActivity</string>
     <string name="title_activity_high_scores">HighScores</string>
+    <string name="title_activity_upgrades">Upgrades</string>
 </resources>

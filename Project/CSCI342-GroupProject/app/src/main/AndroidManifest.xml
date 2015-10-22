@@ -25,6 +25,14 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.peter.csci342_groupproject.MainActivity" />
         </activity>
+        <activity
+            android:name=".UpgradesActivity"
+            android:label="@string/title_activity_upgrades"
+            android:parentActivityName=".MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.peter.csci342_groupproject.MainActivity" />
+        </activity>
     </application>
 
 </manifest>

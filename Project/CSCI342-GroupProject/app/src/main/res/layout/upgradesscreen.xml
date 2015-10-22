@@ -8,7 +8,7 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="Upgrades"
-        android:id="@+id/textView4"
+        android:id="@+id/Heading"
         android:textSize="32dp"
         android:layout_gravity="center_horizontal"
         android:layout_alignParentTop="true"
@@ -19,12 +19,12 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="Lives"
-        android:id="@+id/textView5"
-        android:layout_below="@+id/textView4"
+        android:id="@+id/LivesText"
+        android:layout_below="@+id/Heading"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_toLeftOf="@+id/textView4"
-        android:layout_toStartOf="@+id/textView4"
+        android:layout_toLeftOf="@+id/Heading"
+        android:layout_toStartOf="@+id/Heading"
         android:gravity="center_horizontal"
         android:layout_marginTop="25dp" />
 
@@ -33,11 +33,11 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="Weapon Damage"
-        android:id="@+id/textView6"
+        android:id="@+id/DamageText"
         android:gravity="center_horizontal"
-        android:layout_below="@+id/textView5"
-        android:layout_alignRight="@+id/textView5"
-        android:layout_alignEnd="@+id/textView5"
+        android:layout_below="@+id/LivesText"
+        android:layout_alignRight="@+id/LivesText"
+        android:layout_alignEnd="@+id/LivesText"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_marginTop="25dp" />
@@ -47,13 +47,13 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="Movement Speed"
-        android:id="@+id/textView7"
+        android:id="@+id/SpeedText"
         android:gravity="center_horizontal"
-        android:layout_below="@+id/textView6"
+        android:layout_below="@+id/DamageText"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_alignRight="@+id/textView6"
-        android:layout_alignEnd="@+id/textView6"
+        android:layout_alignRight="@+id/DamageText"
+        android:layout_alignEnd="@+id/DamageText"
         android:layout_marginTop="25dp" />
 
     <ImageView
@@ -61,57 +61,57 @@
         android:layout_height="25dp"
         android:id="@+id/imageView3"
         android:background="#ff1700"
-        android:layout_alignTop="@+id/textView5"
-        android:layout_alignRight="@+id/textView5"
-        android:layout_alignEnd="@+id/textView5" />
+        android:layout_alignTop="@+id/LivesText"
+        android:layout_alignRight="@+id/LivesText"
+        android:layout_alignEnd="@+id/LivesText" />
 
     <ImageView
         android:layout_width="25dp"
         android:layout_height="25dp"
-        android:id="@+id/imageView4"
+        android:id="@+id/Lives2"
         android:background="#ff1700"
-        android:layout_alignTop="@+id/textView5"
-        android:layout_toRightOf="@+id/textView5"
-        android:layout_toEndOf="@+id/textView5"
+        android:layout_alignTop="@+id/LivesText"
+        android:layout_toRightOf="@+id/LivesText"
+        android:layout_toEndOf="@+id/LivesText"
         android:layout_marginLeft="10dp" />
 
     <ImageView
         android:layout_width="25dp"
         android:layout_height="25dp"
-        android:id="@+id/imageView5"
+        android:id="@+id/Lives3"
         android:background="#ff1700"
-        android:layout_alignTop="@+id/imageView4"
-        android:layout_toRightOf="@+id/imageView4"
-        android:layout_toEndOf="@+id/imageView4"
+        android:layout_alignTop="@+id/Lives2"
+        android:layout_toRightOf="@+id/Lives2"
+        android:layout_toEndOf="@+id/Lives2"
         android:layout_marginLeft="10dp" />
 
     <ImageView
         android:layout_width="25dp"
         android:layout_height="25dp"
-        android:id="@+id/imageView6"
+        android:id="@+id/Lives4"
         android:background="#ca4b4d48"
-        android:layout_alignTop="@+id/imageView5"
-        android:layout_toRightOf="@+id/imageView5"
-        android:layout_toEndOf="@+id/imageView5"
+        android:layout_alignTop="@+id/Lives3"
+        android:layout_toRightOf="@+id/Lives3"
+        android:layout_toEndOf="@+id/Lives3"
         android:layout_marginLeft="10dp" />
 
     <ImageView
         android:layout_width="25dp"
         android:layout_height="25dp"
-        android:id="@+id/imageView7"
+        android:id="@+id/Lives5"
         android:background="#ca4b4d48"
-        android:layout_alignTop="@+id/imageView6"
-        android:layout_alignRight="@+id/textView4"
-        android:layout_alignEnd="@+id/textView4" />
+        android:layout_alignTop="@+id/Lives4"
+        android:layout_alignRight="@+id/Heading"
+        android:layout_alignEnd="@+id/Heading" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Buy A Life (5 Gems)"
-        android:id="@+id/button9"
-        android:layout_alignTop="@+id/imageView7"
-        android:layout_toEndOf="@+id/imageView7"
-        android:layout_alignBottom="@+id/imageView7"
+        android:id="@+id/BuyLife"
+        android:layout_alignTop="@+id/Lives5"
+        android:layout_toEndOf="@+id/Lives5"
+        android:layout_alignBottom="@+id/Lives5"
         android:layout_marginTop="-10dp"
         android:layout_marginBottom="-10dp"
         android:layout_marginLeft="20dp"
@@ -120,59 +120,59 @@
     <ImageView
         android:layout_width="25dp"
         android:layout_height="25dp"
-        android:id="@+id/imageView8"
+        android:id="@+id/Damage1"
         android:background="#ff1700"
-        android:layout_alignTop="@+id/textView6"
-        android:layout_alignRight="@+id/textView6"
-        android:layout_alignEnd="@+id/textView6" />
+        android:layout_alignTop="@+id/DamageText"
+        android:layout_alignRight="@+id/DamageText"
+        android:layout_alignEnd="@+id/DamageText" />
 
     <ImageView
         android:layout_width="25dp"
         android:layout_height="25dp"
-        android:id="@+id/imageView9"
+        android:id="@+id/Damage2"
         android:background="#ff1700"
-        android:layout_alignTop="@+id/textView6"
-        android:layout_toRightOf="@+id/textView6"
-        android:layout_toEndOf="@+id/textView6"
+        android:layout_alignTop="@+id/DamageText"
+        android:layout_toRightOf="@+id/DamageText"
+        android:layout_toEndOf="@+id/DamageText"
         android:layout_marginLeft="10dp" />
 
     <ImageView
         android:layout_width="25dp"
         android:layout_height="25dp"
-        android:id="@+id/imageView10"
+        android:id="@+id/Damage3"
         android:background="#ff1700"
-        android:layout_alignTop="@+id/imageView9"
-        android:layout_toRightOf="@+id/imageView9"
-        android:layout_toEndOf="@+id/imageView9"
+        android:layout_alignTop="@+id/Damage2"
+        android:layout_toRightOf="@+id/Damage2"
+        android:layout_toEndOf="@+id/Damage2"
         android:layout_marginLeft="10dp" />
 
     <ImageView
         android:layout_width="25dp"
         android:layout_height="25dp"
-        android:id="@+id/imageView11"
+        android:id="@+id/Damage4"
         android:background="#ca4b4d48"
-        android:layout_alignBottom="@+id/imageView10"
-        android:layout_toRightOf="@+id/imageView10"
-        android:layout_toEndOf="@+id/imageView10"
+        android:layout_alignBottom="@+id/Damage3"
+        android:layout_toRightOf="@+id/Damage3"
+        android:layout_toEndOf="@+id/Damage3"
         android:layout_marginLeft="10dp" />
 
     <ImageView
         android:layout_width="25dp"
         android:layout_height="25dp"
-        android:id="@+id/imageView12"
+        android:id="@+id/Damage5"
         android:background="#ca4b4d48"
-        android:layout_alignTop="@+id/imageView11"
-        android:layout_alignLeft="@+id/imageView7"
-        android:layout_alignStart="@+id/imageView7" />
+        android:layout_alignTop="@+id/Damage4"
+        android:layout_alignLeft="@+id/Lives5"
+        android:layout_alignStart="@+id/Lives5" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Upgrade Damage(10 Gems)"
-        android:id="@+id/button10"
-        android:layout_alignTop="@+id/imageView12"
-        android:layout_alignLeft="@+id/button9"
-        android:layout_alignStart="@+id/button9"
+        android:id="@+id/BuyDamage"
+        android:layout_alignTop="@+id/Damage5"
+        android:layout_alignLeft="@+id/BuyLife"
+        android:layout_alignStart="@+id/BuyLife"
         android:layout_marginTop="-10dp"
         android:layout_marginBottom="-10dp"
         android:textSize="10dp" />
@@ -182,45 +182,45 @@
         android:layout_height="25dp"
         android:id="@+id/imageView13"
         android:background="#ff1700"
-        android:layout_alignTop="@+id/textView7"
-        android:layout_alignLeft="@+id/imageView8"
-        android:layout_alignStart="@+id/imageView8" />
+        android:layout_alignTop="@+id/SpeedText"
+        android:layout_alignLeft="@+id/Damage1"
+        android:layout_alignStart="@+id/Damage1" />
 
     <ImageView
         android:layout_width="25dp"
         android:layout_height="25dp"
-        android:id="@+id/imageView14"
+        android:id="@+id/Speed2"
         android:background="#ff1700"
-        android:layout_alignTop="@+id/textView7"
-        android:layout_toLeftOf="@+id/imageView10"
-        android:layout_toStartOf="@+id/imageView10" />
+        android:layout_alignTop="@+id/SpeedText"
+        android:layout_toLeftOf="@+id/Damage3"
+        android:layout_toStartOf="@+id/Damage3" />
 
     <ImageView
         android:layout_width="25dp"
         android:layout_height="25dp"
-        android:id="@+id/imageView15"
+        android:id="@+id/Speed3"
         android:background="#ff1700"
-        android:layout_alignTop="@+id/imageView14"
-        android:layout_toLeftOf="@+id/imageView11"
-        android:layout_toStartOf="@+id/imageView11" />
+        android:layout_alignTop="@+id/Speed2"
+        android:layout_toLeftOf="@+id/Damage4"
+        android:layout_toStartOf="@+id/Damage4" />
 
     <ImageView
         android:layout_width="25dp"
         android:layout_height="25dp"
-        android:id="@+id/imageView16"
+        android:id="@+id/Speed4"
         android:background="#ca4b4d48"
-        android:layout_alignTop="@+id/imageView15"
-        android:layout_alignLeft="@+id/imageView11"
-        android:layout_alignStart="@+id/imageView11" />
+        android:layout_alignTop="@+id/Speed3"
+        android:layout_alignLeft="@+id/Damage4"
+        android:layout_alignStart="@+id/Damage4" />
 
     <ImageView
         android:layout_width="25dp"
         android:layout_height="25dp"
-        android:id="@+id/imageView17"
+        android:id="@+id/Speed5"
         android:background="#ca4b4d48"
-        android:layout_alignTop="@+id/imageView16"
-        android:layout_toLeftOf="@+id/button9"
-        android:layout_toStartOf="@+id/button9" />
+        android:layout_alignTop="@+id/Speed4"
+        android:layout_toLeftOf="@+id/BuyLife"
+        android:layout_toStartOf="@+id/BuyLife" />
 
     <Button
         android:layout_width="wrap_content"
@@ -228,9 +228,9 @@
         android:text="Upgrade Damage(10 Gems)"
         android:id="@+id/button11"
         android:textSize="10dp"
-        android:layout_alignTop="@+id/imageView17"
-        android:layout_alignLeft="@+id/button10"
-        android:layout_alignStart="@+id/button10"
+        android:layout_alignTop="@+id/Speed5"
+        android:layout_alignLeft="@+id/BuyDamage"
+        android:layout_alignStart="@+id/BuyDamage"
         android:layout_marginTop="-10dp"
         android:layout_marginBottom="-10dp" />
 
@@ -240,7 +240,7 @@
         android:text="Return to Menu"
         android:id="@+id/button12"
         android:layout_alignParentBottom="true"
-        android:layout_alignLeft="@+id/imageView14"
-        android:layout_alignStart="@+id/imageView14" />
+        android:layout_alignLeft="@+id/Speed2"
+        android:layout_alignStart="@+id/Speed2" />
 
 </RelativeLayout>

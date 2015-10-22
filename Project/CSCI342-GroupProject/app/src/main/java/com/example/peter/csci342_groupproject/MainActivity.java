@@ -102,6 +102,12 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    /** Called when the user clicks the Upgrades button */
+    public void viewUpgrades(View view) {
+        Intent intent = new Intent(this, UpgradesActivity.class);
+        startActivity(intent);
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
