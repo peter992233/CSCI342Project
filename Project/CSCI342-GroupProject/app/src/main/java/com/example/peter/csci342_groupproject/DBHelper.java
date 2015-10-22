@@ -7,9 +7,10 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class DBHelper extends SQLiteOpenHelper{
 
     public static final String DATABASE_NAME = "gameDB.db";
-    private static final int DATABASE_VERSION = 2; //Change this when you change your database
+    private static final int DATABASE_VERSION = 4; //Change this when you change your database
 
     private static final String MAIN_CREATE = "create table " + MainTable.MainEntry.TABLE_NAME + " ("
+            + "_id INTEGER PRIMARY KEY AUTOINCREMENT," //for cursor adaptor to work
             + MainTable.MainEntry.COLUMN_NAME_BASE_LIVES + " integer, "
             + MainTable.MainEntry.COLUMN_NAME_BASE_DAMAGE + " real, "
             + MainTable.MainEntry.COLUMN_NAME_BASE_SPEED + " real, "
@@ -21,6 +22,7 @@ public class DBHelper extends SQLiteOpenHelper{
             + ");";
 
     private static final String HS_CREATE = "create table " + HighScoreTable.HighScoreEntry.TABLE_NAME + " ("
+            + "_id INTEGER PRIMARY KEY AUTOINCREMENT," //for cursor adaptor to work
             + HighScoreTable.HighScoreEntry.COLUMN_NAME_UserName + " text not null, "
             + HighScoreTable.HighScoreEntry.COLUMN_NAME_HighScore + " integer"
             + ");";

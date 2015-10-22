@@ -7,4 +7,5 @@
     <string name="Upg">Upgrades</string>
     <string name="HighScore">Highscores</string>
     <string name="title_activity_game">GameActivity</string>
+    <string name="title_activity_high_scores">HighScores</string>
 </resources>
