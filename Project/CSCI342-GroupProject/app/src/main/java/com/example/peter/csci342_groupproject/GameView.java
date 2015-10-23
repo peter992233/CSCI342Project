@@ -72,13 +72,15 @@ public class GameView extends SurfaceView implements Runnable {
     final AnimationDrawable animDraw = createAnimationDrawable();
 
     ArrayList<EnemyShip> EnemyList= new ArrayList<EnemyShip>();
-    int maxEnemies = 60;
+    int maxEnemies = 40;
 
     int score = 0;
     private int lives = 0;
 
     ImageView backGround;
     int currBgFrame = 0;
+    int GameLevel = 0;
+    boolean waitRestart = false;
 
     public GameView(Context context,int x, int y) {
         super(context);
@@ -91,7 +93,8 @@ public class GameView extends SurfaceView implements Runnable {
         screenX = x;
         screenY = y;
 
-
+        //initial Lives
+        lives = 3;
 
         try{
 
@@ -103,8 +106,16 @@ public class GameView extends SurfaceView implements Runnable {
 
         }
 
+        try{
+            backGround = new ImageView(context);
+            backGround.setImageDrawable(animDraw);
 
-        prepareLevel();
+        }catch(Exception e) {
+            e.printStackTrace();
+        }
+
+
+        prepareLevel(GameLevel);
     }
 
 
@@ -120,7 +131,7 @@ public class GameView extends SurfaceView implements Runnable {
         newAnim.addFrame(res.getDrawable(R.drawable.background_6),200);
         newAnim.addFrame(res.getDrawable(R.drawable.background_7),200);
         newAnim.addFrame(res.getDrawable(R.drawable.background_8),200);
-        newAnim.addFrame(res.getDrawable(R.drawable.background_9),200);
+        newAnim.addFrame(res.getDrawable(R.drawable.background_9), 200);
         newAnim.addFrame(res.getDrawable(R.drawable.background_10), 200);
         newAnim.addFrame(res.getDrawable(R.drawable.background_11), 200);
         newAnim.addFrame(res.getDrawable(R.drawable.background_12), 200);
@@ -135,40 +146,16 @@ public class GameView extends SurfaceView implements Runnable {
     }
 
 
-    private void prepareLevel(){
+    private void prepareLevel(int Level){
 
         //Init game Objects
-
-        lives = 3;
-
-
-        try{
-            backGround = new ImageView(context);
-            backGround.setImageDrawable(animDraw);
-
-        }catch(Exception e) {
-            e.printStackTrace();
-        }
-
-        //Make a Player Ship
-        pShip = new PlayerShip(context,screenX,screenY);
-
-        //Prepare Bullets
-
-        projectile = new Projectile(context, screenY);
+        GameLevel++;
+        Log.d("LEVELSTART","" + GameLevel);
 
 
-        //Build Enemy array
-        for(int i = 0; i < maxEnemies; i++){
-
-            EnemyShip newEnemy = new EnemyShip(context,screenX,screenY);
-
-            //Start with 3 Enemies on screen
-            newEnemy.setIsVisible(false);
-
-            //This adds the enemy to the List
-            EnemyList.add(newEnemy);
-        }
+        respawnPlayer();
+        respawnEnemies();
+        playing = true;
 
     }
 
@@ -206,139 +193,175 @@ public class GameView extends SurfaceView implements Runnable {
         }
 
 
+    }
+
+
+    public void respawnEnemies(){
+
+        //Build Enemy array
+        for(int i = 0; i < GameLevel*maxEnemies; i++){
+
+            EnemyShip newEnemy = new EnemyShip(context,screenX,screenY);
+
+            //Start with 3 Enemies on screen
+            newEnemy.setIsVisible(false);
+
+            //This adds the enemy to the List
+            EnemyList.add(newEnemy);
+        }
+
+    }
+
+    public void respawnPlayer(){
+
+        //Make a Player Ship
+        pShip = new PlayerShip(context,screenX,screenY);
+
+        //Prepare Bullets
+
+        projectile = new Projectile(context, screenY);
 
     }
 
 
-
-    private void update(){
+    private void update() {
 
         boolean lost = false;
 
-        if(nextEnemy < 0){
-            Random nextEnemyRand = new Random();
-            //Spawn a new enemy every 0.5 of a second to 3.5 seconds
-            nextEnemy = nextEnemyRand.nextInt(3500) - 500;
+        if (paused != true) {
 
-            if(EnemyList.size() > 0) {
-                EnemyShip es = EnemyList.get(nextEnemyRand.nextInt(EnemyList.size()));
+            if (nextEnemy < 0) {
+                Random nextEnemyRand = new Random();
+                //Spawn a new enemy every 0.5 of a second to 3.5 seconds
+                nextEnemy = nextEnemyRand.nextInt(3500) - 500;
 
-                //Prevent enemy collisions
-                for(int i = 0; i < EnemyList.size(); i++){
-                    if(EnemyList.get(i).isVisible()) {
-                        if (RectF.intersects(es.getRect(), EnemyList.get(i).getRect())){
-                            nextEnemy = 0; //Try again
+                if (EnemyList.size() > 0) {
+                    EnemyShip es = EnemyList.get(nextEnemyRand.nextInt(EnemyList.size()));
+
+                    //Prevent enemy collisions
+                    for (int i = 0; i < EnemyList.size(); i++) {
+                        if (EnemyList.get(i).isVisible()) {
+                            if (RectF.intersects(es.getRect(), EnemyList.get(i).getRect())) {
+                                nextEnemy = 0; //Try again
+                            }
+                        }
+                    }
+
+                    if (nextEnemy != 0) {
+                        es.setIsVisible(true);
+                    }
+
+
+                } else {
+                    GameLevel++;
+                    Log.d("LEVELUP", "YOU DID IT!");
+                }
+            }
+
+
+            //Move the player ship
+            pShip.update(fps);
+
+            //Update the Enemies
+            for (int i = 0; i < EnemyList.size(); i++) {
+                EnemyShip e = EnemyList.get(i);
+
+                if (e.isVisible()) {
+                    e.update(fps);
+
+                    if (e.getY() > 0) {
+                        if (e.shouldShoot(pShip.getX(), pShip.getWidth())) {
+                            Projectile p = new Projectile(context, screenY, true, 0);
+                            p.shoot(e.getX() + e.getLength() / 2, e.getRect().bottom, projectile.DOWN);
+                            enemyBullets.add(p);
+                        }
+                    }
+
+                    //Check if time to remove enemy objects
+                    if (e.getY() < -e.getHeight() * 2 || e.getY() > screenY + e.getHeight() * 2) {
+                        EnemyList.remove(e);
+                    }
+
+
+                    if (RectF.intersects(e.getRect(), pShip.getRect())) {
+                        lives--;
+                        if (lives == 0) {
+                            gameOver();
+                        }
+                        EnemyList.remove(i);
+                        Log.d("Crash", "Hope You Have Insurance Buddy");
+                    }
+
+
+                }
+            }
+
+
+            //Update the Bullets
+
+            for (int i = 0; i < playerBullets.size(); i++) {
+                Projectile p = playerBullets.get(i);
+                if (p.getStatus()) {
+                    p.update(fps);
+                    //Check if time to remove bullet objects
+                    if (p.getImpactPointY() < -p.getHeight() * 2 || p.getImpactPointY() > screenY + p.getHeight() * 2) {
+                        p.setInactive();
+                        playerBullets.remove(p);
+                    }
+
+
+                    for (int j = 0; j < EnemyList.size(); j++) {
+                        EnemyShip e = EnemyList.get(j);
+                        if (e.isVisible()) {
+                            if (RectF.intersects(p.getRect(), e.getRect())) {
+                                Log.d("BOOM", "Enemy Ship Killed");
+                                e.setIsVisible(false);
+                                EnemyList.remove(e);
+                                p.setInactive();
+                                playerBullets.remove(p);
+                                score += 100;
+                            }
                         }
                     }
                 }
-
-                if(nextEnemy != 0){
-                    es.setIsVisible(true);
-                }
-
-
             }
-        }
 
 
-        //Move the player ship
-        pShip.update(fps);
-
-        //Update the Enemies
-        for(int i = 0; i < EnemyList.size(); i++){
-            EnemyShip e = EnemyList.get(i);
-
-            if(e.isVisible()) {
-                e.update(fps);
-
-                if(e.getY() > 0) {
-                    if (e.shouldShoot(pShip.getX(), pShip.getWidth())) {
-                        Projectile p = new Projectile(context, screenY, true, 0);
-                        p.shoot(e.getX() + e.getLength()/2, e.getRect().bottom, projectile.DOWN);
-                        enemyBullets.add(p);
-                    }
+            for (int i = 0; i < enemyBullets.size(); i++) {
+                Projectile p = enemyBullets.get(i);
+                if (p.getStatus()) {
+                    p.update(fps);
                 }
 
-                //Check if time to remove enemy objects
-                if (e.getY() < -e.getHeight() * 2 || e.getY() > screenY + e.getHeight() * 2) {
-                    EnemyList.remove(e);
-                }
-
-
-                if (RectF.intersects(e.getRect(), pShip.getRect())){
-                    lives--;
-                    EnemyList.remove(i);
-                    Log.d("Crash","Hope You Have Insurance Buddy");
-                }
-
-
-
-            }
-        }
-
-
-
-        //Update the Bullets
-
-        for(int i = 0; i < playerBullets.size(); i++){
-            Projectile p = playerBullets.get(i);
-            if (p.getStatus()) {
-                p.update(fps);
-                //Check if time to remove bullet objects
-                if(p.getImpactPointY() < -p.getHeight() *2 || p.getImpactPointY() > screenY + p.getHeight()*2){
+                if (p.getImpactPointY() < -p.getHeight() * 2 || p.getImpactPointY() > screenY + p.getHeight() * 2) {
                     p.setInactive();
-                    playerBullets.remove(p);
+                    enemyBullets.remove(p);
                 }
 
-
-                for(int j = 0; j < EnemyList.size(); j++){
-                    EnemyShip e = EnemyList.get(j);
-                    if(e.isVisible()){
-                        if(RectF.intersects(p.getRect(), e.getRect())){
-                            Log.d("BOOM","Enemy Ship Killed");
-                            e.setIsVisible(false);
-                            EnemyList.remove(e);
-                            p.setInactive();
-                            playerBullets.remove(p);
-                            score += 100;
-                        }
+                if (RectF.intersects(p.getRect(), pShip.getRect())) {
+                    Log.d("POW", "You got Hit");
+                    p.setInactive();
+                    enemyBullets.remove(p);
+                    lives--;
+                    if (lives <= 0) {
+                        gameOver();
                     }
                 }
-            }
-        }
 
 
-        for(int i = 0; i < enemyBullets.size(); i++){
-            Projectile p = enemyBullets.get(i);
-            if (p.getStatus()) {
-                p.update(fps);
             }
 
-            if(p.getImpactPointY() < -p.getHeight() *2 || p.getImpactPointY() > screenY + p.getHeight()*2){
-                p.setInactive();
-                enemyBullets.remove(p);
-            }
-
-            if(RectF.intersects(p.getRect(), pShip.getRect())){
-                Log.d("POW", "You got Hit");
-                p.setInactive();
-                enemyBullets.remove(p);
-                lives--;;
+            if (lives <= 0) {
+                gameOver();
             }
 
 
+            currBgFrame++;
+            if (currBgFrame > animDraw.getNumberOfFrames() - 1) {
+                currBgFrame = 0;
+            }
+
         }
-
-        if(lost){
-            prepareLevel();
-        }
-
-
-        currBgFrame++;
-        if (currBgFrame > animDraw.getNumberOfFrames()-1) {
-            currBgFrame = 0;
-        }
-
     }
 
 
@@ -347,62 +370,92 @@ public class GameView extends SurfaceView implements Runnable {
 
     private void draw(){
 
-        if(ourHolder.getSurface().isValid()){
 
-            canvas = ourHolder.lockCanvas();
+        if(waitRestart == false) {
+            if (ourHolder.getSurface().isValid()) {
+
+                canvas = ourHolder.lockCanvas();
 
 
-            Drawable d = animDraw.getFrame(currBgFrame);
-            d.setBounds(0,0,screenX,screenY);
-            d.draw(canvas);
+                Drawable d = animDraw.getFrame(currBgFrame);
+                d.setBounds(0, 0, screenX, screenY);
+                d.draw(canvas);
 
-            paint.setColor(Color.argb(255, 255, 255, 255));
+                paint.setColor(Color.argb(255, 255, 255, 255));
 
-            //Draw the Active Bullets
+                //Draw the Active Bullets
 
-            for(int i = 0; i < playerBullets.size(); i++){
-                Projectile p = playerBullets.get(i);
-                if(p.getStatus()){
-                    canvas.drawBitmap(p.getBmp(), p.getX(),p.getY(), paint);
+                for (int i = 0; i < playerBullets.size(); i++) {
+                    Projectile p = playerBullets.get(i);
+                    if (p.getStatus()) {
+                        canvas.drawBitmap(p.getBmp(), p.getX(), p.getY(), paint);
+                    }
                 }
-            }
 
-            for(int i = 0; i < enemyBullets.size(); i++){
-                Projectile p = enemyBullets.get(i);
-                if(p.getStatus()){
-                    canvas.drawBitmap(p.getBmp(), p.getX(),p.getY(), paint);
+                for (int i = 0; i < enemyBullets.size(); i++) {
+                    Projectile p = enemyBullets.get(i);
+                    if (p.getStatus()) {
+                        canvas.drawBitmap(p.getBmp(), p.getX(), p.getY(), paint);
+                    }
                 }
-            }
 
 
-            //Draw the Player Ship
-            canvas.drawBitmap(pShip.getBmp(), pShip.getX(),screenY-(pShip.getHeight()*2),paint);
+                //Draw the Player Ship
+                canvas.drawBitmap(pShip.getBmp(), pShip.getX(), screenY - (pShip.getHeight() * 2), paint);
 
-            //Draw the Enemies
+                //Draw the Enemies
 
-            for(int i = 0; i < EnemyList.size(); i++){
-                EnemyShip e = EnemyList.get(i);
-                if(e.isVisible() == true){
-                    canvas.drawBitmap(e.getEnemyBMP(), e.getX(),e.getY(), paint);
+                for (int i = 0; i < EnemyList.size(); i++) {
+                    EnemyShip e = EnemyList.get(i);
+                    if (e.isVisible() == true) {
+                        canvas.drawBitmap(e.getEnemyBMP(), e.getX(), e.getY(), paint);
 
+                    }
                 }
+
+
+                //Draw Score & Lives
+
+                paint.setColor(Color.argb(255, 249, 129, 0));
+                paint.setTextAlign(Paint.Align.LEFT);
+                paint.setTextSize(40);
+                canvas.drawText("Score: " + score + "\t\t\tLives: " + lives, 10, 50, paint);
+
+
+                ourHolder.unlockCanvasAndPost(canvas);
+
+
             }
+        }else{
+            if(ourHolder.getSurface().isValid()){
+
+                canvas = ourHolder.lockCanvas();
+
+
+                Drawable d = animDraw.getFrame(currBgFrame);
+                d.setBounds(0, 0, screenX, screenY);
+                d.draw(canvas);
+
+                paint.setColor(Color.argb(255, 255, 255, 255));
+
+                //Draw the Player Ship
+                canvas.drawBitmap(pShip.getBmp(), pShip.getX(), screenY - (pShip.getHeight() * 2), paint);
+
+
+                //Draw Score & Lives
+                paint.setColor(Color.WHITE);
+
+                paint.setTextSize(50);
+
+                paint.setTextAlign(Paint.Align.CENTER);
+                canvas.drawText("Game Over, You Scored: " + score, canvas.getWidth() / 2,
+                        (int) ((canvas.getHeight() / 2) - ((paint.descent() + paint.ascent()) / 2)), paint);
+
+                ourHolder.unlockCanvasAndPost(canvas);
 
 
 
-
-
-            //Draw Score & Lives
-
-            paint.setColor(Color.argb(255,249,129,0));
-
-            paint.setTextSize(40);
-            canvas.drawText("Score: " + score + "\t\t\tLives: " + lives, 10 , 50 , paint);
-
-            ourHolder.unlockCanvasAndPost(canvas);
-
-
-
+            }
         }
 
     }
@@ -438,6 +491,13 @@ public class GameView extends SurfaceView implements Runnable {
 
 
                 case MotionEvent.ACTION_DOWN:{
+
+                    //You are not waiting to restart
+                    if(waitRestart != false){
+                        waitRestart = false;
+                        score = 0;
+                    }
+
                     paused = false;
                     pShip.setMovementState(pShip.STOPPED);
                     //If the touch is in the top 7/8ths of the screen it is counted as movement
@@ -504,5 +564,46 @@ public class GameView extends SurfaceView implements Runnable {
         }
         return true;
     }
+
+
+
+    public void gameOver(){
+
+
+        //Display highscore
+
+
+
+        //Ask restart
+
+
+
+        try{
+            //Do Restart
+            playing = false;
+            paused = true;
+            EnemyList.clear();
+            enemyBullets.clear();
+            playerBullets.clear();
+            nextShot = 0; //When is the next shot
+            nextEnemy = 5000;//When to display the next enemy
+
+            lives = 3;
+            currBgFrame = 0;
+            GameLevel = 0;
+            waitRestart = true;
+
+
+
+        }catch(Exception e){
+
+        }finally{
+            prepareLevel(0);
+        }
+    }
+
+
+
+
 
 }
