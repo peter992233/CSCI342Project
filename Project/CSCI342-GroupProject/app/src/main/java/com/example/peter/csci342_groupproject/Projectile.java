@@ -26,6 +26,8 @@ public class Projectile {
     float speed = 350;
 
     public boolean isActive;
+    boolean isEnemy = false;
+
 
     public Projectile(Context context, int screenY){
         height = screenY/30;
@@ -37,6 +39,28 @@ public class Projectile {
         bmp = Bitmap.createScaledBitmap(bmp, (int) width, (int) height, false);
 
     }
+
+    public Projectile(Context context, int screenY, boolean enemy, int bulletType){
+
+        height = screenY/30;
+        isActive = false;
+        rect = new RectF();
+        isEnemy = enemy;
+
+        if(enemy == true) {
+            heading = DOWN;
+            //Create the Bitmap
+            bmp = BitmapFactory.decodeResource(context.getResources(), R.drawable.enemy_bullet);
+            bmp = Bitmap.createScaledBitmap(bmp, (int) width, (int) height, false);
+        }else{
+            heading = UP;
+            //Create the Bitmap
+            bmp = BitmapFactory.decodeResource(context.getResources(), R.drawable.player_bullet);
+            bmp = Bitmap.createScaledBitmap(bmp, (int) width, (int) height, false);
+        }
+
+    }
+
 
     public RectF getRect(){ return rect; }
 
@@ -58,18 +82,19 @@ public class Projectile {
         //If the projectile is heading down we want to get its next impact point
         //If it is standing still we need to get its current location
         if(heading == DOWN){
-            return y+height;
+            return y + height;
         }else if(heading == UP){
-            return y-height;
+            return y - height;
         }else{
             return y;
         }
     }
 
     public boolean shoot(float startX, float startY, int direction){
+
         if(!isActive){
-            x = startX - 5;
-            y = startY - 290;
+            x = startX;
+            y = startY;
             heading = direction;
             isActive = true;
             return true;
@@ -80,9 +105,9 @@ public class Projectile {
     public void update(long fps){
 
         if(heading == UP){
-            y = y-speed/fps;
+            y = y - speed/fps;
         }else{
-            y=y+speed /fps;
+            y = y + speed /fps;
         }
 
         //update the rect

@@ -36,10 +36,10 @@ public class PlayerShip {
 
         rect = new RectF();
         width = screenX / 15;
-        height = screenY / 7;
+        height = screenY / 8;
 
         x = screenX / 2;
-        y = screenY - 20;
+        y = screenY - height*2;
 
         //Create the Bitmap
         bmp = BitmapFactory.decodeResource(context.getResources(), R.drawable.player);
@@ -47,7 +47,7 @@ public class PlayerShip {
 
 
         //How fast is the ship in pixels Per Second
-        shipSpeed = 350;
+        shipSpeed = 475;
 
     }
 
@@ -93,6 +93,11 @@ public class PlayerShip {
 
     }
 
+    public float getY() {
+        return y;
+    }
 
-
+    public void setY(float y) {
+        this.y = y;
+    }
 }

@@ -9,6 +9,8 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Picture;
+import android.graphics.Rect;
+import android.graphics.RectF;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -61,13 +63,11 @@ public class GameView extends SurfaceView implements Runnable {
 
     private Projectile projectile;
     private ArrayList<Projectile> playerBullets = new ArrayList<Projectile>();
-    private int maxPlayerProjectiles = 10; //Maximum number of projectiles the player can shoot
-    private boolean shotTap = false; //Has the last tap fired a shot
-    /*
-    private Projectile[] enemyBullets = new Projectile[200];
-    private int NextProjectile;
-    private int MaxProjectile = 10;
-    */
+    private ArrayList<Projectile> enemyBullets = new ArrayList<Projectile>();
+
+    private long nextShot = 250; //When is the next shot
+    private long nextEnemy = 2500;//When to display the next enemy
+
 
     final AnimationDrawable animDraw = createAnimationDrawable();
 
@@ -139,6 +139,8 @@ public class GameView extends SurfaceView implements Runnable {
 
         //Init game Objects
 
+        lives = 3;
+
 
         try{
             backGround = new ImageView(context);
@@ -155,21 +157,17 @@ public class GameView extends SurfaceView implements Runnable {
 
         projectile = new Projectile(context, screenY);
 
-        //Init bullet Array
 
         //Build Enemy array
         for(int i = 0; i < maxEnemies; i++){
 
             EnemyShip newEnemy = new EnemyShip(context,screenX,screenY);
 
-            if(i >= 3) {
-                newEnemy.setIsVisible(false);
-            }
+            //Start with 3 Enemies on screen
+            newEnemy.setIsVisible(false);
 
             EnemyList.add(newEnemy);
         }
-
-
 
     }
 
@@ -198,6 +196,12 @@ public class GameView extends SurfaceView implements Runnable {
                 fps = 1000/timeThisFrame;
             }
 
+
+
+            //Update the Events handler variables by the elapsed time
+            nextShot -= timeThisFrame;
+            nextEnemy -= timeThisFrame;
+
         }
 
 
@@ -212,18 +216,52 @@ public class GameView extends SurfaceView implements Runnable {
         boolean lost = false;
 
 
+        if(nextEnemy < 0){
+            Random nextEnemyRand = new Random();
+            //Spawn a new enemy every 0.5 of a second to 3.5 seconds
+            nextEnemy = nextEnemyRand.nextInt(3500) - 500;
+
+            if(EnemyList.size() > 0) {
+                EnemyShip es = EnemyList.get(nextEnemyRand.nextInt(EnemyList.size()));
+
+                //Prevent enemy collisions
+                for(int i = 0; i < EnemyList.size(); i++){
+                    if(EnemyList.get(i).isVisible()) {
+                        if (RectF.intersects(es.getRect(), EnemyList.get(i).getRect())){
+                            nextEnemy = 0; //Try again
+                        }
+                    }
+                }
+
+
+                es.setIsVisible(true);
+            }
+        }
+
+
         //Move the player ship
         pShip.update(fps);
 
         //Update the Enemies
         for(int i = 0; i < EnemyList.size(); i++){
             EnemyShip e = EnemyList.get(i);
-            e.update(fps);
+
+            if(e.isVisible()) {
+                e.update(fps);
+
+                if(e.getY() > 0) {
+                    if (e.shouldShoot(pShip.getX(), pShip.getWidth())) {
+                        Projectile p = new Projectile(context, screenY, true, 0);
+                        p.shoot(e.getX() + e.getLength()/2, e.getRect().bottom, projectile.DOWN);
+                        enemyBullets.add(p);
+                    }
+                }
 
 
-            //Check if time to remove bullet objects
-            if(e.getY() < -e.getHeight() *2 || e.getY() > screenY + e.getHeight()*2){
-                EnemyList.remove(e);
+                //Check if time to remove enemy objects
+                if (e.getY() < -e.getHeight() * 2 || e.getY() > screenY + e.getHeight() * 2) {
+                    EnemyList.remove(e);
+                }
             }
 
 
@@ -238,22 +276,51 @@ public class GameView extends SurfaceView implements Runnable {
             Projectile p = playerBullets.get(i);
             if (p.getStatus()) {
                 p.update(fps);
+                //Check if time to remove bullet objects
+                if(p.getImpactPointY() < -p.getHeight() *2 || p.getImpactPointY() > screenY + p.getHeight()*2){
+                    p.setInactive();
+                    playerBullets.remove(p);
+                }
+
+
+                for(int j = 0; j < EnemyList.size(); j++){
+                    EnemyShip e = EnemyList.get(j);
+                    if(e.isVisible()){
+                        if(RectF.intersects(p.getRect(), e.getRect())){
+                            Log.d("BOOM","Enemy Ship Killed");
+                            e.setIsVisible(false);
+                            EnemyList.remove(e);
+                            p.setInactive();
+                            playerBullets.remove(p);
+                            score += 100;
+                        }
+                    }
+                }
+            }
+        }
+
+
+        for(int i = 0; i < enemyBullets.size(); i++){
+            Projectile p = enemyBullets.get(i);
+            if (p.getStatus()) {
+                p.update(fps);
             }
 
-            //Check if time to remove bullet objects
             if(p.getImpactPointY() < -p.getHeight() *2 || p.getImpactPointY() > screenY + p.getHeight()*2){
-                playerBullets.remove(p);
+                p.setInactive();
+                enemyBullets.remove(p);
             }
 
-
+            if(RectF.intersects(p.getRect(), pShip.getRect())){
+                Log.d("POW", "You got Hit");
+                p.setInactive();
+                enemyBullets.remove(p);
+                lives--;;
+            }
 
 
         }
 
-        //Check Collision
-
-
-        
 
 
 
@@ -266,7 +333,7 @@ public class GameView extends SurfaceView implements Runnable {
 
 
         currBgFrame++;
-        if (currBgFrame > 9) {
+        if (currBgFrame > animDraw.getNumberOfFrames()-1) {
             currBgFrame = 0;
         }
 
@@ -302,6 +369,14 @@ public class GameView extends SurfaceView implements Runnable {
                 }
             }
 
+            for(int i = 0; i < enemyBullets.size(); i++){
+                Projectile p = enemyBullets.get(i);
+                if(p.getStatus()){
+                    canvas.drawBitmap(p.getBmp(), p.getX(),p.getY(), paint);
+                }
+            }
+
+
             //Draw the Player Ship
             canvas.drawBitmap(pShip.getBmp(), pShip.getX(),screenY-(pShip.getHeight()*2),paint);
 
@@ -314,6 +389,9 @@ public class GameView extends SurfaceView implements Runnable {
 
                 }
             }
+
+
+
 
 
             //Draw Score & Lives
@@ -373,11 +451,13 @@ public class GameView extends SurfaceView implements Runnable {
                         }
                     }
 
-                    if (motionEvent.getY() < screenY - screenY / 4) {
-                        if (projectile.shoot(pShip.getX() + pShip.getWidth() / 2, screenY, projectile.UP)) {
+                    if(nextShot < 0) {
+                        projectile = new Projectile(context, screenY); // reset projectile
+                        if (motionEvent.getY() < screenY - screenY / 4) {
+                            projectile.shoot(pShip.getX() + pShip.getWidth() / 2, pShip.getRect().top, projectile.UP);
                             playerBullets.add(projectile);
-                            projectile = new Projectile(context, screenY); // reset projectile
                         }
+                        nextShot = 250;
                     }
 
 
@@ -400,12 +480,15 @@ public class GameView extends SurfaceView implements Runnable {
                         }
                     }
 
-                        if (yPos < screenY - screenY / 4) {
-                            if (projectile.shoot(pShip.getX() + pShip.getWidth() / 2, screenY, projectile.UP)){
-                                playerBullets.add(projectile);
-                                projectile = new Projectile(context, screenY); // reset projectile
-                            }
 
+                    if(nextShot < 0) {
+                        if (yPos < screenY - screenY / 4) {
+                            projectile = new Projectile(context, screenY); // reset projectile
+                            if (projectile.shoot(pShip.getX() + pShip.getWidth()/2, pShip.getRect().top, projectile.UP)) {
+                                playerBullets.add(projectile);
+                            }
+                        }
+                        nextShot = 250;
 
                     }
                     break;
@@ -416,7 +499,6 @@ public class GameView extends SurfaceView implements Runnable {
                 case MotionEvent.ACTION_UP:{
                     paused = false;
                     pShip.setMovementState(pShip.STOPPED);
-                    shotTap = false;
                     break;
                 }
 

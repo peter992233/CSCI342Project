@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.RectF;
+import android.util.Log;
 
 import java.util.Random;
 
@@ -63,11 +64,15 @@ public class EnemyShip {
         isVisible = true;
 
         Random r = new Random();
-        int pushX = r.nextInt(screenX - (int)length*2) + (int)length*2;
+        int pushX = (int)length*2 + r.nextInt(screenX - (int)length*3 + 1);
+        x = pushX - length;
 
+        if(x+length > screenX){
+            Log.d("PX","Push: " +  pushX + "\t WithMax " + screenX + "\t WhenLength" + length);
+        }
 
         //Push X is a variable to push the ships position to a point along the XY axis
-        x = pushX;
+        x = pushX - length;
 
         enemyBMP = BitmapFactory.decodeResource(context.getResources(), R.drawable.enemy_vertical);
         enemyBMP = Bitmap.createScaledBitmap(enemyBMP, (int) length, (int) height, false);
@@ -114,8 +119,8 @@ public class EnemyShip {
         if((playerShipX + playerShipLength > x && playerShipX + playerShipLength < x + length) ||
                 (playerShipX > x && playerShipX < x + length)) {
 
-            //The random Gen with 1 in 100 chance to shoot
-            randomNumber = shootGen.nextInt(100);
+            //The random Gen with 1 in 50 chance to shoot
+            randomNumber = shootGen.nextInt(50);
             if(randomNumber == 0) {
                 return true;
             }
@@ -123,7 +128,7 @@ public class EnemyShip {
         }
 
         //Fire Randomly regardless of player (1/1500)
-        randomNumber = shootGen.nextInt(1500);
+        randomNumber = shootGen.nextInt(750);
         if(randomNumber == 0){
             return true;
         }
