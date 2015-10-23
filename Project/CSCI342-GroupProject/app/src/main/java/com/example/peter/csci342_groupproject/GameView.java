@@ -432,7 +432,7 @@ public class GameView extends SurfaceView implements Runnable {
                 canvas = ourHolder.lockCanvas();
 
 
-                Drawable d = animDraw.getFrame(currBgFrame);
+                Drawable d = animDraw.getFrame(0);
                 d.setBounds(0, 0, screenX, screenY);
                 d.draw(canvas);
 

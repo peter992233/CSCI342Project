@@ -49,6 +49,15 @@ public class EnemyShip {
     boolean isVisible;
 
 
+    private long lastShot = System.currentTimeMillis();
+
+    public long getLastShot() {
+        return lastShot;
+    }
+
+    public void setLastShot(long lastShot) {
+        this.lastShot = lastShot;
+    }
 
     public EnemyShip(Context context, int screenX, int screenY) {
 
@@ -112,28 +121,36 @@ public class EnemyShip {
 
     public boolean shouldShoot(float playerShipX, float playerShipLength){
 
-        int randomNumber = -1;
 
-        // If near the player run a random generator with a 1/100 chance to shoot
-        // This takes into account the large amount of updates being sent through for the enemy
-        if((playerShipX + playerShipLength > x && playerShipX + playerShipLength < x + length) ||
-                (playerShipX > x && playerShipX < x + length)) {
+        if(System.currentTimeMillis() - lastShot > 2000){
 
-            //The random Gen with 1 in 50 chance to shoot
-            randomNumber = shootGen.nextInt(50);
-            if(randomNumber == 0) {
-                return true;
+            int randomNumber = -1;
+
+            // If near the player run a random generator with a 1/100 chance to shoot
+            // This takes into account the large amount of updates being sent through for the enemy
+            if((playerShipX + playerShipLength > x && playerShipX + playerShipLength < x + length) ||
+                    (playerShipX > x && playerShipX < x + length)) {
+
+                //The random Gen with 1 in 50 chance to shoot
+                randomNumber = shootGen.nextInt(50);
+                if(randomNumber == 0) {
+                    lastShot = System.currentTimeMillis();
+                    return true;
+                }
+
             }
 
+            //Fire Randomly regardless of player (1/1500)
+            randomNumber = shootGen.nextInt(750);
+            if(randomNumber == 0){
+                lastShot = System.currentTimeMillis();
+                return true;
+            }
         }
 
-        //Fire Randomly regardless of player (1/1500)
-        randomNumber = shootGen.nextInt(750);
-        if(randomNumber == 0){
-            return true;
-        }
 
         return false;
+
     }
 
 
