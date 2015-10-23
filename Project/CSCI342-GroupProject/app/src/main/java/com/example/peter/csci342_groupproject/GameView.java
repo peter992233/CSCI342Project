@@ -154,7 +154,9 @@ public class GameView extends SurfaceView implements Runnable {
         //Update the Enemies
 
         //Update the Bullets
-        for(Projectile p : playerBullets ) {
+
+        for(int i = 0; i < playerBullets.size(); i++){
+            Projectile p = playerBullets.get(i);
             if (p.getStatus()) {
                 p.update(fps);
             }
@@ -184,7 +186,9 @@ public class GameView extends SurfaceView implements Runnable {
 
             //Draw the Active Bullets
 
-            for(Projectile p : playerBullets ) {
+
+            for(int i = 0; i < playerBullets.size(); i++){
+                Projectile p = playerBullets.get(i);
                 if(p.getStatus()){
                     canvas.drawRect(p.getRect(),paint);
                     canvas.drawBitmap(p.getBmp(), p.getX(),p.getY(), paint);
@@ -253,11 +257,8 @@ public class GameView extends SurfaceView implements Runnable {
                         }
                     }
 
-                    if(shotTap == false) {
-                        if (motionEvent.getY() < screenY - screenY / 4) {
-                            if (projectile.shoot(pShip.getX() + pShip.getWidth() / 2, screenY, projectile.UP));
-
-                            shotTap = true;
+                    if (motionEvent.getY() < screenY - screenY / 4) {
+                        if (projectile.shoot(pShip.getX() + pShip.getWidth() / 2, screenY, projectile.UP)) {
                             playerBullets.add(projectile);
                             projectile = new Projectile(context, screenY); // reset projectile
                         }
@@ -274,7 +275,6 @@ public class GameView extends SurfaceView implements Runnable {
 
 
                     paused = false;
-                    pShip.setMovementState(pShip.STOPPED);
                     //If the touch is in the top 7/8ths of the screen it is counted as movement
                     if (yPos > screenY - screenY / 4) {
                         if (xPos > screenX / 2) {
@@ -284,17 +284,17 @@ public class GameView extends SurfaceView implements Runnable {
                         }
                     }
 
-                    if(shotTap == false) {
-                        if (motionEvent.getY() < screenY - screenY / 4) {
-                            if (projectile.shoot(pShip.getX() + pShip.getWidth() / 2, screenY, projectile.UP));
+                        if (yPos < screenY - screenY / 4) {
+                            if (projectile.shoot(pShip.getX() + pShip.getWidth() / 2, screenY, projectile.UP)){
+                                playerBullets.add(projectile);
+                                projectile = new Projectile(context, screenY); // reset projectile
+                            }
 
-                            shotTap = true;
-                            playerBullets.add(projectile);
-                            projectile = new Projectile(context, screenY); // reset projectile
-                        }
+
                     }
                     break;
                 }
+
 
 
                 case MotionEvent.ACTION_UP:{
