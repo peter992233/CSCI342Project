@@ -30,7 +30,7 @@ public class PlayerShip {
 
     private int shipMoving = STOPPED;
 
-
+    int SX = 0;
 
     public PlayerShip(Context context, int screenX, int screenY){
 
@@ -40,6 +40,8 @@ public class PlayerShip {
 
         x = screenX / 2;
         y = screenY - height*2;
+
+        SX = screenX;
 
         //Create the Bitmap
         bmp = BitmapFactory.decodeResource(context.getResources(), R.drawable.player);
@@ -75,12 +77,19 @@ public class PlayerShip {
 
     public void update(long fps){
 
+
         //Move the Ship X&Y coords based on direction and Speed
         if(shipMoving == LEFT){
-            x = x-shipSpeed/fps;
+            if(x > width/2){
+                x = x-shipSpeed/fps;
+                return;
+            }
         }
         if(shipMoving == RIGHT){
-            x = x+shipSpeed/fps;
+            if(x < SX - width*1.5){
+                x = x+shipSpeed/fps;
+                return;
+            }
         }
 
         //Update Rect

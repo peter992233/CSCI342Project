@@ -230,12 +230,10 @@ public class GameView extends SurfaceView implements Runnable {
                     if(EnemyList.get(i).isVisible()) {
                         if (RectF.intersects(es.getRect(), EnemyList.get(i).getRect())){
                             nextEnemy = 0; //Try again
+                            es.setIsVisible(true);
                         }
                     }
                 }
-
-
-                es.setIsVisible(true);
             }
         }
 
