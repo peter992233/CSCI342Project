@@ -166,6 +166,7 @@ public class GameView extends SurfaceView implements Runnable {
             //Start with 3 Enemies on screen
             newEnemy.setIsVisible(false);
 
+            //This adds the enemy to the List
             EnemyList.add(newEnemy);
         }
 
