@@ -280,6 +280,11 @@ public class GameView extends SurfaceView implements Runnable {
                     //Check if time to remove enemy objects
                     if (e.getY() < -e.getHeight() * 2 || e.getY() > screenY + e.getHeight() * 2) {
                         EnemyList.remove(e);
+
+                        //Decrease score if enemy gets past player
+                        if(score != 0) {
+                            score -= 100;
+                        }
                     }
 
 
