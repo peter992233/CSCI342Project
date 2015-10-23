@@ -219,7 +219,7 @@ public class GameView extends SurfaceView implements Runnable {
 
         //Prepare Bullets
 
-        projectile = new Projectile(context, screenY);
+        projectile = new Projectile(context, screenY, screenX);
 
     }
 
@@ -271,7 +271,7 @@ public class GameView extends SurfaceView implements Runnable {
 
                     if (e.getY() > 0) {
                         if (e.shouldShoot(pShip.getX(), pShip.getWidth())) {
-                            Projectile p = new Projectile(context, screenY, true, 0);
+                            Projectile p = new Projectile(context, screenY, screenX, true, 0);
                             p.shoot(e.getX() + e.getLength() / 2, e.getRect().bottom, projectile.DOWN);
                             enemyBullets.add(p);
                         }
@@ -487,78 +487,78 @@ public class GameView extends SurfaceView implements Runnable {
     public boolean onTouchEvent(MotionEvent motionEvent){
 
 
-            switch(motionEvent.getAction() & MotionEvent.ACTION_MASK){
+        switch(motionEvent.getAction() & MotionEvent.ACTION_MASK){
 
 
-                case MotionEvent.ACTION_DOWN:{
+            case MotionEvent.ACTION_DOWN:{
 
-                    //You are not waiting to restart
-                    if(waitRestart != false){
-                        waitRestart = false;
-                        score = 0;
+                //You are not waiting to restart
+                if(waitRestart != false){
+                    waitRestart = false;
+                    score = 0;
+                }
+
+                paused = false;
+                pShip.setMovementState(pShip.STOPPED);
+                //If the touch is in the top 7/8ths of the screen it is counted as movement
+                if (motionEvent.getY() > screenY - screenY / 4) {
+                    if (motionEvent.getX() > screenX / 2) {
+                        pShip.setMovementState(pShip.RIGHT);
+                    } else {
+                        pShip.setMovementState(pShip.LEFT);
                     }
+                }
 
-                    paused = false;
-                    pShip.setMovementState(pShip.STOPPED);
-                    //If the touch is in the top 7/8ths of the screen it is counted as movement
-                    if (motionEvent.getY() > screenY - screenY / 4) {
-                        if (motionEvent.getX() > screenX / 2) {
-                            pShip.setMovementState(pShip.RIGHT);
-                        } else {
-                            pShip.setMovementState(pShip.LEFT);
-                        }
+                if(nextShot < 0) {
+                    projectile = new Projectile(context, screenY, screenX); // reset projectile
+                    if (motionEvent.getY() < screenY - screenY / 4) {
+                        projectile.shoot(pShip.getX() + pShip.getWidth() / 2, pShip.getRect().top, projectile.UP);
+                        playerBullets.add(projectile);
                     }
+                    nextShot = 250;
+                }
 
-                    if(nextShot < 0) {
-                        projectile = new Projectile(context, screenY); // reset projectile
-                        if (motionEvent.getY() < screenY - screenY / 4) {
-                            projectile.shoot(pShip.getX() + pShip.getWidth() / 2, pShip.getRect().top, projectile.UP);
+
+                break;
+            }
+
+            case MotionEvent.ACTION_POINTER_DOWN:{
+                int index = motionEvent.getActionIndex();
+                int xPos = (int) MotionEventCompat.getX(motionEvent, index);
+                int yPos = (int) MotionEventCompat.getY(motionEvent, index);
+
+
+                paused = false;
+                //If the touch is in the top 7/8ths of the screen it is counted as movement
+                if (yPos > screenY - screenY / 4) {
+                    if (xPos > screenX / 2) {
+                        pShip.setMovementState(pShip.RIGHT);
+                    } else {
+                        pShip.setMovementState(pShip.LEFT);
+                    }
+                }
+
+
+                if(nextShot < 0) {
+                    if (yPos < screenY - screenY / 4) {
+                        projectile = new Projectile(context, screenY, screenX); // reset projectile
+                        if (projectile.shoot(pShip.getX() + pShip.getWidth()/2, pShip.getRect().top, projectile.UP)) {
                             playerBullets.add(projectile);
                         }
-                        nextShot = 250;
                     }
+                    nextShot = 250;
 
-
-                    break;
                 }
-
-                case MotionEvent.ACTION_POINTER_DOWN:{
-                    int index = motionEvent.getActionIndex();
-                    int xPos = (int) MotionEventCompat.getX(motionEvent, index);
-                    int yPos = (int) MotionEventCompat.getY(motionEvent, index);
-
-
-                    paused = false;
-                    //If the touch is in the top 7/8ths of the screen it is counted as movement
-                    if (yPos > screenY - screenY / 4) {
-                        if (xPos > screenX / 2) {
-                            pShip.setMovementState(pShip.RIGHT);
-                        } else {
-                            pShip.setMovementState(pShip.LEFT);
-                        }
-                    }
-
-
-                    if(nextShot < 0) {
-                        if (yPos < screenY - screenY / 4) {
-                            projectile = new Projectile(context, screenY); // reset projectile
-                            if (projectile.shoot(pShip.getX() + pShip.getWidth()/2, pShip.getRect().top, projectile.UP)) {
-                                playerBullets.add(projectile);
-                            }
-                        }
-                        nextShot = 250;
-
-                    }
-                    break;
-                }
+                break;
+            }
 
 
 
-                case MotionEvent.ACTION_UP:{
-                    paused = false;
-                    pShip.setMovementState(pShip.STOPPED);
-                    break;
-                }
+            case MotionEvent.ACTION_UP:{
+                paused = false;
+                pShip.setMovementState(pShip.STOPPED);
+                break;
+            }
 
 
         }

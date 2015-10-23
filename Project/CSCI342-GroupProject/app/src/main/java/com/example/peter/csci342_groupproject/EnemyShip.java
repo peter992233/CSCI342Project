@@ -65,8 +65,8 @@ public class EnemyShip {
         rect = new RectF();
 
         //Set the length of the Ship
-        length = screenX / 20;
-        height = screenY / 20;
+        length = screenX / 16;
+        height = screenY / 12;
 
 
         //Set the ship to display as visible

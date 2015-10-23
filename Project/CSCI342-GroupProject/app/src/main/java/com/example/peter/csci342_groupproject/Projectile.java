@@ -19,7 +19,7 @@ public class Projectile {
     public final int UP = 0;
     public final int DOWN = 1;
 
-    private int width = 10;
+    private int width;
     private int height;
 
     int heading = -1;
@@ -29,8 +29,11 @@ public class Projectile {
     boolean isEnemy = false;
 
 
-    public Projectile(Context context, int screenY){
+    public Projectile(Context context, int screenY, int screenX){
+
+        width = screenX/90;
         height = screenY/30;
+
         isActive = false;
         rect = new RectF();
 
@@ -40,8 +43,9 @@ public class Projectile {
 
     }
 
-    public Projectile(Context context, int screenY, boolean enemy, int bulletType){
+    public Projectile(Context context, int screenY, int screenX, boolean enemy, int bulletType){
 
+        width = screenX/90;
         height = screenY/30;
         isActive = false;
         rect = new RectF();
