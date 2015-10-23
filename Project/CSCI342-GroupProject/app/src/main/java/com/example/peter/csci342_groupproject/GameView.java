@@ -213,9 +213,7 @@ public class GameView extends SurfaceView implements Runnable {
 
     private void update(){
 
-        boolean bumped = false;
         boolean lost = false;
-
 
         if(nextEnemy < 0){
             Random nextEnemyRand = new Random();
@@ -230,10 +228,15 @@ public class GameView extends SurfaceView implements Runnable {
                     if(EnemyList.get(i).isVisible()) {
                         if (RectF.intersects(es.getRect(), EnemyList.get(i).getRect())){
                             nextEnemy = 0; //Try again
-                            es.setIsVisible(true);
                         }
                     }
                 }
+
+                if(nextEnemy != 0){
+                    es.setIsVisible(true);
+                }
+
+
             }
         }
 
@@ -256,15 +259,21 @@ public class GameView extends SurfaceView implements Runnable {
                     }
                 }
 
-
                 //Check if time to remove enemy objects
                 if (e.getY() < -e.getHeight() * 2 || e.getY() > screenY + e.getHeight() * 2) {
                     EnemyList.remove(e);
                 }
+
+
+                if (RectF.intersects(e.getRect(), pShip.getRect())){
+                    lives--;
+                    EnemyList.remove(i);
+                    Log.d("Crash","Hope You Have Insurance Buddy");
+                }
+
+
+
             }
-
-
-
         }
 
 
@@ -320,12 +329,6 @@ public class GameView extends SurfaceView implements Runnable {
 
         }
 
-
-
-
-
-
-
         if(lost){
             prepareLevel();
         }
@@ -335,10 +338,6 @@ public class GameView extends SurfaceView implements Runnable {
         if (currBgFrame > animDraw.getNumberOfFrames()-1) {
             currBgFrame = 0;
         }
-
-        //Update player bullets
-        //Check the player bullet collisions (top & bottom of Screen + enemies)
-        //Check the enemies bullet collisions (top & bottom of Screen + player)
 
     }
 
