@@ -66,7 +66,8 @@
         android:layout_toRightOf="@+id/LivesText"
         android:layout_toEndOf="@+id/LivesText"
         android:layout_marginLeft="20dp"
-        android:layout_marginStart="20dp" />
+        android:layout_marginStart="20dp"
+        android:onClick="viewHighScores"/>
 
     <ImageView
         android:layout_width="25dp"
@@ -192,7 +193,7 @@
         android:layout_marginLeft="20dp"
         android:layout_marginStart="20dp"
         android:layout_marginTop="-10dp"
-        android:width="175dp"/>/>
+        android:width="175dp"/>
 
     <ImageView
         android:layout_width="25dp"

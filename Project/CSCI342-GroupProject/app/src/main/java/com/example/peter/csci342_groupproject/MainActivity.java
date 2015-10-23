@@ -29,7 +29,6 @@ public class MainActivity extends AppCompatActivity {
 
         DBHelper dbHelper = new DBHelper(getApplicationContext());
         createPlayer(dbHelper);
-        //populateHighScores(dbHelper);
 
         Log.d("START", "Starting Game");
         Display display = getWindowManager().getDefaultDisplay();
@@ -58,25 +57,6 @@ public class MainActivity extends AppCompatActivity {
             writter.insert(MainTable.MainEntry.TABLE_NAME, null, values);
             Log.d ("START", "user created");
         }
-    }
-
-    public void populateHighScores(DBHelper dbHelper) {
-/*************************************************
- * DELETE THIS LATER - just for testing
- *************************************************/
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
-
-        ContentValues values = new ContentValues();
-        values.put(HighScoreTable.HighScoreEntry.COLUMN_NAME_UserName, "Garry");
-        values.put(HighScoreTable.HighScoreEntry.COLUMN_NAME_HighScore, 100);
-        long garryId = db.insert(HighScoreTable.HighScoreEntry.TABLE_NAME, null, values);
-        Log.i("Returned ID", "" + (garryId));
-
-        ContentValues values2 = new ContentValues();
-        values2.put(HighScoreTable.HighScoreEntry.COLUMN_NAME_UserName, "Barry");
-        values2.put(HighScoreTable.HighScoreEntry.COLUMN_NAME_HighScore, 200);
-        long barryId = db.insert(HighScoreTable.HighScoreEntry.TABLE_NAME, null, values2);
-        Log.i("Returned ID", "" + (barryId));
     }
 
     public void menuButtons(){

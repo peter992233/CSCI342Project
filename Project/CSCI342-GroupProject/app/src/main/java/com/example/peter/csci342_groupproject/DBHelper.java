@@ -21,12 +21,6 @@ public class DBHelper extends SQLiteOpenHelper{
             + MainTable.MainEntry.COLUMN_NAME_OPTION_TILT + " integer"
             + ");";
 
-    private static final String HS_CREATE = "create table " + HighScoreTable.HighScoreEntry.TABLE_NAME + " ("
-            + "_id INTEGER PRIMARY KEY AUTOINCREMENT," //for cursor adaptor to work
-            + HighScoreTable.HighScoreEntry.COLUMN_NAME_UserName + " text not null, "
-            + HighScoreTable.HighScoreEntry.COLUMN_NAME_HighScore + " integer"
-            + ");";
-
     public DBHelper(Context context){
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
@@ -34,14 +28,12 @@ public class DBHelper extends SQLiteOpenHelper{
     @Override
     public void onCreate(SQLiteDatabase DB) {
         DB.execSQL(MAIN_CREATE);
-        DB.execSQL(HS_CREATE);
     }
 
     @Override
     //When our database version changes, in this case, simply delete the database and recreate it:
     public void onUpgrade(SQLiteDatabase DB, int oldVersion, int newVersion) {
         DB.execSQL("DROP TABLE IF EXISTS " + MainTable.MainEntry.TABLE_NAME);
-        DB.execSQL("DROP TABLE IF EXISTS " + HighScoreTable.HighScoreEntry.TABLE_NAME);
         onCreate(DB);
     }
 
