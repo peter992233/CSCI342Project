@@ -2,6 +2,7 @@ package com.example.peter.csci342_groupproject;
 
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -20,6 +21,8 @@ public class HighScoresActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_high_scores);
+
+
 
         DBHelper dbHelper = new DBHelper(this);
         SQLiteDatabase reader = dbHelper.getReadableDatabase();
@@ -53,6 +56,7 @@ public class HighScoresActivity extends AppCompatActivity {
             message.setText("No High Scores");
         }
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

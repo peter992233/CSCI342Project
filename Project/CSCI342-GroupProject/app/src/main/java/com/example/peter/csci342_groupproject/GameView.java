@@ -1,17 +1,28 @@
 package com.example.peter.csci342_groupproject;
 
+import android.app.ActionBar;
 import android.content.Context;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Picture;
+import android.graphics.drawable.AnimationDrawable;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.support.v4.view.MotionEventCompat;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 /**
  * Created by pb864 on 17/10/15.
@@ -58,14 +69,16 @@ public class GameView extends SurfaceView implements Runnable {
     private int MaxProjectile = 10;
     */
 
+    final AnimationDrawable animDraw = createAnimationDrawable();
 
-    EnemyShip[] enemies = new EnemyShip[60];
-    int numEnemies = 0;
+    ArrayList<EnemyShip> EnemyList= new ArrayList<EnemyShip>();
+    int maxEnemies = 60;
 
     int score = 0;
     private int lives = 0;
 
-
+    ImageView backGround;
+    int currBgFrame = 0;
 
     public GameView(Context context,int x, int y) {
         super(context);
@@ -77,6 +90,7 @@ public class GameView extends SurfaceView implements Runnable {
 
         screenX = x;
         screenY = y;
+
 
 
         try{
@@ -94,10 +108,45 @@ public class GameView extends SurfaceView implements Runnable {
     }
 
 
+    private AnimationDrawable createAnimationDrawable(){
+
+        AnimationDrawable newAnim = new AnimationDrawable();
+        Resources res = getResources();
+        newAnim.addFrame(res.getDrawable(R.drawable.background_1),200);
+        newAnim.addFrame(res.getDrawable(R.drawable.background_2),200);
+        newAnim.addFrame(res.getDrawable(R.drawable.background_3),200);
+        newAnim.addFrame(res.getDrawable(R.drawable.background_4),200);
+        newAnim.addFrame(res.getDrawable(R.drawable.background_5),200);
+        newAnim.addFrame(res.getDrawable(R.drawable.background_6),200);
+        newAnim.addFrame(res.getDrawable(R.drawable.background_7),200);
+        newAnim.addFrame(res.getDrawable(R.drawable.background_8),200);
+        newAnim.addFrame(res.getDrawable(R.drawable.background_9),200);
+        newAnim.addFrame(res.getDrawable(R.drawable.background_10), 200);
+        newAnim.addFrame(res.getDrawable(R.drawable.background_11), 200);
+        newAnim.addFrame(res.getDrawable(R.drawable.background_12), 200);
+        newAnim.addFrame(res.getDrawable(R.drawable.background_13), 200);
+        newAnim.addFrame(res.getDrawable(R.drawable.background_14), 200);
+        newAnim.addFrame(res.getDrawable(R.drawable.background_15), 200);
+        newAnim.addFrame(res.getDrawable(R.drawable.background_16), 200);
+
+
+        newAnim.setOneShot(false);
+        return newAnim;
+    }
+
 
     private void prepareLevel(){
 
         //Init game Objects
+
+
+        try{
+            backGround = new ImageView(context);
+            backGround.setImageDrawable(animDraw);
+
+        }catch(Exception e) {
+            e.printStackTrace();
+        }
 
         //Make a Player Ship
         pShip = new PlayerShip(context,screenX,screenY);
@@ -107,7 +156,20 @@ public class GameView extends SurfaceView implements Runnable {
         projectile = new Projectile(context, screenY);
 
         //Init bullet Array
+
         //Build Enemy array
+        for(int i = 0; i < maxEnemies; i++){
+
+            EnemyShip newEnemy = new EnemyShip(context,screenX,screenY);
+
+            if(i >= 3) {
+                newEnemy.setIsVisible(false);
+            }
+
+            EnemyList.add(newEnemy);
+        }
+
+
 
     }
 
@@ -117,6 +179,8 @@ public class GameView extends SurfaceView implements Runnable {
 
 
         while(playing){
+
+
             long startFrameTime = System.currentTimeMillis();
 
             //If not pause the game should update
@@ -134,12 +198,12 @@ public class GameView extends SurfaceView implements Runnable {
                 fps = 1000/timeThisFrame;
             }
 
-
         }
 
 
 
     }
+
 
 
     private void update(){
@@ -152,6 +216,21 @@ public class GameView extends SurfaceView implements Runnable {
         pShip.update(fps);
 
         //Update the Enemies
+        for(int i = 0; i < EnemyList.size(); i++){
+            EnemyShip e = EnemyList.get(i);
+            e.update(fps);
+
+
+            //Check if time to remove bullet objects
+            if(e.getY() < -e.getHeight() *2 || e.getY() > screenY + e.getHeight()*2){
+                EnemyList.remove(e);
+            }
+
+
+
+        }
+
+
 
         //Update the Bullets
 
@@ -160,12 +239,35 @@ public class GameView extends SurfaceView implements Runnable {
             if (p.getStatus()) {
                 p.update(fps);
             }
+
+            //Check if time to remove bullet objects
+            if(p.getImpactPointY() < -p.getHeight() *2 || p.getImpactPointY() > screenY + p.getHeight()*2){
+                playerBullets.remove(p);
+            }
+
+
+
+
         }
 
         //Check Collision
 
+
+        
+
+
+
+
+
+
         if(lost){
             prepareLevel();
+        }
+
+
+        currBgFrame++;
+        if (currBgFrame > 9) {
+            currBgFrame = 0;
         }
 
         //Update player bullets
@@ -175,22 +277,27 @@ public class GameView extends SurfaceView implements Runnable {
     }
 
 
+
+
+
     private void draw(){
 
         if(ourHolder.getSurface().isValid()){
 
             canvas = ourHolder.lockCanvas();
 
-            canvas.drawColor(Color.argb(255, 26, 128, 182));
+
+            Drawable d = animDraw.getFrame(currBgFrame);
+            d.setBounds(0,0,screenX,screenY);
+            d.draw(canvas);
+
             paint.setColor(Color.argb(255, 255, 255, 255));
 
             //Draw the Active Bullets
 
-
             for(int i = 0; i < playerBullets.size(); i++){
                 Projectile p = playerBullets.get(i);
                 if(p.getStatus()){
-                    canvas.drawRect(p.getRect(),paint);
                     canvas.drawBitmap(p.getBmp(), p.getX(),p.getY(), paint);
                 }
             }
@@ -199,6 +306,15 @@ public class GameView extends SurfaceView implements Runnable {
             canvas.drawBitmap(pShip.getBmp(), pShip.getX(),screenY-(pShip.getHeight()*2),paint);
 
             //Draw the Enemies
+
+            for(int i = 0; i < EnemyList.size(); i++){
+                EnemyShip e = EnemyList.get(i);
+                if(e.isVisible() == true){
+                    canvas.drawBitmap(e.getEnemyBMP(), e.getX(),e.getY(), paint);
+
+                }
+            }
+
 
             //Draw Score & Lives
 

@@ -59,6 +59,8 @@ public class Projectile {
         //If it is standing still we need to get its current location
         if(heading == DOWN){
             return y+height;
+        }else if(heading == UP){
+            return y-height;
         }else{
             return y;
         }
@@ -88,5 +90,6 @@ public class Projectile {
         rect.right = x+width;
         rect.top = y;
         rect.bottom = y+height;
+
     }
 }

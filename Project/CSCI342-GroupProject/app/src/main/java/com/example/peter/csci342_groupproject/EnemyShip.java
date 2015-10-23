@@ -49,28 +49,31 @@ public class EnemyShip {
 
 
 
-    public EnemyShip(Context context, int pushX, int pushY, int screenX, int screenY) {
+    public EnemyShip(Context context, int screenX, int screenY) {
 
         // Initialize a blank RectF
         rect = new RectF();
 
         //Set the length of the Ship
         length = screenX / 20;
+        height = screenY / 20;
+
 
         //Set the ship to display as visible
         isVisible = true;
 
+        Random r = new Random();
+        int pushX = r.nextInt(screenX - (int)length*2) + (int)length*2;
+
+
         //Push X is a variable to push the ships position to a point along the XY axis
-        x = pushX * (length);
+        x = pushX;
 
-        // Initialize the bitmap
-        //enemyBMP = BitmapFactory.decodeResource(context.getResources(), R.drawable.X);
-
-        // stretch the first bitmap to a size appropriate for the screen resolution
-        enemyBMP = Bitmap.createScaledBitmap(enemyBMP, (int) (length), (int) (height), false);
+        enemyBMP = BitmapFactory.decodeResource(context.getResources(), R.drawable.enemy_vertical);
+        enemyBMP = Bitmap.createScaledBitmap(enemyBMP, (int) length, (int) height, false);
 
         //Set The Enemy Movespeed
-        shipSpeed = 80;
+        shipSpeed = 100;
     }
 
     public void update(long fps){
