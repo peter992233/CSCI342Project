@@ -79,6 +79,7 @@ public class GameView extends SurfaceView implements Runnable {
 
     int score = 0;
     private int lives = 0;
+    int currency = 0;
 
     ImageView backGround;
     int currBgFrame = 0;
@@ -301,6 +302,16 @@ public class GameView extends SurfaceView implements Runnable {
                     }
 
 
+
+                }
+            }
+
+            //Update the Coins
+
+            for(int i = 0; i < coins.size(); i++) {
+                Coin c = coins.get(i);
+                if(c.getStatus()) {
+                    c.update(fps);
                 }
             }
 
@@ -323,6 +334,16 @@ public class GameView extends SurfaceView implements Runnable {
                         if (e.isVisible()) {
                             if (RectF.intersects(p.getRect(), e.getRect())) {
                                 Log.d("BOOM", "Enemy Ship Killed");
+
+                                Random randCoin = new Random();
+                                int coinCheck = randCoin.nextInt(5);
+
+                                if(coinCheck == 2) {
+                                    Coin c = new Coin(context, screenY, screenX);
+                                    c.spawn(e.getX(), e.getY());
+                                    coins.add(c);
+                                }
+
                                 e.setIsVisible(false);
                                 EnemyList.remove(e);
                                 p.setInactive();
@@ -331,6 +352,24 @@ public class GameView extends SurfaceView implements Runnable {
                             }
                         }
                     }
+                }
+            }
+
+            for(int i = 0; i < coins.size(); i++) {
+                Coin c = coins.get(i);
+                if(c.getStatus()) {
+                    c.update(fps);
+                }
+
+                if(c.getY() < -c.getHeight() * 2 || c.getY() > screenY + c.getHeight() * 2) {
+                    c.setInactive();
+                    coins.remove(c);
+                }
+
+                if(RectF.intersects(c.getRect(), pShip.getRect())) {
+                    c.setInactive();
+                    coins.remove(c);
+                    currency = currency + 10;
                 }
             }
 
@@ -407,6 +446,15 @@ public class GameView extends SurfaceView implements Runnable {
                     }
                 }
 
+                //Draw the Active coins
+
+                for(int i = 0; i < coins.size(); i++) {
+                    Coin c = coins.get(i);
+                    if(c.getStatus()) {
+                        canvas.drawBitmap(c.getBmp(), c.getX(), c.getY(), paint);
+                    }
+                }
+
 
                 //Draw the Player Ship
                 canvas.drawBitmap(pShip.getBmp(), pShip.getX(), screenY - (pShip.getHeight() * 2), paint);
@@ -427,7 +475,7 @@ public class GameView extends SurfaceView implements Runnable {
                 paint.setColor(Color.argb(255, 249, 129, 0));
                 paint.setTextAlign(Paint.Align.LEFT);
                 paint.setTextSize(40);
-                canvas.drawText("Score: " + score + "\t\t\tLives: " + lives, 10, 50, paint);
+                canvas.drawText("Score: " + score + "\t\t\tLives: " + lives + "\t\t\tCoins: " + currency, 10, 50, paint);
 
 
                 ourHolder.unlockCanvasAndPost(canvas);

@@ -18,13 +18,13 @@ public class Coin {
     private int width;
     private int height;
 
-    float speed = 350;
+    float speed = 150;
 
     public boolean isActive;
 
     public Coin(Context context, int screenY, int screenX) {
-        width = screenX/45;
-        height = screenY/45;
+        width = screenX/25;
+        height = screenY/25;
 
         isActive = false;
         rect = new RectF();
