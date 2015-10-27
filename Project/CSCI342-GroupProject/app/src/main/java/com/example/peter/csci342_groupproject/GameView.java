@@ -65,6 +65,9 @@ public class GameView extends SurfaceView implements Runnable {
     private ArrayList<Projectile> playerBullets = new ArrayList<Projectile>();
     private ArrayList<Projectile> enemyBullets = new ArrayList<Projectile>();
 
+    private Coin coin;
+    private ArrayList<Coin> coins = new ArrayList<Coin>();
+
     private long nextShot = 250; //When is the next shot
     private long nextEnemy = 2500;//When to display the next enemy
 
