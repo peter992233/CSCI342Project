@@ -29,10 +29,10 @@ public class Projectile {
     boolean isEnemy = false;
 
 
-    public Projectile(Context context, int screenY, int screenX){
+    public Projectile(Context context, int screenY, int screenX) {
 
-        width = screenX/90;
-        height = screenY/30;
+        width = screenX / 90;
+        height = screenY / 30;
 
         isActive = false;
         rect = new RectF();
@@ -43,20 +43,20 @@ public class Projectile {
 
     }
 
-    public Projectile(Context context, int screenY, int screenX, boolean enemy, int bulletType){
+    public Projectile(Context context, int screenY, int screenX, boolean enemy, int bulletType) {
 
-        width = screenX/90;
-        height = screenY/30;
+        width = screenX / 90;
+        height = screenY / 30;
         isActive = false;
         rect = new RectF();
         isEnemy = enemy;
 
-        if(enemy == true) {
+        if (enemy == true) {
             heading = DOWN;
             //Create the Bitmap
             bmp = BitmapFactory.decodeResource(context.getResources(), R.drawable.enemy_bullet);
             bmp = Bitmap.createScaledBitmap(bmp, (int) width, (int) height, false);
-        }else{
+        } else {
             heading = UP;
             //Create the Bitmap
             bmp = BitmapFactory.decodeResource(context.getResources(), R.drawable.player_bullet);
@@ -66,37 +66,49 @@ public class Projectile {
     }
 
 
-    public RectF getRect(){ return rect; }
-
-    public Bitmap getBmp() { return bmp; }
-
-    public boolean getStatus(){ return isActive; }
-
-    public float getX() { return x; }
-
-    public float getY() { return y;}
-
-    public float getHeight(){ return height;
+    public RectF getRect() {
+        return rect;
     }
-    public void setInactive(){
+
+    public Bitmap getBmp() {
+        return bmp;
+    }
+
+    public boolean getStatus() {
+        return isActive;
+    }
+
+    public float getX() {
+        return x;
+    }
+
+    public float getY() {
+        return y;
+    }
+
+    public float getHeight() {
+        return height;
+    }
+
+    public void setInactive() {
         isActive = false;
     }
 
-    public float getImpactPointY(){
+    public float getImpactPointY() {
         //If the projectile is heading down we want to get its next impact point
         //If it is standing still we need to get its current location
-        if(heading == DOWN){
+        if (heading == DOWN) {
             return y + height;
-        }else if(heading == UP){
+        } else if (heading == UP) {
             return y - height;
-        }else{
+        } else {
             return y;
         }
     }
 
-    public boolean shoot(float startX, float startY, int direction){
+    public boolean shoot(float startX, float startY, int direction) {
 
-        if(!isActive){
+        if (!isActive) {
             x = startX;
             y = startY;
             heading = direction;
@@ -106,18 +118,18 @@ public class Projectile {
         return false;
     }
 
-    public void update(long fps){
+    public void update(long fps) {
 
-        if(heading == UP){
-            y = y - speed/fps;
-        }else{
-            y = y + speed /fps;
+        if (heading == UP) {
+            y = y - speed / fps;
+        } else {
+            y = y + speed / fps;
         }
 
         //update the rect
         rect.left = x;
-        rect.right = x+width;
+        rect.right = x + width;
         rect.top = y;
-        rect.bottom = y+height;
+        rect.bottom = y + height;
     }
 }

@@ -7,8 +7,11 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class UpgradesActivity extends AppCompatActivity {
 
@@ -31,7 +34,8 @@ public class UpgradesActivity extends AppCompatActivity {
         //set damage
         updateDamage(gd);
 
-
+        //set speed
+        updateSpeed(gd);
     }
 
     private void updateLives(GameData gd) {
@@ -41,7 +45,7 @@ public class UpgradesActivity extends AppCompatActivity {
         ImageView life4 = (ImageView) this.findViewById(R.id.Lives4);
         ImageView life5 = (ImageView) this.findViewById(R.id.Lives5);
 
-        switch (gd.getBaseLives().intValue()) {
+        switch (gd.getBaseLives()) {
             case 1:
 
                 life1.setBackgroundResource(R.drawable.upgrade_true);
@@ -67,6 +71,8 @@ public class UpgradesActivity extends AppCompatActivity {
                 life3.setBackgroundResource(R.drawable.upgrade_true);
                 life4.setBackgroundResource(R.drawable.upgrade_true);
                 life5.setBackgroundResource(R.drawable.upgrade_true);
+                Button buyLife = (Button) this.findViewById(R.id.BuyLife);
+                buyLife.setEnabled(false);
                 break;
         }
     }
@@ -78,9 +84,8 @@ public class UpgradesActivity extends AppCompatActivity {
         ImageView damage4 = (ImageView) this.findViewById(R.id.Damage4);
         ImageView damage5 = (ImageView) this.findViewById(R.id.Damage5);
 
-        switch (gd.getBaseLives().intValue()) {
+        switch (gd.getBaseDamage().intValue()) {
             case 1:
-
                 damage1.setBackgroundResource(R.drawable.upgrade_true);
                 break;
             case 2:
@@ -96,7 +101,7 @@ public class UpgradesActivity extends AppCompatActivity {
                 damage1.setBackgroundResource(R.drawable.upgrade_true);
                 damage2.setBackgroundResource(R.drawable.upgrade_true);
                 damage3.setBackgroundResource(R.drawable.upgrade_true);
-                damage5.setBackgroundResource(R.drawable.upgrade_true);
+                damage4.setBackgroundResource(R.drawable.upgrade_true);
                 break;
             case 5:
                 damage1.setBackgroundResource(R.drawable.upgrade_true);
@@ -104,47 +109,85 @@ public class UpgradesActivity extends AppCompatActivity {
                 damage3.setBackgroundResource(R.drawable.upgrade_true);
                 damage4.setBackgroundResource(R.drawable.upgrade_true);
                 damage5.setBackgroundResource(R.drawable.upgrade_true);
+                Button buyDamage = (Button) this.findViewById(R.id.BuyDamage);
+                buyDamage.setEnabled(false);
                 break;
         }
     }
-/*
+
     private void updateSpeed(GameData gd) {
-        ImageView speed1 = (ImageView) this.findViewById(R.id.Damage1);
-        ImageView speed2 = (ImageView) this.findViewById(R.id.Damage2);
-        ImageView damage3 = (ImageView) this.findViewById(R.id.Damage3);
-        ImageView damage4 = (ImageView) this.findViewById(R.id.Damage4);
-        ImageView damage5 = (ImageView) this.findViewById(R.id.Damage5);
+        ImageView speed1 = (ImageView) this.findViewById(R.id.Speed1);
+        ImageView speed2 = (ImageView) this.findViewById(R.id.Speed2);
+        ImageView speed3 = (ImageView) this.findViewById(R.id.Speed3);
+        ImageView speed4 = (ImageView) this.findViewById(R.id.Speed4);
+        ImageView speed5 = (ImageView) this.findViewById(R.id.Speed5);
 
-        switch (gd.getBaseLives().intValue()) {
+        switch (gd.getBaseSpeed().intValue()) {
             case 1:
-
-                damage1.setBackgroundResource(R.drawable.upgrade_true);
+                speed1.setBackgroundResource(R.drawable.upgrade_true);
                 break;
             case 2:
-                damage1.setBackgroundResource(R.drawable.upgrade_true);
-                damage2.setBackgroundResource(R.drawable.upgrade_true);
+                speed1.setBackgroundResource(R.drawable.upgrade_true);
+                speed2.setBackgroundResource(R.drawable.upgrade_true);
                 break;
             case 3:
-                damage1.setBackgroundResource(R.drawable.upgrade_true);
-                damage2.setBackgroundResource(R.drawable.upgrade_true);
-                damage3.setBackgroundResource(R.drawable.upgrade_true);
+                speed1.setBackgroundResource(R.drawable.upgrade_true);
+                speed2.setBackgroundResource(R.drawable.upgrade_true);
+                speed3.setBackgroundResource(R.drawable.upgrade_true);
                 break;
             case 4:
-                damage1.setBackgroundResource(R.drawable.upgrade_true);
-                damage2.setBackgroundResource(R.drawable.upgrade_true);
-                damage3.setBackgroundResource(R.drawable.upgrade_true);
-                damage5.setBackgroundResource(R.drawable.upgrade_true);
+                speed1.setBackgroundResource(R.drawable.upgrade_true);
+                speed2.setBackgroundResource(R.drawable.upgrade_true);
+                speed3.setBackgroundResource(R.drawable.upgrade_true);
+                speed4.setBackgroundResource(R.drawable.upgrade_true);
                 break;
             case 5:
-                damage1.setBackgroundResource(R.drawable.upgrade_true);
-                damage2.setBackgroundResource(R.drawable.upgrade_true);
-                damage3.setBackgroundResource(R.drawable.upgrade_true);
-                damage4.setBackgroundResource(R.drawable.upgrade_true);
-                damage5.setBackgroundResource(R.drawable.upgrade_true);
+                speed1.setBackgroundResource(R.drawable.upgrade_true);
+                speed2.setBackgroundResource(R.drawable.upgrade_true);
+                speed3.setBackgroundResource(R.drawable.upgrade_true);
+                speed4.setBackgroundResource(R.drawable.upgrade_true);
+                speed5.setBackgroundResource(R.drawable.upgrade_true);
+                Button buySpeed= (Button) this.findViewById(R.id.BuySpeed);
+                buySpeed.setEnabled(false);
                 break;
         }
     }
-    */
+
+    public void buyLife(View view) {
+        GameData gd = GameData.getInstance();
+
+        if (gd.getBaseLives() < 5) {
+            DBHelper dbHelper = new DBHelper(getApplicationContext());
+
+            if (gd.setBaseLives((gd.getBaseLives()+1), dbHelper))
+                updateLives(gd);
+        }
+    }
+
+    public void buyDamage(View view) {
+        GameData gd = GameData.getInstance();
+
+        if (gd.getBaseDamage() < 5) {
+            DBHelper dbHelper = new DBHelper(getApplicationContext());
+
+            if (gd.setBaseDamage((gd.getBaseDamage() + 1), dbHelper))
+                updateDamage(gd);
+        }
+    }
+
+    public void buySpeed(View view) {
+        GameData gd = GameData.getInstance();
+
+        if (gd.getBaseSpeed() < 5) {
+            DBHelper dbHelper = new DBHelper(getApplicationContext());
+
+            if (gd.setBaseSpeed((gd.getBaseSpeed() + 1), dbHelper))
+                updateSpeed(gd);
+        }
+    }
+
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

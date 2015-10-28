@@ -3,14 +3,13 @@ package com.example.peter.csci342_groupproject;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
 
 /**
  * Created by Lorthris on 28/10/2015.
  */
 public class GameData {
 
-    private static GameData GD = new GameData( );
+    private static GameData GD = new GameData();
 
     private Integer baseLives;
     private Double baseDamage;
@@ -23,7 +22,7 @@ public class GameData {
     /* A private Constructor prevents any other
      * class from instantiating.
      */
-    private GameData(){
+    private GameData() {
         baseLives = 1;
         baseDamage = 1.0;
         baseSpeed = 1.0;
@@ -34,11 +33,11 @@ public class GameData {
     }
 
     /* Static 'instance' method */
-    public static GameData getInstance( ) {
+    public static GameData getInstance() {
         return GD;
     }
 
-    public void populateFromDB (DBHelper dbHelper){
+    public void populateFromDB(DBHelper dbHelper) {
 
         SQLiteDatabase reader = dbHelper.getReadableDatabase();
         Cursor cursor = reader.rawQuery("SELECT * FROM " + MainTable.MainEntry.TABLE_NAME, null);
@@ -80,7 +79,7 @@ public class GameData {
 
     public boolean setBaseLives(Integer baseLives, DBHelper dbHelper) {
         this.baseLives = baseLives;
-        return  dbHelper.updateMainTable(dbHelper);
+        return dbHelper.updateMainTable(dbHelper);
     }
 
     public Double getBaseDamage() {
@@ -98,7 +97,7 @@ public class GameData {
 
     public boolean setBaseSpeed(Double baseSpeed, DBHelper dbHelper) {
         this.baseSpeed = baseSpeed;
-        return  dbHelper.updateMainTable(dbHelper);
+        return dbHelper.updateMainTable(dbHelper);
     }
 
     public Integer getCurrency() {
@@ -107,7 +106,7 @@ public class GameData {
 
     public boolean setCurrency(Integer currency, DBHelper dbHelper) {
         this.currency = currency;
-        return  dbHelper.updateMainTable(dbHelper);
+        return dbHelper.updateMainTable(dbHelper);
     }
 
     public Boolean getSoundFX() {
@@ -119,7 +118,7 @@ public class GameData {
             this.soundFX = false;
         else
             this.soundFX = true;
-        return  dbHelper.updateMainTable(dbHelper);
+        return dbHelper.updateMainTable(dbHelper);
     }
 
     public Boolean getMusic() {
@@ -131,7 +130,7 @@ public class GameData {
             this.music = false;
         else
             this.music = true;
-        return  dbHelper.updateMainTable(dbHelper);
+        return dbHelper.updateMainTable(dbHelper);
     }
 
     public Double getVolume() {
@@ -140,6 +139,6 @@ public class GameData {
 
     public boolean setVolume(Double volume, DBHelper dbHelper) {
         this.volume = volume;
-        return  dbHelper.updateMainTable(dbHelper);
+        return dbHelper.updateMainTable(dbHelper);
     }
 }

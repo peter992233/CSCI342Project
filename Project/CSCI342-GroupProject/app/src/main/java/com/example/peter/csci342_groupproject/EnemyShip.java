@@ -43,7 +43,7 @@ public class EnemyShip {
     public final int UP = 4;
 
     //The Dual Coordinate Movement allowing for movement on Diagonals as well as XY
-    private int[] shipMoving = {EMPTY,DOWN};
+    private int[] shipMoving = {EMPTY, DOWN};
 
     //Is the Enemy visible
     boolean isVisible;
@@ -73,11 +73,11 @@ public class EnemyShip {
         isVisible = true;
 
         Random r = new Random();
-        int pushX = (int)length*2 + r.nextInt(screenX - (int)length*3 + 1);
+        int pushX = (int) length * 2 + r.nextInt(screenX - (int) length * 3 + 1);
         x = pushX - length;
 
-        if(x+length > screenX){
-            Log.d("PX","Push: " +  pushX + "\t WithMax " + screenX + "\t WhenLength" + length);
+        if (x + length > screenX) {
+            Log.d("PX", "Push: " + pushX + "\t WithMax " + screenX + "\t WhenLength" + length);
         }
 
         //Push X is a variable to push the ships position to a point along the XY axis
@@ -90,22 +90,22 @@ public class EnemyShip {
         shipSpeed = 100;
     }
 
-    public void update(long fps){
+    public void update(long fps) {
 
         //Movement Left, Right, Up and Down Movement
-        if(shipMoving[0] == LEFT){
+        if (shipMoving[0] == LEFT) {
             x = x - shipSpeed / fps;
         }
 
-        if(shipMoving[0] == RIGHT){
+        if (shipMoving[0] == RIGHT) {
             x = x + shipSpeed / fps;
         }
 
-        if(shipMoving[1] == UP){
+        if (shipMoving[1] == UP) {
             y = y - shipSpeed / fps;
         }
 
-        if(shipMoving[1] == DOWN){
+        if (shipMoving[1] == DOWN) {
             y = y + shipSpeed / fps;
         }
 
@@ -118,22 +118,21 @@ public class EnemyShip {
     }
 
 
+    public boolean shouldShoot(float playerShipX, float playerShipLength) {
 
-    public boolean shouldShoot(float playerShipX, float playerShipLength){
 
-
-        if(System.currentTimeMillis() - lastShot > 2000){
+        if (System.currentTimeMillis() - lastShot > 2000) {
 
             int randomNumber = -1;
 
             // If near the player run a random generator with a 1/100 chance to shoot
             // This takes into account the large amount of updates being sent through for the enemy
-            if((playerShipX + playerShipLength > x && playerShipX + playerShipLength < x + length) ||
+            if ((playerShipX + playerShipLength > x && playerShipX + playerShipLength < x + length) ||
                     (playerShipX > x && playerShipX < x + length)) {
 
                 //The random Gen with 1 in 50 chance to shoot
                 randomNumber = shootGen.nextInt(50);
-                if(randomNumber == 0) {
+                if (randomNumber == 0) {
                     lastShot = System.currentTimeMillis();
                     return true;
                 }
@@ -142,7 +141,7 @@ public class EnemyShip {
 
             //Fire Randomly regardless of player (1/1500)
             randomNumber = shootGen.nextInt(750);
-            if(randomNumber == 0){
+            if (randomNumber == 0) {
                 lastShot = System.currentTimeMillis();
                 return true;
             }

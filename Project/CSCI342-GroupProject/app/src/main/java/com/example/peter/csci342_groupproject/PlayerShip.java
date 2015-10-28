@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.RectF;
-import android.util.Log;
 
 /**
  * Created by pb864 on 17/10/15.
@@ -18,7 +17,7 @@ public class PlayerShip {
     private float height, width;
 
     //Far left (X) and Top (Y)
-    private float x , y ;
+    private float x, y;
 
     //Movement Speed of the Ship
     private float shipSpeed;
@@ -32,14 +31,14 @@ public class PlayerShip {
 
     int SX = 0;
 
-    public PlayerShip(Context context, int screenX, int screenY){
+    public PlayerShip(Context context, int screenX, int screenY) {
 
         rect = new RectF();
         width = screenX / 15;
         height = screenY / 8;
 
         x = screenX / 2;
-        y = screenY - height*2;
+        y = screenY - height * 2;
 
         SX = screenX;
 
@@ -57,7 +56,9 @@ public class PlayerShip {
         return rect;
     }
 
-    public Bitmap getBmp() { return bmp; }
+    public Bitmap getBmp() {
+        return bmp;
+    }
 
     public float getX() {
         return x;
@@ -67,27 +68,27 @@ public class PlayerShip {
         return width;
     }
 
-    public void setMovementState(int state){
+    public void setMovementState(int state) {
         shipMoving = state;
     }
 
-    public float getHeight(){
+    public float getHeight() {
         return height;
     }
 
-    public void update(long fps){
+    public void update(long fps) {
 
 
         //Move the Ship X&Y coords based on direction and Speed
-        if(shipMoving == LEFT){
-            if(x > width/2){
-                x = x-shipSpeed/fps;
+        if (shipMoving == LEFT) {
+            if (x > width / 2) {
+                x = x - shipSpeed / fps;
                 return;
             }
         }
-        if(shipMoving == RIGHT){
-            if(x < SX - width*1.5){
-                x = x+shipSpeed/fps;
+        if (shipMoving == RIGHT) {
+            if (x < SX - width * 1.5) {
+                x = x + shipSpeed / fps;
                 return;
             }
         }
@@ -96,8 +97,7 @@ public class PlayerShip {
         rect.top = y;
         rect.bottom = y + height;
         rect.left = x;
-        rect.right = x+width;
-
+        rect.right = x + width;
 
 
     }

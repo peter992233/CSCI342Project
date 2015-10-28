@@ -4,7 +4,8 @@ import android.provider.BaseColumns;
 
 public class MainTable {
 
-    public MainTable(){}
+    public MainTable() {
+    }
 
     public static abstract class MainEntry implements BaseColumns {
 

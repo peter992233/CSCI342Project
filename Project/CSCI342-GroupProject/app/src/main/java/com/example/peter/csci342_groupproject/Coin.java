@@ -23,8 +23,8 @@ public class Coin {
     public boolean isActive;
 
     public Coin(Context context, int screenY, int screenX) {
-        width = screenX/25;
-        height = screenY/25;
+        width = screenX / 25;
+        height = screenY / 25;
 
         isActive = false;
         rect = new RectF();
@@ -33,22 +33,36 @@ public class Coin {
         bmp = Bitmap.createScaledBitmap(bmp, (int) width, (int) height, false);
     }
 
-    public RectF getRect(){ return rect; }
+    public RectF getRect() {
+        return rect;
+    }
 
-    public Bitmap getBmp() { return bmp; }
+    public Bitmap getBmp() {
+        return bmp;
+    }
 
-    public boolean getStatus(){ return isActive; }
+    public boolean getStatus() {
+        return isActive;
+    }
 
-    public float getX() { return x; }
+    public float getX() {
+        return x;
+    }
 
-    public float getY() { return y;}
+    public float getY() {
+        return y;
+    }
 
-    public float getHeight(){ return height;}
+    public float getHeight() {
+        return height;
+    }
 
-    public void setInactive(){isActive = false;}
+    public void setInactive() {
+        isActive = false;
+    }
 
     public boolean spawn(float startX, float startY) {
-        if(!isActive) {
+        if (!isActive) {
             x = startX;
             y = startY;
             isActive = true;

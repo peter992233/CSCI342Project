@@ -1,27 +1,19 @@
 package com.example.peter.csci342_groupproject;
 
-import android.app.ActionBar;
 import android.content.Context;
 import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Picture;
-import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.drawable.AnimationDrawable;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.support.v4.view.MotionEventCompat;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -30,7 +22,6 @@ import java.util.Random;
  * Created by pb864 on 17/10/15.
  */
 public class GameView extends SurfaceView implements Runnable {
-
 
 
     Context context;
@@ -82,7 +73,7 @@ public class GameView extends SurfaceView implements Runnable {
     ArrayList<Integer> explY = new ArrayList<Integer>();
     ArrayList<Integer> currExFrames = new ArrayList<Integer>();
 
-    ArrayList<EnemyShip> EnemyList= new ArrayList<EnemyShip>();
+    ArrayList<EnemyShip> EnemyList = new ArrayList<EnemyShip>();
     int maxEnemies = 40;
 
     int score = 0;
@@ -98,7 +89,7 @@ public class GameView extends SurfaceView implements Runnable {
 
     GameData gd = GameData.getInstance();
 
-    public GameView(Context context,int x, int y) {
+    public GameView(Context context, int x, int y) {
         super(context);
 
         this.context = context;
@@ -110,24 +101,24 @@ public class GameView extends SurfaceView implements Runnable {
         screenY = y;
 
         //initial Lives
-        lives = gd.getBaseLives() +3;
+        lives = gd.getBaseLives() + 3;
         currency = gd.getCurrency();
 
-        try{
+        try {
 
             //Load Sound Files
 
-        }catch(Exception e){
+        } catch (Exception e) {
             Log.d("CERROR", "GameView Contructor");
             e.printStackTrace();
 
         }
 
-        try{
+        try {
             backGround = new ImageView(context);
             backGround.setImageDrawable(animDraw);
 
-        }catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -135,17 +126,17 @@ public class GameView extends SurfaceView implements Runnable {
     }
 
 
-    private AnimationDrawable createAnimationDrawable(){
+    private AnimationDrawable createAnimationDrawable() {
 
         AnimationDrawable newAnim = new AnimationDrawable();
         Resources res = getResources();
-        newAnim.addFrame(res.getDrawable(R.drawable.background_1),200);
-        newAnim.addFrame(res.getDrawable(R.drawable.background_2),200);
-        newAnim.addFrame(res.getDrawable(R.drawable.background_3),200);
-        newAnim.addFrame(res.getDrawable(R.drawable.background_4),200);
-        newAnim.addFrame(res.getDrawable(R.drawable.background_5),200);
-        newAnim.addFrame(res.getDrawable(R.drawable.background_6),200);
-        newAnim.addFrame(res.getDrawable(R.drawable.background_7),200);
+        newAnim.addFrame(res.getDrawable(R.drawable.background_1), 200);
+        newAnim.addFrame(res.getDrawable(R.drawable.background_2), 200);
+        newAnim.addFrame(res.getDrawable(R.drawable.background_3), 200);
+        newAnim.addFrame(res.getDrawable(R.drawable.background_4), 200);
+        newAnim.addFrame(res.getDrawable(R.drawable.background_5), 200);
+        newAnim.addFrame(res.getDrawable(R.drawable.background_6), 200);
+        newAnim.addFrame(res.getDrawable(R.drawable.background_7), 200);
         newAnim.addFrame(res.getDrawable(R.drawable.background_8), 200);
         newAnim.addFrame(res.getDrawable(R.drawable.background_9), 200);
         newAnim.addFrame(res.getDrawable(R.drawable.background_10), 200);
@@ -176,11 +167,11 @@ public class GameView extends SurfaceView implements Runnable {
     }
 
 
-    private void prepareLevel(int Level){
+    private void prepareLevel(int Level) {
 
         //Init game Objects
         GameLevel++;
-        Log.d("LEVELSTART","" + GameLevel);
+        Log.d("LEVELSTART", "" + GameLevel);
 
 
         respawnPlayer();
@@ -194,13 +185,13 @@ public class GameView extends SurfaceView implements Runnable {
     public void run() {
 
 
-        while(playing){
+        while (playing) {
 
 
             long startFrameTime = System.currentTimeMillis();
 
             //If not pause the game should update
-            if(!paused){
+            if (!paused) {
                 update();
             }
 
@@ -210,10 +201,9 @@ public class GameView extends SurfaceView implements Runnable {
 
             //Update the elapsed time
             timeThisFrame = System.currentTimeMillis() - startFrameTime;
-            if(timeThisFrame >= 1){
-                fps = 1000/timeThisFrame;
+            if (timeThisFrame >= 1) {
+                fps = 1000 / timeThisFrame;
             }
-
 
 
             //Update the Events handler variables by the elapsed time
@@ -226,12 +216,12 @@ public class GameView extends SurfaceView implements Runnable {
     }
 
 
-    public void respawnEnemies(){
+    public void respawnEnemies() {
 
         //Build Enemy array
-        for(int i = 0; i < GameLevel*maxEnemies; i++){
+        for (int i = 0; i < GameLevel * maxEnemies; i++) {
 
-            EnemyShip newEnemy = new EnemyShip(context,screenX,screenY);
+            EnemyShip newEnemy = new EnemyShip(context, screenX, screenY);
 
             //Start with 3 Enemies on screen
             newEnemy.setIsVisible(false);
@@ -242,10 +232,10 @@ public class GameView extends SurfaceView implements Runnable {
 
     }
 
-    public void respawnPlayer(){
+    public void respawnPlayer() {
 
         //Make a Player Ship
-        pShip = new PlayerShip(context,screenX,screenY);
+        pShip = new PlayerShip(context, screenX, screenY);
 
         //Prepare Bullets
 
@@ -312,7 +302,7 @@ public class GameView extends SurfaceView implements Runnable {
                         EnemyList.remove(e);
 
                         //Decrease score if enemy gets past player
-                        if(score != 0) {
+                        if (score != 0) {
                             score -= 100;
                         }
                     }
@@ -328,7 +318,7 @@ public class GameView extends SurfaceView implements Runnable {
 
                         currExFrames.add(0);
 
-                        explX.add((int)EnemyList.get(i).getX());
+                        explX.add((int) EnemyList.get(i).getX());
                         explY.add((int) EnemyList.get(i).getY());
 
                         EnemyList.remove(i);
@@ -339,16 +329,16 @@ public class GameView extends SurfaceView implements Runnable {
 
             //Update the Coins
 
-            for(int i = 0; i < coins.size(); i++) {
+            for (int i = 0; i < coins.size(); i++) {
                 Coin c = coins.get(i);
-                if(c.getStatus()) {
+                if (c.getStatus()) {
                     c.update(fps);
                 }
             }
 
-            for(int i = 0; i < powerups.size(); i++) {
+            for (int i = 0; i < powerups.size(); i++) {
                 Powerup u = powerups.get(i);
-                if(u.getStatus()) {
+                if (u.getStatus()) {
                     u.update(fps);
                 }
             }
@@ -376,7 +366,7 @@ public class GameView extends SurfaceView implements Runnable {
                                 Random randCoin = new Random();
                                 int coinCheck = randCoin.nextInt(5);
 
-                                if(coinCheck == 2) {
+                                if (coinCheck == 2) {
                                     Coin c = new Coin(context, screenY, screenX);
                                     c.spawn(e.getX(), e.getY());
                                     coins.add(c);
@@ -385,7 +375,7 @@ public class GameView extends SurfaceView implements Runnable {
                                 Random randPowerup = new Random();
                                 int powerupCheck = randPowerup.nextInt(10);
 
-                                if(powerupCheck == 2) {
+                                if (powerupCheck == 2) {
                                     Powerup u = new Powerup(context, screenY, screenX);
                                     u.spawn(e.getX(), e.getY());
                                     powerups.add(u);
@@ -396,7 +386,7 @@ public class GameView extends SurfaceView implements Runnable {
 
                                 currExFrames.add(0);
 
-                                explX.add((int)EnemyList.get(j).getX());
+                                explX.add((int) EnemyList.get(j).getX());
                                 explY.add((int) EnemyList.get(j).getY());
 
                                 e.setIsVisible(false);
@@ -410,36 +400,36 @@ public class GameView extends SurfaceView implements Runnable {
                 }
             }
 
-            for(int i = 0; i < coins.size(); i++) {
+            for (int i = 0; i < coins.size(); i++) {
                 Coin c = coins.get(i);
-                if(c.getStatus()) {
+                if (c.getStatus()) {
                     c.update(fps);
                 }
 
-                if(c.getY() < -c.getHeight() * 2 || c.getY() > screenY + c.getHeight() * 2) {
+                if (c.getY() < -c.getHeight() * 2 || c.getY() > screenY + c.getHeight() * 2) {
                     c.setInactive();
                     coins.remove(c);
                 }
 
-                if(RectF.intersects(c.getRect(), pShip.getRect())) {
+                if (RectF.intersects(c.getRect(), pShip.getRect())) {
                     c.setInactive();
                     coins.remove(c);
                     currency = currency + 10;
                 }
             }
 
-            for(int i = 0; i < powerups.size(); i++) {
+            for (int i = 0; i < powerups.size(); i++) {
                 Powerup u = powerups.get(i);
-                if(u.getStatus()) {
+                if (u.getStatus()) {
                     u.update(fps);
                 }
 
-                if(u.getY() < -u.getHeight() * 2 || u.getY() > screenY + u.getHeight() * 2) {
+                if (u.getY() < -u.getHeight() * 2 || u.getY() > screenY + u.getHeight() * 2) {
                     u.setInactive();
                     powerups.remove(u);
                 }
 
-                if(RectF.intersects(u.getRect(), pShip.getRect())) {
+                if (RectF.intersects(u.getRect(), pShip.getRect())) {
                     u.setInactive();
                     powerups.remove(u);
                 }
@@ -480,9 +470,9 @@ public class GameView extends SurfaceView implements Runnable {
                 currBgFrame = 0;
             }
 
-            for(int i = 0; i < currExFrames.size(); i++) {
+            for (int i = 0; i < currExFrames.size(); i++) {
                 currExFrames.set(i, currExFrames.get(i) + 1);
-                if(currExFrames.get(i) == 6) {
+                if (currExFrames.get(i) == 6) {
                     explDraws.remove(i);
                     explX.remove(i);
                     explY.remove(i);
@@ -493,13 +483,10 @@ public class GameView extends SurfaceView implements Runnable {
     }
 
 
+    private void draw() {
 
 
-
-    private void draw(){
-
-
-        if(waitRestart == false) {
+        if (waitRestart == false) {
             if (ourHolder.getSurface().isValid()) {
 
                 canvas = ourHolder.lockCanvas();
@@ -528,18 +515,18 @@ public class GameView extends SurfaceView implements Runnable {
 
                 //Draw the Active coins
 
-                for(int i = 0; i < coins.size(); i++) {
+                for (int i = 0; i < coins.size(); i++) {
                     Coin c = coins.get(i);
-                    if(c.getStatus()) {
+                    if (c.getStatus()) {
                         canvas.drawBitmap(c.getBmp(), c.getX(), c.getY(), paint);
                     }
                 }
 
                 //Draw the Active powerups
 
-                for(int i = 0; i < powerups.size(); i++) {
+                for (int i = 0; i < powerups.size(); i++) {
                     Powerup u = powerups.get(i);
-                    if(u.getStatus()) {
+                    if (u.getStatus()) {
                         canvas.drawBitmap(u.getBmp(), u.getX(), u.getY(), paint);
                     }
                 }
@@ -556,8 +543,8 @@ public class GameView extends SurfaceView implements Runnable {
                     }
                 }
 
-                for(int i = 0; i < explDraws.size(); i++) {
-                    if(currExFrames.get(i) < explDraws.get(i).getNumberOfFrames()) {
+                for (int i = 0; i < explDraws.size(); i++) {
+                    if (currExFrames.get(i) < explDraws.get(i).getNumberOfFrames()) {
                         Drawable ex = explDraws.get(i).getFrame(currExFrames.get(i));
                         ex.setBounds(explX.get(i), explY.get(i), explX.get(i) + 100, explY.get(i) + 100);
                         ex.draw(canvas);
@@ -577,8 +564,8 @@ public class GameView extends SurfaceView implements Runnable {
 
 
             }
-        }else{
-            if(ourHolder.getSurface().isValid()){
+        } else {
+            if (ourHolder.getSurface().isValid()) {
 
                 canvas = ourHolder.lockCanvas();
 
@@ -605,46 +592,43 @@ public class GameView extends SurfaceView implements Runnable {
                 ourHolder.unlockCanvasAndPost(canvas);
 
 
-
             }
         }
 
     }
 
 
-    public void Pause(){
+    public void Pause() {
 
         playing = false;
-        try{
+        try {
             gameThread.join();
-        }catch(Exception e){
-            Log.d("CERROR","Error Pause()");
+        } catch (Exception e) {
+            Log.d("CERROR", "Error Pause()");
             e.printStackTrace();
         }
 
     }
 
 
-
-    public void Resume(){
+    public void Resume() {
         playing = true;
         gameThread = new Thread(this);
         gameThread.start();
     }
 
 
-
     @Override
-    public boolean onTouchEvent(MotionEvent motionEvent){
+    public boolean onTouchEvent(MotionEvent motionEvent) {
 
 
-        switch(motionEvent.getAction() & MotionEvent.ACTION_MASK){
+        switch (motionEvent.getAction() & MotionEvent.ACTION_MASK) {
 
 
-            case MotionEvent.ACTION_DOWN:{
+            case MotionEvent.ACTION_DOWN: {
 
                 //You are not waiting to restart
-                if(waitRestart != false){
+                if (waitRestart != false) {
                     waitRestart = false;
                     score = 0;
                 }
@@ -660,7 +644,7 @@ public class GameView extends SurfaceView implements Runnable {
                     }
                 }
 
-                if(nextShot < 0) {
+                if (nextShot < 0) {
                     projectile = new Projectile(context, screenY, screenX); // reset projectile
                     if (motionEvent.getY() < screenY - screenY / 4) {
                         projectile.shoot(pShip.getX() + pShip.getWidth() / 2, pShip.getRect().top, projectile.UP);
@@ -673,7 +657,7 @@ public class GameView extends SurfaceView implements Runnable {
                 break;
             }
 
-            case MotionEvent.ACTION_POINTER_DOWN:{
+            case MotionEvent.ACTION_POINTER_DOWN: {
                 int index = motionEvent.getActionIndex();
                 int xPos = (int) MotionEventCompat.getX(motionEvent, index);
                 int yPos = (int) MotionEventCompat.getY(motionEvent, index);
@@ -690,10 +674,10 @@ public class GameView extends SurfaceView implements Runnable {
                 }
 
 
-                if(nextShot < 0) {
+                if (nextShot < 0) {
                     if (yPos < screenY - screenY / 4) {
                         projectile = new Projectile(context, screenY, screenX); // reset projectile
-                        if (projectile.shoot(pShip.getX() + pShip.getWidth()/2, pShip.getRect().top, projectile.UP)) {
+                        if (projectile.shoot(pShip.getX() + pShip.getWidth() / 2, pShip.getRect().top, projectile.UP)) {
                             playerBullets.add(projectile);
                         }
                     }
@@ -704,8 +688,7 @@ public class GameView extends SurfaceView implements Runnable {
             }
 
 
-
-            case MotionEvent.ACTION_UP:{
+            case MotionEvent.ACTION_UP: {
                 paused = false;
                 pShip.setMovementState(pShip.STOPPED);
                 break;
@@ -717,12 +700,10 @@ public class GameView extends SurfaceView implements Runnable {
     }
 
 
-
-    public void gameOver(){
+    public void gameOver() {
 
 
         //Display highscore
-
 
 
         //Ask restart
@@ -731,8 +712,7 @@ public class GameView extends SurfaceView implements Runnable {
         gd.setCurrency(currency, db);
 
 
-
-        try{
+        try {
             //Do Restart
             playing = false;
             paused = true;
@@ -756,16 +736,12 @@ public class GameView extends SurfaceView implements Runnable {
             waitRestart = true;
 
 
+        } catch (Exception e) {
 
-        }catch(Exception e){
-
-        }finally{
+        } finally {
             prepareLevel(0);
         }
     }
-
-
-
 
 
 }

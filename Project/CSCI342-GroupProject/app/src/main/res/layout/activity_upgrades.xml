@@ -1,264 +1,270 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background_5"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    tools:context="com.example.peter.csci342_groupproject.UpgradesActivity"
-    android:background="@drawable/background_5">
+    tools:context="com.example.peter.csci342_groupproject.UpgradesActivity">
 
 
     <ImageView
+        android:id="@+id/Heading"
         android:layout_width="350dp"
         android:layout_height="60dp"
-        android:id="@+id/Heading"
         android:layout_centerHorizontal="true"
-        android:background="@drawable/upgrades"/>
+        android:background="@drawable/upgrades" />
 
     <RelativeLayout
-        android:orientation="vertical"
+        android:id="@+id/upgradesLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/upgradesLayout"
         android:layout_below="@+id/Heading"
-        android:background="@drawable/backboard">
+        android:background="@drawable/backboard"
+        android:orientation="vertical">
 
         <TextView
+            android:id="@+id/Currency"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:id="@+id/Currency"
             android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
             android:text="Coins: 560"
-            android:layout_marginTop="20dp"
+            android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="#fff325" />
 
         <ImageView
-            android:layout_width="100dp"
-            android:layout_height="30dp"
             android:id="@+id/LivesText"
-            android:gravity="right"
+            android:layout_width="100dp"
+            android:layout_height="30dp"
             android:layout_below="@+id/Currency"
+            android:layout_marginTop="20dp"
             android:layout_toLeftOf="@+id/Lives1"
-            android:layout_marginTop="20dp"
-            android:background="@drawable/lives"/>
+            android:background="@drawable/lives"
+            android:gravity="right" />
 
         <ImageView
-            android:layout_width="100dp"
-            android:layout_height="30dp"
             android:id="@+id/DamageText"
-            android:gravity="right"
-            android:layout_below="@+id/LivesText"
-            android:layout_toLeftOf="@+id/Damage1"
-            android:layout_marginTop="20dp"
-            android:background="@drawable/damage"/>
-
-        <ImageView
             android:layout_width="100dp"
             android:layout_height="30dp"
-            android:id="@+id/SpeedText"
-            android:gravity="right"
-            android:layout_below="@+id/DamageText"
-            android:layout_toLeftOf="@+id/Speed1"
+            android:layout_below="@+id/LivesText"
             android:layout_marginTop="20dp"
-            android:background="@drawable/speed"/>
+            android:layout_toLeftOf="@+id/Damage1"
+            android:background="@drawable/damage"
+            android:gravity="right" />
 
         <ImageView
-            android:layout_width="25dp"
-            android:layout_height="25dp"
+            android:id="@+id/SpeedText"
+            android:layout_width="100dp"
+            android:layout_height="30dp"
+            android:layout_below="@+id/DamageText"
+            android:layout_marginTop="20dp"
+            android:layout_toLeftOf="@+id/Speed1"
+            android:background="@drawable/speed"
+            android:gravity="right" />
+
+        <ImageView
             android:id="@+id/Lives1"
-            android:background="@drawable/upgrade_true"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
             android:layout_alignTop="@+id/LivesText"
+            android:layout_marginLeft="20dp"
+            android:layout_marginStart="20dp"
             android:layout_toLeftOf="@+id/Lives2"
-            android:layout_marginLeft="20dp"
-            android:layout_marginStart="20dp"/>
+            android:background="@drawable/upgrade_true" />
 
         <ImageView
-            android:layout_width="25dp"
-            android:layout_height="25dp"
             android:id="@+id/Lives2"
-            android:background="@drawable/upgrade_false"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
             android:layout_alignTop="@+id/LivesText"
+            android:layout_marginLeft="20dp"
+            android:layout_marginStart="20dp"
             android:layout_toLeftOf="@+id/Lives3"
-            android:layout_marginLeft="20dp"
-            android:layout_marginStart="20dp" />
+            android:background="@drawable/upgrade_false" />
 
         <ImageView
-            android:layout_width="25dp"
-            android:layout_height="25dp"
             android:id="@+id/Lives3"
-            android:background="@drawable/upgrade_false"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
             android:layout_alignTop="@+id/LivesText"
             android:layout_centerHorizontal="true"
             android:layout_marginLeft="20dp"
-            android:layout_marginStart="20dp" />
+            android:layout_marginStart="20dp"
+            android:background="@drawable/upgrade_false" />
 
         <ImageView
-            android:layout_width="25dp"
-            android:layout_height="25dp"
             android:id="@+id/Lives4"
-            android:background="@drawable/upgrade_false"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
             android:layout_alignTop="@+id/LivesText"
+            android:layout_marginLeft="20dp"
+            android:layout_marginStart="20dp"
+            android:layout_toEndOf="@+id/LivesText"
             android:layout_toRightOf="@+id/Lives3"
-            android:layout_toEndOf="@+id/LivesText"
-            android:layout_marginLeft="20dp"
-            android:layout_marginStart="20dp" />
+            android:background="@drawable/upgrade_false" />
 
         <ImageView
-            android:layout_width="25dp"
-            android:layout_height="25dp"
             android:id="@+id/Lives5"
-            android:background="@drawable/upgrade_false"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
             android:layout_alignTop="@+id/LivesText"
-            android:layout_toRightOf="@+id/Lives4"
+            android:layout_marginLeft="20dp"
+            android:layout_marginStart="20dp"
             android:layout_toEndOf="@+id/LivesText"
-            android:layout_marginLeft="20dp"
-            android:layout_marginStart="20dp" />
+            android:layout_toRightOf="@+id/Lives4"
+            android:background="@drawable/upgrade_false" />
 
         <Button
-            android:layout_width="120dp"
-            android:layout_height="45dp"
             android:id="@+id/BuyLife"
-            android:text="Buy"
-            android:textSize="10dp"
+            android:layout_width="120dp"
+            android:layout_height="45dp"
             android:layout_alignTop="@+id/LivesText"
-            android:layout_toRightOf="@+id/Lives5"
             android:layout_marginLeft="20dp"
             android:layout_marginStart="20dp"
             android:layout_marginTop="-10dp"
+            android:layout_toRightOf="@+id/Lives5"
             android:background="@drawable/button_small"
-            android:textColor="#fff325" />
+            android:onClick="buyLife"
+            android:text="Buy"
+            android:textColor="#fff325"
+            android:textSize="10dp" />
 
         <ImageView
-            android:layout_width="25dp"
-            android:layout_height="25dp"
             android:id="@+id/Damage1"
-            android:background="@drawable/upgrade_true"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
             android:layout_alignTop="@+id/DamageText"
+            android:layout_marginLeft="20dp"
+            android:layout_marginStart="20dp"
             android:layout_toLeftOf="@+id/Damage2"
-            android:layout_marginLeft="20dp"
-            android:layout_marginStart="20dp" />
+            android:background="@drawable/upgrade_true" />
 
         <ImageView
-            android:layout_width="25dp"
-            android:layout_height="25dp"
             android:id="@+id/Damage2"
-            android:background="@drawable/upgrade_false"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
             android:layout_alignTop="@+id/DamageText"
+            android:layout_marginLeft="20dp"
+            android:layout_marginStart="20dp"
             android:layout_toLeftOf="@+id/Damage3"
-            android:layout_marginLeft="20dp"
-            android:layout_marginStart="20dp" />
+            android:background="@drawable/upgrade_false" />
 
         <ImageView
-            android:layout_width="25dp"
-            android:layout_height="25dp"
             android:id="@+id/Damage3"
-            android:background="@drawable/upgrade_false"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
             android:layout_alignTop="@+id/DamageText"
             android:layout_centerHorizontal="true"
             android:layout_marginLeft="20dp"
-            android:layout_marginStart="20dp" />
+            android:layout_marginStart="20dp"
+            android:background="@drawable/upgrade_false" />
 
         <ImageView
-            android:layout_width="25dp"
-            android:layout_height="25dp"
             android:id="@+id/Damage4"
-            android:background="@drawable/upgrade_false"
-            android:layout_alignTop="@+id/DamageText"
-            android:layout_toRightOf="@+id/Damage3"
-            android:layout_toEndOf="@+id/DamageText"
-            android:layout_marginLeft="20dp"
-            android:layout_marginStart="20dp" />
-
-        <ImageView
             android:layout_width="25dp"
             android:layout_height="25dp"
-            android:id="@+id/Damage5"
-            android:background="@drawable/upgrade_false"
             android:layout_alignTop="@+id/DamageText"
-            android:layout_toRightOf="@+id/Damage4"
-            android:layout_toEndOf="@+id/DamageText"
             android:layout_marginLeft="20dp"
-            android:layout_marginStart="20dp" />
+            android:layout_marginStart="20dp"
+            android:layout_toEndOf="@+id/DamageText"
+            android:layout_toRightOf="@+id/Damage3"
+            android:background="@drawable/upgrade_false" />
+
+        <ImageView
+            android:id="@+id/Damage5"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_alignTop="@+id/DamageText"
+            android:layout_marginLeft="20dp"
+            android:layout_marginStart="20dp"
+            android:layout_toEndOf="@+id/DamageText"
+            android:layout_toRightOf="@+id/Damage4"
+            android:background="@drawable/upgrade_false" />
+
         <Button
+            android:id="@+id/BuyDamage"
             android:layout_width="120dp"
             android:layout_height="45dp"
-            android:id="@+id/BuyDamage"
-            android:text="Buy"
-            android:textSize="10dp"
             android:layout_alignTop="@+id/DamageText"
-            android:layout_toRightOf="@+id/Lives5"
             android:layout_marginLeft="20dp"
             android:layout_marginStart="20dp"
             android:layout_marginTop="-10dp"
+            android:layout_toRightOf="@+id/Lives5"
             android:background="@drawable/button_small"
-            android:textColor="#fff325" />
+            android:onClick="buyDamage"
+            android:text="Buy"
+            android:textColor="#fff325"
+            android:textSize="10dp" />
 
         <ImageView
-            android:layout_width="25dp"
-            android:layout_height="25dp"
             android:id="@+id/Speed1"
-            android:background="@drawable/upgrade_true"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
             android:layout_alignTop="@+id/SpeedText"
+            android:layout_marginLeft="20dp"
+            android:layout_marginStart="20dp"
             android:layout_toLeftOf="@+id/Speed2"
-            android:layout_marginLeft="20dp"
-            android:layout_marginStart="20dp" />
+            android:background="@drawable/upgrade_true" />
 
         <ImageView
-            android:layout_width="25dp"
-            android:layout_height="25dp"
             android:id="@+id/Speed2"
-            android:background="@drawable/upgrade_false"
-            android:layout_alignTop="@+id/SpeedText"
-            android:layout_toLeftOf="@+id/Speed3"
-            android:layout_marginLeft="20dp"
-            android:layout_marginStart="20dp" />
-
-        <ImageView
             android:layout_width="25dp"
             android:layout_height="25dp"
+            android:layout_alignTop="@+id/SpeedText"
+            android:layout_marginLeft="20dp"
+            android:layout_marginStart="20dp"
+            android:layout_toLeftOf="@+id/Speed3"
+            android:background="@drawable/upgrade_false" />
+
+        <ImageView
             android:id="@+id/Speed3"
-            android:background="@drawable/upgrade_false"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
             android:layout_alignTop="@+id/SpeedText"
             android:layout_centerHorizontal="true"
             android:layout_marginLeft="20dp"
-            android:layout_marginStart="20dp" />
+            android:layout_marginStart="20dp"
+            android:background="@drawable/upgrade_false" />
 
         <ImageView
-            android:layout_width="25dp"
-            android:layout_height="25dp"
             android:id="@+id/Speed4"
-            android:background="@drawable/upgrade_false"
-            android:layout_alignTop="@+id/SpeedText"
-            android:layout_toRightOf="@+id/Speed3"
-            android:layout_toEndOf="@+id/SpeedText"
-            android:layout_marginLeft="20dp"
-            android:layout_marginStart="20dp" />
-
-        <ImageView
             android:layout_width="25dp"
             android:layout_height="25dp"
-            android:id="@+id/Speed5"
-            android:background="@drawable/upgrade_false"
             android:layout_alignTop="@+id/SpeedText"
-            android:layout_toRightOf="@+id/Speed4"
-            android:layout_toEndOf="@+id/SpeedText"
             android:layout_marginLeft="20dp"
-            android:layout_marginStart="20dp" />
+            android:layout_marginStart="20dp"
+            android:layout_toEndOf="@+id/SpeedText"
+            android:layout_toRightOf="@+id/Speed3"
+            android:background="@drawable/upgrade_false" />
+
+        <ImageView
+            android:id="@+id/Speed5"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_alignTop="@+id/SpeedText"
+            android:layout_marginLeft="20dp"
+            android:layout_marginStart="20dp"
+            android:layout_toEndOf="@+id/SpeedText"
+            android:layout_toRightOf="@+id/Speed4"
+            android:background="@drawable/upgrade_false" />
 
         <Button
+            android:id="@+id/BuySpeed"
             android:layout_width="120dp"
             android:layout_height="45dp"
-            android:id="@+id/BuySpeed"
-            android:text="Buy"
-            android:textSize="10dp"
             android:layout_alignTop="@+id/SpeedText"
-            android:layout_toRightOf="@+id/Lives5"
             android:layout_marginLeft="20dp"
             android:layout_marginStart="20dp"
             android:layout_marginTop="-10dp"
+            android:layout_toRightOf="@+id/Lives5"
             android:background="@drawable/button_small"
-            android:textColor="#fff325" />
+            android:onClick="buySpeed"
+            android:text="Buy"
+            android:textColor="#fff325"
+            android:textSize="10dp" />
 
     </RelativeLayout>
 
