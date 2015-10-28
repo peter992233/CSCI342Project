@@ -505,14 +505,6 @@ public class GameView extends SurfaceView implements Runnable {
                 d.setBounds(0, 0, screenX, screenY);
                 d.draw(canvas);
 
-                for(int i = 0; i < explDraws.size(); i++) {
-                    if(currExFrames.get(i) < explDraws.get(i).getNumberOfFrames()) {
-                        Drawable ex = explDraws.get(i).getFrame(currExFrames.get(i));
-                        ex.setBounds(explX.get(i), explY.get(i), explX.get(i) + 100, explY.get(i) + 100);
-                        ex.draw(canvas);
-                    }
-                }
-
                 paint.setColor(Color.argb(255, 255, 255, 255));
 
                 //Draw the Active Bullets
@@ -558,6 +550,14 @@ public class GameView extends SurfaceView implements Runnable {
                     EnemyShip e = EnemyList.get(i);
                     if (e.isVisible() == true) {
                         canvas.drawBitmap(e.getEnemyBMP(), e.getX(), e.getY(), paint);
+                    }
+                }
+
+                for(int i = 0; i < explDraws.size(); i++) {
+                    if(currExFrames.get(i) < explDraws.get(i).getNumberOfFrames()) {
+                        Drawable ex = explDraws.get(i).getFrame(currExFrames.get(i));
+                        ex.setBounds(explX.get(i), explY.get(i), explX.get(i) + 100, explY.get(i) + 100);
+                        ex.draw(canvas);
                     }
                 }
 
@@ -735,6 +735,9 @@ public class GameView extends SurfaceView implements Runnable {
             playerBullets.clear();
             nextShot = 0; //When is the next shot
             nextEnemy = 5000;//When to display the next enemy
+
+            coins.clear();
+            powerups.clear();
 
             explDraws.clear();
             explX.clear();
