@@ -23,8 +23,8 @@ public class Powerup {
     public boolean isActive;
 
     public Powerup(Context context, int screenY, int screenX) {
-        width = screenX/25;
-        height = screenY/25;
+        width = screenX/20;
+        height = screenY/20;
 
         isActive = false;
         rect = new RectF();
@@ -33,5 +33,36 @@ public class Powerup {
         bmp = Bitmap.createScaledBitmap(bmp, (int) width, (int) height, false);
     }
 
+    public RectF getRect(){ return rect; }
 
+    public Bitmap getBmp() { return bmp; }
+
+    public boolean getStatus(){ return isActive; }
+
+    public float getX() { return x; }
+
+    public float getY() { return y;}
+
+    public float getHeight(){ return height;}
+
+    public void setInactive(){isActive = false;}
+
+    public boolean spawn(float startX, float startY) {
+        if(!isActive) {
+            x = startX;
+            y = startY;
+            isActive = true;
+            return true;
+        }
+        return false;
+    }
+
+    public void update(long fps) {
+        y = y + speed / fps;
+
+        rect.left = x;
+        rect.right = x + width;
+        rect.top = y;
+        rect.bottom = y + height;
+    }
 }

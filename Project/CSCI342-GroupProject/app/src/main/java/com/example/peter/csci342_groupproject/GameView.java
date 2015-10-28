@@ -68,6 +68,9 @@ public class GameView extends SurfaceView implements Runnable {
     private Coin coin;
     private ArrayList<Coin> coins = new ArrayList<Coin>();
 
+    private Powerup powerup;
+    private ArrayList<Powerup> powerups = new ArrayList<Powerup>();
+
     private long nextShot = 250; //When is the next shot
     private long nextEnemy = 2500;//When to display the next enemy
 
@@ -315,6 +318,13 @@ public class GameView extends SurfaceView implements Runnable {
                 }
             }
 
+            for(int i = 0; i < powerups.size(); i++) {
+                Powerup u = powerups.get(i);
+                if(u.getStatus()) {
+                    u.update(fps);
+                }
+            }
+
 
             //Update the Bullets
 
@@ -344,6 +354,15 @@ public class GameView extends SurfaceView implements Runnable {
                                     coins.add(c);
                                 }
 
+                                Random randPowerup = new Random();
+                                int powerupCheck = randPowerup.nextInt(10);
+
+                                if(powerupCheck == 2) {
+                                    Powerup u = new Powerup(context, screenY, screenX);
+                                    u.spawn(e.getX(), e.getY());
+                                    powerups.add(u);
+                                }
+
                                 e.setIsVisible(false);
                                 EnemyList.remove(e);
                                 p.setInactive();
@@ -370,6 +389,23 @@ public class GameView extends SurfaceView implements Runnable {
                     c.setInactive();
                     coins.remove(c);
                     currency = currency + 10;
+                }
+            }
+
+            for(int i = 0; i < powerups.size(); i++) {
+                Powerup u = powerups.get(i);
+                if(u.getStatus()) {
+                    u.update(fps);
+                }
+
+                if(u.getY() < -u.getHeight() * 2 || u.getY() > screenY + u.getHeight() * 2) {
+                    u.setInactive();
+                    powerups.remove(u);
+                }
+
+                if(RectF.intersects(u.getRect(), pShip.getRect())) {
+                    u.setInactive();
+                    powerups.remove(u);
                 }
             }
 
@@ -455,6 +491,12 @@ public class GameView extends SurfaceView implements Runnable {
                     }
                 }
 
+                for(int i = 0; i < powerups.size(); i++) {
+                    Powerup u = powerups.get(i);
+                    if(u.getStatus()) {
+                        canvas.drawBitmap(u.getBmp(), u.getX(), u.getY(), paint);
+                    }
+                }
 
                 //Draw the Player Ship
                 canvas.drawBitmap(pShip.getBmp(), pShip.getX(), screenY - (pShip.getHeight() * 2), paint);
