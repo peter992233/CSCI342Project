@@ -12,9 +12,6 @@ public class Powerup {
     private float x;
     private float y;
 
-    private float x;
-    private float y;
-
     private RectF rect;
     private Bitmap bmp = null;
 
