@@ -77,6 +77,11 @@ public class GameView extends SurfaceView implements Runnable {
 
     final AnimationDrawable animDraw = createAnimationDrawable();
 
+    final ArrayList<AnimationDrawable> explDraws = new ArrayList<AnimationDrawable>();
+    ArrayList<Integer> explX = new ArrayList<Integer>();
+    ArrayList<Integer> explY = new ArrayList<Integer>();
+    ArrayList<Integer> currExFrames = new ArrayList<Integer>();
+
     ArrayList<EnemyShip> EnemyList= new ArrayList<EnemyShip>();
     int maxEnemies = 40;
 
@@ -86,6 +91,8 @@ public class GameView extends SurfaceView implements Runnable {
 
     ImageView backGround;
     int currBgFrame = 0;
+
+
     int GameLevel = 0;
     boolean waitRestart = false;
 
@@ -121,7 +128,6 @@ public class GameView extends SurfaceView implements Runnable {
             e.printStackTrace();
         }
 
-
         prepareLevel(GameLevel);
     }
 
@@ -137,7 +143,7 @@ public class GameView extends SurfaceView implements Runnable {
         newAnim.addFrame(res.getDrawable(R.drawable.background_5),200);
         newAnim.addFrame(res.getDrawable(R.drawable.background_6),200);
         newAnim.addFrame(res.getDrawable(R.drawable.background_7),200);
-        newAnim.addFrame(res.getDrawable(R.drawable.background_8),200);
+        newAnim.addFrame(res.getDrawable(R.drawable.background_8), 200);
         newAnim.addFrame(res.getDrawable(R.drawable.background_9), 200);
         newAnim.addFrame(res.getDrawable(R.drawable.background_10), 200);
         newAnim.addFrame(res.getDrawable(R.drawable.background_11), 200);
@@ -147,8 +153,22 @@ public class GameView extends SurfaceView implements Runnable {
         newAnim.addFrame(res.getDrawable(R.drawable.background_15), 200);
         newAnim.addFrame(res.getDrawable(R.drawable.background_16), 200);
 
-
         newAnim.setOneShot(false);
+        return newAnim;
+    }
+
+    private AnimationDrawable createExplosionDrawable() {
+
+        AnimationDrawable newAnim = new AnimationDrawable();
+        Resources res = getResources();
+        newAnim.addFrame(res.getDrawable(R.drawable.explosion_1), 200);
+        newAnim.addFrame(res.getDrawable(R.drawable.explosion_2), 200);
+        newAnim.addFrame(res.getDrawable(R.drawable.explosion_3), 200);
+        newAnim.addFrame(res.getDrawable(R.drawable.explosion_4), 200);
+        newAnim.addFrame(res.getDrawable(R.drawable.explosion_5), 200);
+        newAnim.addFrame(res.getDrawable(R.drawable.explosion_6), 200);
+
+        newAnim.setOneShot(true);
         return newAnim;
     }
 
@@ -363,6 +383,14 @@ public class GameView extends SurfaceView implements Runnable {
                                     powerups.add(u);
                                 }
 
+                                AnimationDrawable explDraw = createExplosionDrawable();
+                                explDraws.add(explDraw);
+
+                                currExFrames.add(0);
+
+                                explX.add((int)EnemyList.get(j).getX());
+                                explY.add((int) EnemyList.get(j).getY());
+
                                 e.setIsVisible(false);
                                 EnemyList.remove(e);
                                 p.setInactive();
@@ -444,6 +472,15 @@ public class GameView extends SurfaceView implements Runnable {
                 currBgFrame = 0;
             }
 
+            for(int i = 0; i < currExFrames.size(); i++) {
+                currExFrames.set(i, currExFrames.get(i) + 1);
+                if(currExFrames.get(i) == 6) {
+                    explDraws.remove(i);
+                    explX.remove(i);
+                    explY.remove(i);
+                    currExFrames.remove(i);
+                }
+            }
         }
     }
 
@@ -459,10 +496,17 @@ public class GameView extends SurfaceView implements Runnable {
 
                 canvas = ourHolder.lockCanvas();
 
-
                 Drawable d = animDraw.getFrame(currBgFrame);
                 d.setBounds(0, 0, screenX, screenY);
                 d.draw(canvas);
+
+                for(int i = 0; i < explDraws.size(); i++) {
+                    if(currExFrames.get(i) < explDraws.get(i).getNumberOfFrames()) {
+                        Drawable ex = explDraws.get(i).getFrame(currExFrames.get(i));
+                        ex.setBounds(explX.get(i), explY.get(i), explX.get(i) + 100, explY.get(i) + 100);
+                        ex.draw(canvas);
+                    }
+                }
 
                 paint.setColor(Color.argb(255, 255, 255, 255));
 
@@ -491,6 +535,8 @@ public class GameView extends SurfaceView implements Runnable {
                     }
                 }
 
+                //Draw the Active powerups
+
                 for(int i = 0; i < powerups.size(); i++) {
                     Powerup u = powerups.get(i);
                     if(u.getStatus()) {
@@ -507,7 +553,6 @@ public class GameView extends SurfaceView implements Runnable {
                     EnemyShip e = EnemyList.get(i);
                     if (e.isVisible() == true) {
                         canvas.drawBitmap(e.getEnemyBMP(), e.getX(), e.getY(), paint);
-
                     }
                 }
 
@@ -685,6 +730,11 @@ public class GameView extends SurfaceView implements Runnable {
             playerBullets.clear();
             nextShot = 0; //When is the next shot
             nextEnemy = 5000;//When to display the next enemy
+
+            explDraws.clear();
+            explX.clear();
+            explY.clear();
+            currExFrames.clear();
 
             lives = 3;
             currBgFrame = 0;
