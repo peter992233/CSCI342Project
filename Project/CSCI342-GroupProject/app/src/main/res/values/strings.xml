@@ -9,4 +9,5 @@
     <string name="title_activity_game">GameActivity</string>
     <string name="title_activity_high_scores">HighScores</string>
     <string name="title_activity_upgrades">Upgrades</string>
+    <string name="title_activity_options">Options</string>
 </resources>

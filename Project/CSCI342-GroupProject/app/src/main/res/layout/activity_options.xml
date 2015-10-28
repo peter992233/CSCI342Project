@@ -1,0 +1,83 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background_5"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="com.example.peter.csci342_groupproject.OptionsActivity">
+
+
+    <ImageView
+        android:id="@+id/Heading"
+        android:layout_width="350dp"
+        android:layout_height="60dp"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/options" />
+
+    <RelativeLayout
+        android:id="@+id/upgradesLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/Heading"
+        android:background="@drawable/backboard"
+        android:orientation="vertical">
+
+        <CheckBox
+            android:id="@+id/soundfx"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="SoundFX"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="30dp"
+            android:textColor="#fff325" />
+        <CheckBox
+            android:id="@+id/music"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/soundfx"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="10dp"
+            android:text="Music"
+            android:textColor="#fff325"/>
+
+        <TextView
+            android:id="@+id/soundText"
+            android:layout_width="180dp"
+            android:layout_height="wrap_content"
+            android:text="Sound Level"
+            android:textColor="#fff325"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:layout_alignTop="@+id/soundfx"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="30dp"
+            android:gravity="center_horizontal"/>
+
+        <SeekBar
+            android:id="@+id/seekBar"
+            android:layout_width="180dp"
+            android:layout_height="wrap_content"
+            android:progress="100"
+            android:layout_below="@+id/soundText"
+            android:layout_alignLeft="@id/soundText"/>
+
+        <Button
+            android:layout_width="120dp"
+            android:layout_height="45dp"
+            android:id="@+id/save"
+            android:text="Save"
+            android:textSize="10dp"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="20dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginBottom="30dp"
+            android:background="@drawable/button_small"
+            android:textColor="#fff325" />
+
+    </RelativeLayout>
+
+</RelativeLayout>

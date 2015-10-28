@@ -14,6 +14,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
+import java.util.ArrayList;
+
 public class MainActivity extends AppCompatActivity {
 
 
@@ -57,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
             writter.insert(MainTable.MainEntry.TABLE_NAME, null, values);
             Log.d ("START", "user created");
         }
-    }
+     }
 
     public void menuButtons(){
 
@@ -85,6 +87,12 @@ public class MainActivity extends AppCompatActivity {
     /** Called when the user clicks the Upgrades button */
     public void viewUpgrades(View view) {
         Intent intent = new Intent(this, UpgradesActivity.class);
+        startActivity(intent);
+    }
+
+    /** Called when the user clicks the Upgrades button */
+    public void viewOptions(View view) {
+        Intent intent = new Intent(this, OptionsActivity.class);
         startActivity(intent);
     }
 
