@@ -119,6 +119,5 @@ public class Projectile {
         rect.right = x+width;
         rect.top = y;
         rect.bottom = y+height;
-
     }
 }

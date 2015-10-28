@@ -18,7 +18,7 @@ public class Coin {
     private int width;
     private int height;
 
-    float speed = 150;
+    float speed = 100;
 
     public boolean isActive;
 
