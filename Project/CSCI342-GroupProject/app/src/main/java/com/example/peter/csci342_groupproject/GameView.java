@@ -320,12 +320,17 @@ public class GameView extends SurfaceView implements Runnable {
                         if (lives == 0) {
                             gameOver();
                         }
+                        AnimationDrawable explDraw = createExplosionDrawable();
+                        explDraws.add(explDraw);
+
+                        currExFrames.add(0);
+
+                        explX.add((int)EnemyList.get(i).getX());
+                        explY.add((int) EnemyList.get(i).getY());
+
                         EnemyList.remove(i);
                         Log.d("Crash", "Hope You Have Insurance Buddy");
                     }
-
-
-
                 }
             }
 
