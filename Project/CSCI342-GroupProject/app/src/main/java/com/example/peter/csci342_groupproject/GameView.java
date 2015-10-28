@@ -96,6 +96,8 @@ public class GameView extends SurfaceView implements Runnable {
     int GameLevel = 0;
     boolean waitRestart = false;
 
+    GameData gd = GameData.getInstance();
+
     public GameView(Context context,int x, int y) {
         super(context);
 
@@ -108,7 +110,8 @@ public class GameView extends SurfaceView implements Runnable {
         screenY = y;
 
         //initial Lives
-        lives = 3;
+        lives = gd.getBaseLives() +3;
+        currency = gd.getCurrency();
 
         try{
 
@@ -723,6 +726,9 @@ public class GameView extends SurfaceView implements Runnable {
 
 
         //Ask restart
+        DBHelper db = new DBHelper(getContext());
+
+        gd.setCurrency(currency, db);
 
 
 

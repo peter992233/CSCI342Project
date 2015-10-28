@@ -27,53 +27,49 @@
 
         <Button
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/StGame"
+            android:layout_height="55dp"
             android:id="@+id/startGameButton"
             android:layout_above="@+id/button2"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:textSize="10dp"/>
+            android:background="@drawable/start_button"/>
 
         <Button
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/Upg"
+            android:layout_height="55dp"
             android:id="@+id/UpgradeButton"
             android:layout_above="@+id/button3"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_alignRight="@+id/button3"
             android:layout_alignEnd="@+id/button3"
-            android:textSize="10dp"
-            android:onClick="viewUpgrades" />
+            android:background="@drawable/upgrades_button"
+            android:onClick="viewUpgrades"/>
 
         <Button
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/HighScore"
+            android:layout_height="55dp"
             android:id="@+id/HighScoreButton"
             android:layout_above="@+id/button4"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_alignRight="@+id/button4"
             android:layout_alignEnd="@+id/button4"
-            android:textSize="10dp"
+            android:background="@drawable/highscores_button"
             android:onClick="viewHighScores" />
 
         <Button
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Options"
+            android:layout_height="55dp"
             android:id="@+id/OptionsButton"
-            android:textSize="10dp"
             android:layout_alignParentBottom="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
+            android:background="@drawable/options_button"
             android:onClick="viewOptions"/>
     </LinearLayout>
 

@@ -30,7 +30,8 @@ public class MainActivity extends AppCompatActivity {
         //this.deleteDatabase(DBHelper.DATABASE_NAME);
 
         DBHelper dbHelper = new DBHelper(getApplicationContext());
-        createPlayer(dbHelper);
+        GameData gd = GameData.getInstance();
+        gd.populateFromDB(dbHelper);
 
         Log.d("START", "Starting Game");
         Display display = getWindowManager().getDefaultDisplay();
@@ -40,26 +41,6 @@ public class MainActivity extends AppCompatActivity {
         menuButtons();
     }
 
-    public void createPlayer(DBHelper dbHelper) {
-
-        SQLiteDatabase reader = dbHelper.getReadableDatabase();
-        Cursor cursor = reader.rawQuery("SELECT * FROM " + MainTable.MainEntry.TABLE_NAME, null);
-
-        if (cursor.getCount() == 0) {//if user doesnt exist, create one
-            SQLiteDatabase writter = dbHelper.getWritableDatabase();
-            ContentValues values = new ContentValues();
-            values.put(MainTable.MainEntry.COLUMN_NAME_BASE_LIVES, 1);
-            values.put(MainTable.MainEntry.COLUMN_NAME_BASE_DAMAGE, 1);
-            values.put(MainTable.MainEntry.COLUMN_NAME_BASE_SPEED, 1);
-            values.put(MainTable.MainEntry.COLUMN_NAME_PLAYER_CURRENCY, 0);
-            values.put(MainTable.MainEntry.COLUMN_NAME_OPTION_FX, 1);
-            values.put(MainTable.MainEntry.COLUMN_NAME_OPTION_MUSIC, 1);
-            values.put(MainTable.MainEntry.COLUMN_NAME_OPTION_SOUND, 1);
-            values.put(MainTable.MainEntry.COLUMN_NAME_OPTION_TILT, 0);
-            writter.insert(MainTable.MainEntry.TABLE_NAME, null, values);
-            Log.d ("START", "user created");
-        }
-     }
 
     public void menuButtons(){
 

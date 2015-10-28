@@ -1,5 +1,6 @@
 package com.example.peter.csci342_groupproject;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -35,6 +36,20 @@ public class DBHelper extends SQLiteOpenHelper{
     public void onUpgrade(SQLiteDatabase DB, int oldVersion, int newVersion) {
         DB.execSQL("DROP TABLE IF EXISTS " + MainTable.MainEntry.TABLE_NAME);
         onCreate(DB);
+    }
+
+    public boolean updateMainTable(DBHelper dbHelper) {
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        ContentValues args = new ContentValues();
+        GameData gd = GameData.getInstance();
+        args.put(MainTable.MainEntry.COLUMN_NAME_BASE_LIVES, gd.getBaseLives());
+        args.put(MainTable.MainEntry.COLUMN_NAME_BASE_DAMAGE, gd.getBaseDamage());
+        args.put(MainTable.MainEntry.COLUMN_NAME_BASE_SPEED, gd.getBaseSpeed());
+        args.put(MainTable.MainEntry.COLUMN_NAME_PLAYER_CURRENCY, gd.getCurrency());
+        args.put(MainTable.MainEntry.COLUMN_NAME_OPTION_FX, gd.getSoundFX());
+        args.put(MainTable.MainEntry.COLUMN_NAME_OPTION_MUSIC, gd.getMusic());
+        args.put(MainTable.MainEntry.COLUMN_NAME_OPTION_SOUND, gd.getVolume());
+        return db.update(MainTable.MainEntry.TABLE_NAME, args, null, null) > 0;
     }
 
     @Override
