@@ -91,8 +91,6 @@ public class GameView extends SurfaceView implements Runnable {
     int pWeaponLevel = 0;
     int pWeaponDamage = 0;
 
-    int timeTillNextLevel = 2000;
-
     GameData gd = GameData.getInstance();
 
     public GameView(Context context, int x, int y) {
@@ -129,7 +127,7 @@ public class GameView extends SurfaceView implements Runnable {
             e.printStackTrace();
         }
 
-        prepareLevel(GameLevel);
+        prepareLevel();
     }
 
 
@@ -174,7 +172,7 @@ public class GameView extends SurfaceView implements Runnable {
     }
 
 
-    private void prepareLevel(int Level) {
+    private void prepareLevel() {
 
         //Init game Objects
         GameLevel++;
@@ -215,13 +213,6 @@ public class GameView extends SurfaceView implements Runnable {
             //Update the Events handler variables by the elapsed time
             nextShot -= timeThisFrame;
             nextEnemy -= timeThisFrame;
-            if(EnemyList.isEmpty()) {
-                timeTillNextLevel -= timeTillNextLevel;
-            }
-            if(timeTillNextLevel < 0) {
-                prepareLevel(GameLevel);
-                timeTillNextLevel = 2000;
-            }
         }
     }
 
@@ -293,7 +284,8 @@ public class GameView extends SurfaceView implements Runnable {
 
 
                 } else {
-                    GameLevel++;
+                    nextEnemy = 2000;
+                    prepareLevel();
                     Log.d("LEVELUP", "YOU DID IT!");
                 }
             }
@@ -329,15 +321,30 @@ public class GameView extends SurfaceView implements Runnable {
                         }
                     }
 
-                    if(e.getX() < -e.getLength() * 2 || e.getX() > screenX + e.getLength() * 2) {
-                        if(e.getEnemyDirection() == 1) {
-                            EnemyList.remove(e);
+                    if(e.getEnemyType() == 1) {
+                        if(e.getX() < -e.getLength() * 2 || e.getX() > screenX + e.getLength() * 2) {
+                            if(e.getEnemyDirection() == 1) {
+                                EnemyList.remove(e);
 
-                            Log.d("Oops", "Enemy ship has gotten past you");
+                                Log.d("Oops", "Enemy ship has gotten past you");
 
-                            //Decrease score if enemy gets past player
-                            if (score != 0) {
-                                score -= 100;
+                                //Decrease score if enemy gets past player
+                                if (score != 0) {
+                                    score -= 100;
+                                }
+                            }
+                        }
+
+                        if(e.getX() > -e.getLength() * 2 || e.getX() < screenX + e.getLength() * 2) {
+                            if(e.getEnemyDirection() == 2) {
+                                EnemyList.remove(e);
+
+                                Log.d("Oops", "Enemy ship has gotten past you");
+
+                                //Decrease score if enemy gets past player
+                                if (score != 0) {
+                                    score -= 100;
+                                }
                             }
                         }
                     }
@@ -736,16 +743,16 @@ public class GameView extends SurfaceView implements Runnable {
                     nextShot = 250;
 
                     if(pWeaponType == 0) {
-                        nextShot = 250;
+                        nextShot = 450;
                     }
                     if(pWeaponType == 1) {
-                        nextShot = 300;
+                        nextShot = 500;
                     }
                     if(pWeaponType == 3) {
-                        nextShot = 200;
+                        nextShot = 400;
                     }
 
-                    nextShot = nextShot - (pWeaponLevel * 50);
+                    nextShot = nextShot - (pWeaponDamage * 25);
                 }
 
 
@@ -837,7 +844,7 @@ public class GameView extends SurfaceView implements Runnable {
         } catch (Exception e) {
 
         } finally {
-            prepareLevel(0);
+            prepareLevel();
         }
     }
 
