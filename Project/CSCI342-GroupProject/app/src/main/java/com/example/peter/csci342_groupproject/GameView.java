@@ -224,13 +224,23 @@ public class GameView extends SurfaceView implements Runnable {
         //Build Enemy array
         for (int i = 0; i < GameLevel * maxEnemies; i++) {
 
-            EnemyShip newEnemy = new EnemyShip(context, screenX, screenY, 2);
+            Random randEnemy = new Random();
+            int enemyCheck = randEnemy.nextInt(2);
 
-            //Start with 3 Enemies on screen
-            newEnemy.setIsVisible(false);
-
-            //This adds the enemy to the List
-            EnemyList.add(newEnemy);
+            if(enemyCheck == 0) {
+                EnemyShip newEnemy = new EnemyShip(context, screenX, screenY, 3, enemyCheck);
+                //Start with 3 Enemies on screen
+                newEnemy.setIsVisible(false);
+                //This adds the enemy to the List
+                EnemyList.add(newEnemy);
+            }
+            if(enemyCheck == 1) {
+                EnemyShip newEnemy = new EnemyShip(context, screenX, screenY, 2, enemyCheck);
+                //Start with 3 Enemies on screen
+                newEnemy.setIsVisible(false);
+                //This adds the enemy to the List
+                EnemyList.add(newEnemy);
+            }
         }
 
     }

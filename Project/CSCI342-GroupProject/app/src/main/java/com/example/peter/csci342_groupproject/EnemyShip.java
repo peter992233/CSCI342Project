@@ -45,6 +45,8 @@ public class EnemyShip {
     //The Dual Coordinate Movement allowing for movement on Diagonals as well as XY
     private int[] shipMoving = {EMPTY, DOWN};
 
+    int enemyType;
+
     //Is the Enemy visible
     boolean isVisible;
 
@@ -60,7 +62,7 @@ public class EnemyShip {
         this.lastShot = lastShot;
     }
 
-    public EnemyShip(Context context, int screenX, int screenY, int eLives) {
+    public EnemyShip(Context context, int screenX, int screenY, int eLives, int eType) {
 
         // Initialize a blank RectF
         rect = new RectF();
@@ -73,20 +75,48 @@ public class EnemyShip {
         isVisible = true;
 
         enemyLives = eLives;
+        enemyType = eType;
 
-        Random r = new Random();
-        int pushX = (int) length * 2 + r.nextInt(screenX - (int) length * 3 + 1);
-        x = pushX - length;
-
-        if (x + length > screenX) {
-            Log.d("PX", "Push: " + pushX + "\t WithMax " + screenX + "\t WhenLength" + length);
+        if(enemyType == 0) {
+            enemyBMP = BitmapFactory.decodeResource(context.getResources(), R.drawable.enemy_vertical);
+            enemyBMP = Bitmap.createScaledBitmap(enemyBMP, (int) length, (int) height, false);
+        }
+        if(enemyType == 1) {
+            length = screenX / 20;
+            height = screenX / 26;
+            Random randDirection = new Random();
+            int checkDirection = randDirection.nextInt(2);
+            if(checkDirection == 0) {
+                shipMoving[0] = LEFT;
+            }
+            if(checkDirection == 1) {
+                shipMoving[0] = RIGHT;
+            }
+            shipMoving[1] = EMPTY;
+            enemyBMP = BitmapFactory.decodeResource(context.getResources(), R.drawable.enemy_horizontal);
+            enemyBMP = Bitmap.createScaledBitmap(enemyBMP, (int) length, (int) height, false);
         }
 
-        //Push X is a variable to push the ships position to a point along the XY axis
-        x = pushX - length;
+        if(enemyType == 0) {
+            Random r = new Random();
+            int pushX = (int) length * 2 + r.nextInt(screenX - (int) length * 3 + 1);
+            x = pushX - length;
 
-        enemyBMP = BitmapFactory.decodeResource(context.getResources(), R.drawable.enemy_vertical);
-        enemyBMP = Bitmap.createScaledBitmap(enemyBMP, (int) length, (int) height, false);
+            if (x + length > screenX) {
+                Log.d("PX", "Push: " + pushX + "\t WithMax " + screenX + "\t WhenLength" + length);
+            }
+
+            //Push X is a variable to push the ships position to a point along the XY axis
+            x = pushX - length;
+        }
+        if(enemyType == 1) {
+            Random r = new Random();
+            int pushY = (int) height * 2 + r.nextInt((screenY - screenY/6) - (int) height * 3 + 1);
+            y = pushY - height;
+            if(shipMoving[0] == LEFT) {
+                x = screenX;
+            }
+        }
 
         //Set The Enemy Movespeed
         shipSpeed = 100;
@@ -160,6 +190,8 @@ public class EnemyShip {
     public int getEnemyLives() {return enemyLives;}
 
     public void setEnemyLives() {enemyLives--;}
+
+    public int getEnemyType() {return enemyType;}
 
     public RectF getRect() {
         return rect;
