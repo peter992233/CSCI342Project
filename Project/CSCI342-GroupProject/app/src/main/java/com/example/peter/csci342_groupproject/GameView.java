@@ -89,6 +89,7 @@ public class GameView extends SurfaceView implements Runnable {
 
     int pWeaponType = 0;
     int pWeaponLevel = 0;
+    int pWeaponDamage = 0;
 
     GameData gd = GameData.getInstance();
 
@@ -106,6 +107,7 @@ public class GameView extends SurfaceView implements Runnable {
         //initial Lives
         lives = gd.getBaseLives() + 3;
         currency = gd.getCurrency();
+        pWeaponDamage = gd.getBaseDamage().intValue();
 
         try {
 
@@ -248,7 +250,7 @@ public class GameView extends SurfaceView implements Runnable {
     public void respawnPlayer() {
 
         //Make a Player Ship
-        pShip = new PlayerShip(context, screenX, screenY);
+        pShip = new PlayerShip(context, screenX, screenY, gd.getBaseSpeed());
 
         //Prepare Bullets
 

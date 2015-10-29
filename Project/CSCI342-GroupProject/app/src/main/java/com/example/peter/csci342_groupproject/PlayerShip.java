@@ -31,7 +31,7 @@ public class PlayerShip {
 
     int SX = 0;
 
-    public PlayerShip(Context context, int screenX, int screenY) {
+    public PlayerShip(Context context, int screenX, int screenY, Double pSpeed) {
 
         rect = new RectF();
         width = screenX / 15;
@@ -48,7 +48,7 @@ public class PlayerShip {
 
 
         //How fast is the ship in pixels Per Second
-        shipSpeed = 475;
+        shipSpeed = 375 + (100 * pSpeed.intValue());
 
     }
 
