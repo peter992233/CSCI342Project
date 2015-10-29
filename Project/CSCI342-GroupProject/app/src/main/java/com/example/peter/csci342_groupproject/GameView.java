@@ -14,6 +14,7 @@ import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
 import android.media.SoundPool;
+import android.os.AsyncTask;
 import android.support.v4.view.MotionEventCompat;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -22,6 +23,13 @@ import android.view.SurfaceView;
 import android.widget.EditText;
 import android.widget.ImageView;
 
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -237,13 +245,13 @@ public class GameView extends SurfaceView implements Runnable {
 
             //If not pause the game should update
             if (!paused) {
-                if (EnemyList.size() == 0 && spawnedBoss == false && GameLevel == 1) {
+                if (EnemyList.size() == 0 && !spawnedBoss && GameLevel == 1) {
                     EnemyShip newEnemy = new EnemyShip(context, screenX, screenY, 15, 3);
                     newEnemy.setIsVisible(false);
                     EnemyList.add(newEnemy);
                     spawnedBoss = true;
                 }
-                if (EnemyList.size() == 0 && spawnedBoss == false && GameLevel == 2) {
+                if (EnemyList.size() == 0 && !spawnedBoss && GameLevel == 2) {
                     EnemyShip newEnemy = new EnemyShip(context, screenX, screenY, 30, 4);
                     newEnemy.setIsVisible(false);
                     EnemyList.add(newEnemy);
@@ -305,8 +313,6 @@ public class GameView extends SurfaceView implements Runnable {
 
 
     private void update() {
-
-        boolean lost = false;
 
         if (!paused) {
 
@@ -655,7 +661,7 @@ public class GameView extends SurfaceView implements Runnable {
                 //Draw the Enemies
                 for (int i = 0; i < EnemyList.size(); i++) {
                     EnemyShip e = EnemyList.get(i);
-                    if (e.isVisible() == true) {
+                    if (e.isVisible()) {
                         canvas.drawBitmap(e.getEnemyBMP(), e.getX(), e.getY(), paint);
                     }
                 }
@@ -928,7 +934,7 @@ public class GameView extends SurfaceView implements Runnable {
     public void doPlayAgainClick(GameCompleteDialog dialog) {
         EditText et = (EditText) dialog.getDialog().findViewById(R.id.username);
         if (!et.getText().toString().equals("")) {
-            //call update server
+            new SendHighScore().execute(et.getText().toString(), Integer.toString(score));
         }
         dialog.getDialog().dismiss();
     }
@@ -936,7 +942,7 @@ public class GameView extends SurfaceView implements Runnable {
     public void doMenuClick(GameCompleteDialog dialog) {
         EditText et = (EditText) dialog.getDialog().findViewById(R.id.username);
         if (!et.getText().toString().equals("")) {
-            //call update server
+            new SendHighScore().execute(et.getText().toString(), Integer.toString(score));
         }
 
         dialog.getDialog().dismiss();
@@ -972,10 +978,78 @@ public class GameView extends SurfaceView implements Runnable {
             lives = gd.getBaseLives() + 3;
             currBgFrame = 0;
             GameLevel = 0;
-        } catch (Exception e) {
+        } catch (Exception ignored) {
 
         } finally {
             prepareLevel();
+        }
+    }
+
+    private class SendHighScore extends AsyncTask<String, Void, String> {
+
+        String urlString = "http://203.143.84.128/csci342/addScore.php";
+        String urlParameters = "";
+
+        @Override
+        protected String doInBackground(String... data) {
+
+            try {
+                urlParameters = "uName=" + URLEncoder.encode(data[0], "UTF-8") + "&score=" + URLEncoder.encode(data[1], "UTF-8");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            URL url;
+            HttpURLConnection connection = null;
+            try {
+                //Create connection
+                url = new URL(urlString);
+                connection = (HttpURLConnection) url.openConnection();
+                connection.setRequestMethod("POST");
+                connection.setRequestProperty("Content-Type",
+                        "application/x-www-form-urlencoded");
+
+                connection.setRequestProperty("Content-Length", "" +
+                        Integer.toString(urlParameters.getBytes().length));
+                connection.setRequestProperty("Content-Language", "en-US");
+
+                connection.setUseCaches(false);
+                connection.setDoInput(true);
+                connection.setDoOutput(true);
+
+                //Send request
+                DataOutputStream wr = new DataOutputStream(
+                        connection.getOutputStream());
+                wr.writeBytes(urlParameters);
+                wr.flush();
+                wr.close();
+
+                //Get Response
+                InputStream is = connection.getInputStream();
+                BufferedReader rd = new BufferedReader(new InputStreamReader(is));
+                String line;
+                StringBuilder response = new StringBuilder();
+                while ((line = rd.readLine()) != null) {
+                    response.append(line);
+                    response.append('\r');
+                }
+                rd.close();
+
+                Log.d("SERVER", "Response: " + response.toString());
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                if (connection != null) {
+                    connection.disconnect();
+                }
+            }
+            return urlParameters;
+        }
+
+        @Override
+        protected void onPostExecute(String jString) {
+            super.onPostExecute(jString);
         }
     }
 }

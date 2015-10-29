@@ -102,13 +102,6 @@ public class HighScoresActivity extends AppCompatActivity implements MediaPlayer
 
     private class GetHighScores extends AsyncTask<String, Void, JSONArray> {
 
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-
-        }
-
         @Override
         protected JSONArray doInBackground(String... urls) {
             JSONArray jsonArray = null;
