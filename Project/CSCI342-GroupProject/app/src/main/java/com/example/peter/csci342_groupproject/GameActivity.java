@@ -36,7 +36,7 @@ public class GameActivity extends AppCompatActivity implements MediaPlayer.OnErr
         Display display = getWindowManager().getDefaultDisplay();
         Point size = new Point();
         display.getSize(size);
-        gmv = new GameView(this, size.x, size.y);
+        gmv = new GameView(this, getFragmentManager(), size.x, size.y);
 
         setContentView(gmv);
 

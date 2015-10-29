@@ -57,8 +57,6 @@ public class HighScoresActivity extends AppCompatActivity implements MediaPlayer
             mp.prepareAsync();
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
-        } catch (IllegalStateException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
