@@ -22,15 +22,33 @@ public class Powerup {
 
     public boolean isActive;
 
-    public Powerup(Context context, int screenY, int screenX) {
-        width = screenX / 20;
-        height = screenY / 20;
+    int powerupType;
+
+    public Powerup(Context context, int screenY, int screenX, int pType) {
+        width = screenX / 22;
+        height = screenY / 22;
 
         isActive = false;
         rect = new RectF();
 
-        bmp = BitmapFactory.decodeResource(context.getResources(), R.drawable.powerup_bullet);
-        bmp = Bitmap.createScaledBitmap(bmp, (int) width, (int) height, false);
+        powerupType = pType;
+
+        if(pType == 0) {
+            bmp = BitmapFactory.decodeResource(context.getResources(), R.drawable.powerup_bullet);
+            bmp = Bitmap.createScaledBitmap(bmp, (int) width, (int) height, false);
+        }
+        else if(pType == 1) {
+            bmp = BitmapFactory.decodeResource(context.getResources(), R.drawable.powerup_orb);
+            bmp = Bitmap.createScaledBitmap(bmp, (int) width, (int) height, false);
+        }
+        else if(pType == 2) {
+            bmp = BitmapFactory.decodeResource(context.getResources(), R.drawable.powerup_lazer);
+            bmp = Bitmap.createScaledBitmap(bmp, (int) width, (int) height, false);
+        }
+    }
+
+    public int getPowerupType() {
+        return powerupType;
     }
 
     public RectF getRect() {

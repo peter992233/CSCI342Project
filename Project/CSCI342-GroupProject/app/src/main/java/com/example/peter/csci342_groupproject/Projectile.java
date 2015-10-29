@@ -18,6 +18,8 @@ public class Projectile {
 
     public final int UP = 0;
     public final int DOWN = 1;
+    public final int LEFT = 2;
+    public final int RIGHT = 3;
 
     private int width;
     private int height;
@@ -28,8 +30,10 @@ public class Projectile {
     public boolean isActive;
     boolean isEnemy = false;
 
+    int weaponType;
+    int weaponLevel;
 
-    public Projectile(Context context, int screenY, int screenX) {
+    public Projectile(Context context, int screenY, int screenX, int wType, int wLevel) {
 
         width = screenX / 90;
         height = screenY / 30;
@@ -37,10 +41,29 @@ public class Projectile {
         isActive = false;
         rect = new RectF();
 
-        //Create the Bitmap
-        bmp = BitmapFactory.decodeResource(context.getResources(), R.drawable.player_bullet);
-        bmp = Bitmap.createScaledBitmap(bmp, (int) width, (int) height, false);
+        weaponType = wType;
+        weaponLevel = wLevel;
 
+        if(weaponType == 0) {
+            //Create the Bitmap
+            bmp = BitmapFactory.decodeResource(context.getResources(), R.drawable.player_bullet);
+            bmp = Bitmap.createScaledBitmap(bmp, (int) width, (int) height, false);
+        }
+        if(weaponType == 1) {
+            //Create the Bitmap
+            width = screenX/30;
+            height = screenY/30;
+            bmp = BitmapFactory.decodeResource(context.getResources(), R.drawable.player_orb);
+            bmp = Bitmap.createScaledBitmap(bmp, (int) width, (int) height, false);
+        }
+        if(weaponType == 2) {
+            for(int i = 0; i < 3; i++) {
+                width = (screenX/40) * (weaponLevel + 1);
+            }
+            height = screenY/25;
+            bmp = BitmapFactory.decodeResource(context.getResources(), R.drawable.player_lazer);
+            bmp = Bitmap.createScaledBitmap(bmp, (int) width, (int) height, false);
+        }
     }
 
     public Projectile(Context context, int screenY, int screenX, boolean enemy, int bulletType) {
@@ -99,7 +122,7 @@ public class Projectile {
         //If it is standing still we need to get its current location
         if (heading == DOWN) {
             return y + height;
-        } else if (heading == UP) {
+        } else if (heading == UP || heading == LEFT || heading == RIGHT) {
             return y - height;
         } else {
             return y;
@@ -120,10 +143,18 @@ public class Projectile {
 
     public void update(long fps) {
 
-        if (heading == UP) {
+        if (heading == UP || heading == LEFT || heading == RIGHT) {
             y = y - speed / fps;
-        } else {
+        }
+        else {
             y = y + speed / fps;
+        }
+
+        if(heading == LEFT) {
+            x = x - speed/fps;
+        }
+        if(heading == RIGHT) {
+            x = x + speed/fps;
         }
 
         //update the rect

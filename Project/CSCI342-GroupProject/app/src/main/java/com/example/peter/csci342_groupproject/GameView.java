@@ -87,6 +87,9 @@ public class GameView extends SurfaceView implements Runnable {
     int GameLevel = 0;
     boolean waitRestart = false;
 
+    int pWeaponType = 0;
+    int pWeaponLevel = 0;
+
     GameData gd = GameData.getInstance();
 
     public GameView(Context context, int x, int y) {
@@ -239,7 +242,7 @@ public class GameView extends SurfaceView implements Runnable {
 
         //Prepare Bullets
 
-        projectile = new Projectile(context, screenY, screenX);
+        projectile = new Projectile(context, screenY, screenX, pWeaponType, pWeaponLevel);
 
     }
 
@@ -364,21 +367,23 @@ public class GameView extends SurfaceView implements Runnable {
                                 Log.d("BOOM", "Enemy Ship Killed");
 
                                 Random randCoin = new Random();
-                                int coinCheck = randCoin.nextInt(5);
+                                int coinCheck = randCoin.nextInt(3);
 
-                                if (coinCheck == 2) {
+                                if (coinCheck == 0) {
                                     Coin c = new Coin(context, screenY, screenX);
                                     c.spawn(e.getX(), e.getY());
                                     coins.add(c);
                                 }
 
                                 Random randPowerup = new Random();
-                                int powerupCheck = randPowerup.nextInt(10);
+                                int powerupCheck = randPowerup.nextInt(5);
 
-                                if (powerupCheck == 2) {
-                                    Powerup u = new Powerup(context, screenY, screenX);
-                                    u.spawn(e.getX(), e.getY());
-                                    powerups.add(u);
+                                for(int k = 0; k < 3; k++) {
+                                    if(powerupCheck == k) {
+                                        Powerup u = new Powerup(context, screenY, screenX, powerupCheck);
+                                        u.spawn(e.getX(), e.getY());
+                                        powerups.add(u);
+                                    }
                                 }
 
                                 AnimationDrawable explDraw = createExplosionDrawable();
@@ -391,8 +396,10 @@ public class GameView extends SurfaceView implements Runnable {
 
                                 e.setIsVisible(false);
                                 EnemyList.remove(e);
-                                p.setInactive();
-                                playerBullets.remove(p);
+                                if(pWeaponType != 2) {
+                                    p.setInactive();
+                                    playerBullets.remove(p);
+                                }
                                 score += 100;
                             }
                         }
@@ -431,6 +438,12 @@ public class GameView extends SurfaceView implements Runnable {
 
                 if (RectF.intersects(u.getRect(), pShip.getRect())) {
                     u.setInactive();
+                    if(pWeaponType == powerups.get(i).getPowerupType()) {
+                        if(pWeaponLevel < 2) {
+                            pWeaponLevel++;
+                        }
+                    }
+                    pWeaponType = powerups.get(i).getPowerupType();
                     powerups.remove(u);
                 }
             }
@@ -645,11 +658,48 @@ public class GameView extends SurfaceView implements Runnable {
                 }
 
                 if (nextShot < 0) {
-                    projectile = new Projectile(context, screenY, screenX); // reset projectile
+                    projectile = new Projectile(context, screenY, screenX, pWeaponType, pWeaponLevel); // reset projectile
                     if (motionEvent.getY() < screenY - screenY / 4) {
-                        projectile.shoot(pShip.getX() + pShip.getWidth() / 2, pShip.getRect().top, projectile.UP);
-                        playerBullets.add(projectile);
+                        if(pWeaponLevel == 0 || pWeaponType == 2) {
+                            projectile.shoot(pShip.getX() + pShip.getWidth() / 2, pShip.getRect().top, projectile.UP);
+                            playerBullets.add(projectile);
+                        }
+                        if(pWeaponType == 0 && pWeaponLevel == 1) {
+                            projectile.shoot(pShip.getX() + pShip.getWidth() / 2 - 50, pShip.getRect().top, projectile.UP);
+                            playerBullets.add(projectile);
+                            projectile = new Projectile(context, screenY, screenX, pWeaponType, pWeaponLevel);
+                            projectile.shoot((pShip.getX() + pShip.getWidth() / 2) + 50, pShip.getRect().top, projectile.UP);
+                            playerBullets.add(projectile);
+                        }
+                        if(pWeaponType == 0 && pWeaponLevel == 2) {
+                            projectile.shoot(pShip.getX() + pShip.getWidth() / 2, pShip.getRect().top, projectile.UP);
+                            playerBullets.add(projectile);
+                            projectile = new Projectile(context, screenY, screenX, pWeaponType, pWeaponLevel);
+                            projectile.shoot((pShip.getX() + pShip.getWidth() / 2) - 100, pShip.getRect().top, projectile.UP);
+                            playerBullets.add(projectile);
+                            projectile = new Projectile(context, screenY, screenX, pWeaponType, pWeaponLevel);
+                            projectile.shoot((pShip.getX() + pShip.getWidth() / 2) + 100, pShip.getRect().top, projectile.UP);
+                            playerBullets.add(projectile);
+                        }
+                        if(pWeaponType == 1 && pWeaponLevel == 1) {
+                            projectile.shoot(pShip.getX() + pShip.getWidth() / 2 - 50, pShip.getRect().top, projectile.LEFT);
+                            playerBullets.add(projectile);
+                            projectile = new Projectile(context, screenY, screenX, pWeaponType, pWeaponLevel);
+                            projectile.shoot((pShip.getX() + pShip.getWidth() / 2) + 50, pShip.getRect().top, projectile.RIGHT);
+                            playerBullets.add(projectile);
+                        }
+                        if(pWeaponType == 1 && pWeaponLevel == 2) {
+                            projectile.shoot(pShip.getX() + pShip.getWidth() / 2, pShip.getRect().top, projectile.UP);
+                            playerBullets.add(projectile);
+                            projectile = new Projectile(context, screenY, screenX, pWeaponType, pWeaponLevel);
+                            projectile.shoot((pShip.getX() + pShip.getWidth() / 2) - 100, pShip.getRect().top, projectile.LEFT);
+                            playerBullets.add(projectile);
+                            projectile = new Projectile(context, screenY, screenX, pWeaponType, pWeaponLevel);
+                            projectile.shoot((pShip.getX() + pShip.getWidth() / 2) + 100, pShip.getRect().top, projectile.RIGHT);
+                            playerBullets.add(projectile);
+                        }
                     }
+
                     nextShot = 250;
                 }
 
@@ -676,10 +726,11 @@ public class GameView extends SurfaceView implements Runnable {
 
                 if (nextShot < 0) {
                     if (yPos < screenY - screenY / 4) {
-                        projectile = new Projectile(context, screenY, screenX); // reset projectile
+                        projectile = new Projectile(context, screenY, screenX, pWeaponType, pWeaponLevel); // reset projectile
                         if (projectile.shoot(pShip.getX() + pShip.getWidth() / 2, pShip.getRect().top, projectile.UP)) {
                             playerBullets.add(projectile);
                         }
+
                     }
                     nextShot = 250;
 
