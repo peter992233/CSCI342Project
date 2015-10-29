@@ -1,19 +1,23 @@
 package com.example.peter.csci342_groupproject;
 
+import android.content.res.AssetFileDescriptor;
 import android.content.res.Resources;
-import android.graphics.drawable.Drawable;
-import android.support.v7.app.AppCompatActivity;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.os.Bundle;
-import android.util.Log;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-public class UpgradesActivity extends AppCompatActivity {
+import java.io.IOException;
+
+public class UpgradesActivity extends AppCompatActivity implements MediaPlayer.OnErrorListener, MediaPlayer.OnPreparedListener {
+
+    MediaPlayer mp = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,7 +26,6 @@ public class UpgradesActivity extends AppCompatActivity {
 
         GameData gd = GameData.getInstance();
 
-        //set coins up
         TextView coins = (TextView) this.findViewById(R.id.Currency);
         String coinsText = "Coins: " + gd.getCurrency().toString();
         coins.setText(coinsText);
@@ -36,6 +39,39 @@ public class UpgradesActivity extends AppCompatActivity {
 
         //set speed
         updateSpeed(gd);
+
+        mp = new MediaPlayer();
+        mp.setAudioStreamType(AudioManager.STREAM_MUSIC);
+        try {
+            AssetFileDescriptor afd = this.getResources().openRawResourceFd(R.raw.mainmenumusic);
+            if (afd == null) return;
+            mp.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
+            afd.close();
+            mp.setOnErrorListener(this);
+            mp.setOnPreparedListener(this);
+            mp.prepareAsync();
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        } catch (IllegalStateException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onPrepared(MediaPlayer play) {
+        GameData gd = GameData.getInstance();
+        play.setVolume(gd.getVolume().floatValue(), gd.getVolume().floatValue());
+        play.setLooping(true);
+        if (gd.getMusic()) {
+            play.start();
+        }
+    }
+
+    @Override
+    public boolean onError(MediaPlayer arg0, int arg1, int arg2) {
+        return false;
     }
 
     private void updateLives(GameData gd) {
@@ -147,7 +183,7 @@ public class UpgradesActivity extends AppCompatActivity {
                 speed3.setBackgroundResource(R.drawable.upgrade_true);
                 speed4.setBackgroundResource(R.drawable.upgrade_true);
                 speed5.setBackgroundResource(R.drawable.upgrade_true);
-                Button buySpeed= (Button) this.findViewById(R.id.BuySpeed);
+                Button buySpeed = (Button) this.findViewById(R.id.BuySpeed);
                 buySpeed.setEnabled(false);
                 break;
         }
@@ -159,7 +195,7 @@ public class UpgradesActivity extends AppCompatActivity {
         if (gd.getBaseLives() < 5) {
             DBHelper dbHelper = new DBHelper(getApplicationContext());
 
-            if (gd.setBaseLives((gd.getBaseLives()+1), dbHelper))
+            if (gd.setBaseLives((gd.getBaseLives() + 1), dbHelper))
                 updateLives(gd);
         }
     }
@@ -187,8 +223,6 @@ public class UpgradesActivity extends AppCompatActivity {
     }
 
 
-
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -209,5 +243,36 @@ public class UpgradesActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onPause() {
+
+        super.onPause();
+        if (mp != null) {
+            if (mp.isPlaying())
+                mp.pause();
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (mp != null) {
+            GameData gd = GameData.getInstance();
+            mp.setVolume(gd.getVolume().floatValue(), gd.getVolume().floatValue());
+            mp.setLooping(true);
+            if (gd.getMusic())
+                mp.start();
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (mp != null) {
+            mp.release();
+            mp = null;
+        }
     }
 }

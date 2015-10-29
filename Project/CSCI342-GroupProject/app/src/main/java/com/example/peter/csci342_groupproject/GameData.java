@@ -29,7 +29,7 @@ public class GameData {
         currency = 0;
         soundFX = true;
         music = true;
-        volume = 100.0;
+        volume = 1.0;
     }
 
     /* Static 'instance' method */

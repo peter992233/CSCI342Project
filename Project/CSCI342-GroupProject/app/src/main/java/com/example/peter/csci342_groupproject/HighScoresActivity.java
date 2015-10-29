@@ -1,10 +1,12 @@
 package com.example.peter.csci342_groupproject;
 
 import android.content.Context;
+import android.content.res.AssetFileDescriptor;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -19,6 +21,7 @@ import org.json.JSONObject;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
@@ -29,7 +32,9 @@ import java.util.ArrayList;
  * Created by jas899 on 22/10/2015.
  */
 
-public class HighScoresActivity extends AppCompatActivity {
+public class HighScoresActivity extends AppCompatActivity implements MediaPlayer.OnErrorListener, MediaPlayer.OnPreparedListener {
+
+    MediaPlayer mp = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,9 +43,40 @@ public class HighScoresActivity extends AppCompatActivity {
 
         GameData gd = GameData.getInstance();
 
-        Log.d("HS", gd.getBaseLives().toString());
-
         new GetHighScores().execute("");
+
+        mp = new MediaPlayer();
+        mp.setAudioStreamType(AudioManager.STREAM_MUSIC);
+        try {
+            AssetFileDescriptor afd = this.getResources().openRawResourceFd(R.raw.mainmenumusic);
+            if (afd == null) return;
+            mp.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
+            afd.close();
+            mp.setOnErrorListener(this);
+            mp.setOnPreparedListener(this);
+            mp.prepareAsync();
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        } catch (IllegalStateException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onPrepared(MediaPlayer play) {
+        GameData gd = GameData.getInstance();
+        play.setVolume(gd.getVolume().floatValue(), gd.getVolume().floatValue());
+        play.setLooping(true);
+        if (gd.getMusic()) {
+            play.start();
+        }
+    }
+
+    @Override
+    public boolean onError(MediaPlayer arg0, int arg1, int arg2) {
+        return false;
     }
 
     @Override
@@ -161,4 +197,34 @@ public class HighScoresActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onPause() {
+
+        super.onPause();
+        if (mp != null) {
+            if (mp.isPlaying())
+                mp.pause();
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (mp != null) {
+            GameData gd = GameData.getInstance();
+            mp.setVolume(gd.getVolume().floatValue(), gd.getVolume().floatValue());
+            mp.setLooping(true);
+            if (gd.getMusic())
+                mp.start();
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (mp != null) {
+            mp.release();
+            mp = null;
+        }
+    }
 }
