@@ -808,7 +808,7 @@ public class GameView extends SurfaceView implements Runnable {
 
             pWeaponType = 0;
             pWeaponLevel = 0;
-            lives = 3;
+            lives = gd.getBaseLives() + 3;
             currBgFrame = 0;
             GameLevel = 0;
             waitRestart = true;
