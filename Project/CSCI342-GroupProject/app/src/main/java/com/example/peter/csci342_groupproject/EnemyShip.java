@@ -165,7 +165,7 @@ public class EnemyShip {
             length = screenX / 6;
             height = screenY / 4;
 
-            enemyBMP = BitmapFactory.decodeResource(context.getResources(), R.drawable.enemy_horizontal);
+            enemyBMP = BitmapFactory.decodeResource(context.getResources(), R.drawable.boss_3);
             enemyBMP = Bitmap.createScaledBitmap(enemyBMP, (int) length, (int) height, false);
             shipMoved = 100;
 
@@ -176,7 +176,7 @@ public class EnemyShip {
             length = screenX / 4;
             height = screenY / 4;
 
-            enemyBMP = BitmapFactory.decodeResource(context.getResources(), R.drawable.enemy_horizontal);
+            enemyBMP = BitmapFactory.decodeResource(context.getResources(), R.drawable.boss_4);
             enemyBMP = Bitmap.createScaledBitmap(enemyBMP, (int) length, (int) height, false);
             shipMoved = 100;
 
@@ -187,7 +187,7 @@ public class EnemyShip {
             length = screenX / 3;
             height = screenY / 4;
 
-            enemyBMP = BitmapFactory.decodeResource(context.getResources(), R.drawable.enemy_horizontal);
+            enemyBMP = BitmapFactory.decodeResource(context.getResources(), R.drawable.boss_5);
             enemyBMP = Bitmap.createScaledBitmap(enemyBMP, (int) length, (int) height, false);
             shipMoved = 100;
 
