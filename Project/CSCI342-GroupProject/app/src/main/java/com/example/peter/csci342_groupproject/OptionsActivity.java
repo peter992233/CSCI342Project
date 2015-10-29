@@ -1,8 +1,7 @@
 package com.example.peter.csci342_groupproject;
 
-import android.content.res.AssetFileDescriptor;
 import android.media.AudioManager;
-import android.media.MediaPlayer;
+import android.media.SoundPool;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -11,18 +10,20 @@ import android.view.View;
 import android.widget.CheckBox;
 import android.widget.SeekBar;
 
-import java.io.IOException;
+public class OptionsActivity extends AppCompatActivity {
 
-public class OptionsActivity extends AppCompatActivity implements MediaPlayer.OnErrorListener, MediaPlayer.OnPreparedListener {
-
-    MediaPlayer mp = null;
+    private SoundPool sp = null;
+    private boolean soundLoaded = false;
+    private boolean playing = false;
+    private int playID = 0;
+    private int soundID = 0;
+    GameData gd = GameData.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_options);
 
-        GameData gd = GameData.getInstance();
         CheckBox music = (CheckBox) this.findViewById(R.id.music);
         CheckBox soundFX = (CheckBox) this.findViewById(R.id.soundfx);
         SeekBar volume = (SeekBar) this.findViewById(R.id.volume);
@@ -32,24 +33,19 @@ public class OptionsActivity extends AppCompatActivity implements MediaPlayer.On
         Double vol = (gd.getVolume() * 100);
         volume.setProgress(vol.intValue());
 
-
-        mp = new MediaPlayer();
-        mp.setAudioStreamType(AudioManager.STREAM_MUSIC);
-        try {
-            AssetFileDescriptor afd = this.getResources().openRawResourceFd(R.raw.mainmenumusic);
-            if (afd == null) return;
-            mp.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
-            afd.close();
-            mp.setOnErrorListener(this);
-            mp.setOnPreparedListener(this);
-            mp.prepareAsync();
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-        } catch (IllegalStateException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        sp = new SoundPool(10, AudioManager.STREAM_MUSIC, 0);
+        sp.setOnLoadCompleteListener(new SoundPool.OnLoadCompleteListener() {
+            @Override
+            public void onLoadComplete(SoundPool soundPool, int sampleId, int status) {
+                soundLoaded = true;
+                GameData gd = GameData.getInstance();
+                if (gd.getMusic()) {
+                    playID = sp.play(soundID, gd.getVolume().floatValue(), gd.getVolume().floatValue(), 1, -1, 1f);
+                    playing = true;
+                }
+            }
+        });
+        soundID = sp.load(this, R.raw.mainmenumusic, 1);
 
         volume.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 
@@ -66,32 +62,19 @@ public class OptionsActivity extends AppCompatActivity implements MediaPlayer.On
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 // TODO Auto-generated method stub
-                if (mp != null) {
-                    Double vol = ((progress * 1.0) / 100);
-                    mp.setVolume(vol.floatValue(), vol.floatValue());
+                if (sp != null) {
+                    if (soundLoaded) {
+                        Double vol = ((progress * 1.0) / 100);
+                        sp.setVolume(soundID, vol.floatValue(), vol.floatValue());
+                    }
+
                 }
 
             }
         });
     }
 
-    @Override
-    public void onPrepared(MediaPlayer play) {
-        GameData gd = GameData.getInstance();
-        play.setVolume(gd.getVolume().floatValue(), gd.getVolume().floatValue());
-        play.setLooping(true);
-        if (gd.getMusic()) {
-            play.start();
-        }
-    }
-
-    @Override
-    public boolean onError(MediaPlayer arg0, int arg1, int arg2) {
-        return false;
-    }
-
     public void saveOptions(View view) {
-        GameData gd = GameData.getInstance();
         DBHelper dbHelper = new DBHelper(this);
         CheckBox music = (CheckBox) this.findViewById(R.id.music);
         CheckBox soundFX = (CheckBox) this.findViewById(R.id.soundfx);
@@ -99,11 +82,26 @@ public class OptionsActivity extends AppCompatActivity implements MediaPlayer.On
 
         if (music.isChecked()) {
             gd.setMusic(1, dbHelper);
-            if (!mp.isPlaying())
-                mp.start();
+            if (sp != null) {
+                if (soundLoaded) {
+                    if (!playing) {
+                        playing = true;
+                        if (playID == 0) {
+                            playID = sp.play(soundID, gd.getVolume().floatValue(), gd.getVolume().floatValue(), 1, -1, 1f);
+                        } else {
+                            sp.resume(playID);
+                        }
+                    }
+                }
+            }
         } else {
             gd.setMusic(0, dbHelper);
-            mp.pause();
+            if (sp != null) {
+                if (soundLoaded) {
+                    sp.pause(playID);
+                    playing = false;
+                }
+            }
         }
 
         if (soundFX.isChecked()) {
@@ -140,32 +138,35 @@ public class OptionsActivity extends AppCompatActivity implements MediaPlayer.On
 
     @Override
     protected void onPause() {
-
         super.onPause();
-        if (mp != null) {
-            if (mp.isPlaying())
-                mp.pause();
+        if (sp != null) {
+            if (soundLoaded) {
+                sp.pause(playID);
+                playing = false;
+            }
         }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        if (mp != null) {
-            GameData gd = GameData.getInstance();
-            mp.setVolume(gd.getVolume().floatValue(), gd.getVolume().floatValue());
-            mp.setLooping(true);
-            if (gd.getMusic())
-                mp.start();
+        if ((sp != null) && (soundLoaded) && (!playing) && (gd.getMusic())) {
+            playing = true;
+            if (playID == 0) {
+                playID = sp.play(soundID, gd.getVolume().floatValue(), gd.getVolume().floatValue(), 1, -1, 1f);
+            } else {
+                sp.resume(playID);
+            }
         }
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (mp != null) {
-            mp.release();
-            mp = null;
+        if (sp != null) {
+            sp.stop(playID);
+            sp.release();
+            sp = null;
         }
     }
 }
