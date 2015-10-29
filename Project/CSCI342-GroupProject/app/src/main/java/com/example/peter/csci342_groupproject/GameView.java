@@ -743,16 +743,16 @@ public class GameView extends SurfaceView implements Runnable {
                     nextShot = 250;
 
                     if(pWeaponType == 0) {
-                        nextShot = 250;
+                        nextShot = 450;
                     }
                     if(pWeaponType == 1) {
-                        nextShot = 300;
+                        nextShot = 500;
                     }
                     if(pWeaponType == 3) {
-                        nextShot = 200;
+                        nextShot = 400;
                     }
 
-                    nextShot = nextShot - (pWeaponLevel * 50);
+                    nextShot = nextShot - (pWeaponDamage * 25);
                 }
 
 
