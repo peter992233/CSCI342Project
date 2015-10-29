@@ -35,6 +35,8 @@ public class EnemyShip {
     //This is the Movement speed of the enemy ship class
     private float shipSpeed;
 
+    private int shipMoved = 25;
+
     //Movement types for the enemy
     public final int EMPTY = 0;
     public final int LEFT = 1;
@@ -80,10 +82,14 @@ public class EnemyShip {
         if(enemyType == 0) {
             enemyBMP = BitmapFactory.decodeResource(context.getResources(), R.drawable.enemy_vertical);
             enemyBMP = Bitmap.createScaledBitmap(enemyBMP, (int) length, (int) height, false);
+            Random r = new Random();
+            int pushX = (int) length * 2 + r.nextInt(screenX - (int) length * 3 + 1);
+            x = pushX - length;
         }
         if(enemyType == 1) {
             length = screenX / 20;
             height = screenX / 26;
+
             Random randDirection = new Random();
             int checkDirection = randDirection.nextInt(2);
             if(checkDirection == 0) {
@@ -93,23 +99,10 @@ public class EnemyShip {
                 shipMoving[0] = RIGHT;
             }
             shipMoving[1] = EMPTY;
+
             enemyBMP = BitmapFactory.decodeResource(context.getResources(), R.drawable.enemy_horizontal);
             enemyBMP = Bitmap.createScaledBitmap(enemyBMP, (int) length, (int) height, false);
-        }
 
-        if(enemyType == 0) {
-            Random r = new Random();
-            int pushX = (int) length * 2 + r.nextInt(screenX - (int) length * 3 + 1);
-            x = pushX - length;
-
-            if (x + length > screenX) {
-                Log.d("PX", "Push: " + pushX + "\t WithMax " + screenX + "\t WhenLength" + length);
-            }
-
-            //Push X is a variable to push the ships position to a point along the XY axis
-            x = pushX - length;
-        }
-        if(enemyType == 1) {
             Random r = new Random();
             int pushY = (int) height * 2 + r.nextInt((screenY - screenY/6) - (int) height * 3 + 1);
             y = pushY - height;
@@ -117,12 +110,43 @@ public class EnemyShip {
                 x = screenX;
             }
         }
+        if(enemyType == 2) {
+            length = screenX / 16;
+            height = screenX / 16;
+
+            Random randDirection = new Random();
+            int checkDirection = randDirection.nextInt(2);
+
+            if(checkDirection == 0) {
+                shipMoving[0] = LEFT;
+            }
+            if(checkDirection == 1) {
+                shipMoving[0] = RIGHT;
+            }
+
+            enemyBMP = BitmapFactory.decodeResource(context.getResources(), R.drawable.enemy_diagonal);
+            enemyBMP = Bitmap.createScaledBitmap(enemyBMP, (int) length, (int) height, false);
+
+            Random r = new Random();
+            int pushX = (int) length * 2 + r.nextInt(screenX - (int) length * 3 + 1);
+            x = pushX - length;
+        }
 
         //Set The Enemy Movespeed
         shipSpeed = 100;
     }
 
     public void update(long fps) {
+
+        if(shipMoved > 50) {
+            if(shipMoving[0] == LEFT) {
+                shipMoving[0] = RIGHT;
+            }
+            else if(shipMoving[0] == RIGHT) {
+                shipMoving[0] = LEFT;
+            }
+            shipMoved = 0;
+        }
 
         //Movement Left, Right, Up and Down Movement
         if (shipMoving[0] == LEFT) {
@@ -147,6 +171,9 @@ public class EnemyShip {
         rect.left = x;
         rect.right = x + length;
 
+        if(enemyType == 2) {
+            shipMoved++;
+        }
     }
 
 

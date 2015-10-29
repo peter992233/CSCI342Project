@@ -225,9 +225,9 @@ public class GameView extends SurfaceView implements Runnable {
         for (int i = 0; i < GameLevel * maxEnemies; i++) {
 
             Random randEnemy = new Random();
-            int enemyCheck = randEnemy.nextInt(2);
+            int enemyCheck = randEnemy.nextInt(3);
 
-            if(enemyCheck == 0) {
+            if(enemyCheck == 0 || enemyCheck == 2) {
                 EnemyShip newEnemy = new EnemyShip(context, screenX, screenY, 3, enemyCheck);
                 //Start with 3 Enemies on screen
                 newEnemy.setIsVisible(false);
@@ -303,7 +303,7 @@ public class GameView extends SurfaceView implements Runnable {
                     e.update(fps);
 
                     if (e.getY() > 0) {
-                        if (e.shouldShoot(pShip.getX(), pShip.getWidth())) {
+                        if (e.shouldShoot(pShip.getX(), pShip.getWidth()) && e.getEnemyType() != 2) {
                             Projectile p = new Projectile(context, screenY, screenX, true, 0);
                             p.shoot(e.getX() + e.getLength() / 2, e.getRect().bottom, projectile.DOWN);
                             enemyBullets.add(p);
