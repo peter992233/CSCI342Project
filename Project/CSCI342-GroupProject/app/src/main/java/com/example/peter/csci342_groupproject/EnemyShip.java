@@ -220,6 +220,8 @@ public class EnemyShip {
 
     public int getEnemyType() {return enemyType;}
 
+    public int getEnemyDirection() {return shipMoving[0];}
+
     public RectF getRect() {
         return rect;
     }
