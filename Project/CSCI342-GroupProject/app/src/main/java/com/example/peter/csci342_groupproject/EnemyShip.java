@@ -158,7 +158,7 @@ public class EnemyShip {
             }
             shipMoved = 0;
         }
-
+        
         //Movement Left, Right, Up and Down Movement
         if (shipMoving[0] == LEFT) {
             x = x - shipSpeed / fps;
