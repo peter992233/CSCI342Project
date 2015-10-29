@@ -138,16 +138,16 @@ public class EnemyShip {
             x = pushX - length;
         }
         if(enemyType == 3) {
-            length = screenX / 20;
-            height = screenY / 4;
+            length = screenX / 12;
+            height = screenY / 3;
 
             enemyBMP = BitmapFactory.decodeResource(context.getResources(), R.drawable.boss_1);
             enemyBMP = Bitmap.createScaledBitmap(enemyBMP, (int) length, (int) height, false);
 
-            shipMoved = 60;
+            shipMoved = 100;
 
             x = screenX / 2;
-            y = 0;
+            y = 0 - height;
         }
         if(enemyType == 4) {
             length = screenX / 6;
@@ -156,10 +156,43 @@ public class EnemyShip {
             enemyBMP = BitmapFactory.decodeResource(context.getResources(), R.drawable.boss_2);
             enemyBMP = Bitmap.createScaledBitmap(enemyBMP, (int) length, (int) height, false);
 
-            shipMoved = 60;
+            shipMoved = 100;
 
             x = screenX / 2;
-            y = 0;
+            y = 0 - height;
+        }
+        if(enemyType == 5) {
+            length = screenX / 6;
+            height = screenY / 4;
+
+            enemyBMP = BitmapFactory.decodeResource(context.getResources(), R.drawable.enemy_horizontal);
+            enemyBMP = Bitmap.createScaledBitmap(enemyBMP, (int) length, (int) height, false);
+            shipMoved = 100;
+
+            x = screenX / 2;
+            y = 0 - height;
+        }
+        if(enemyType == 6) {
+            length = screenX / 4;
+            height = screenY / 4;
+
+            enemyBMP = BitmapFactory.decodeResource(context.getResources(), R.drawable.enemy_horizontal);
+            enemyBMP = Bitmap.createScaledBitmap(enemyBMP, (int) length, (int) height, false);
+            shipMoved = 100;
+
+            x = screenX / 2;
+            y = 0 - height;
+        }
+        if(enemyType == 7) {
+            length = screenX / 3;
+            height = screenY / 4;
+
+            enemyBMP = BitmapFactory.decodeResource(context.getResources(), R.drawable.enemy_horizontal);
+            enemyBMP = Bitmap.createScaledBitmap(enemyBMP, (int) length, (int) height, false);
+            shipMoved = 100;
+
+            x = screenX / 2;
+            y = 0 - height;
         }
 
         //Set The Enemy Movespeed
@@ -177,7 +210,7 @@ public class EnemyShip {
             }
             shipMoved = 0;
         }
-        if(shipMoved > 120 && enemyType >= 3) {
+        if(shipMoved > 200 && enemyType >= 3) {
             if(shipMoving[0] == LEFT) {
                 shipMoving[0] = RIGHT;
             }
@@ -213,7 +246,7 @@ public class EnemyShip {
         if(enemyType == 2) {
             shipMoved++;
         }
-        if(enemyType >= 3 && y > SY/3 && shipSet == false) {
+        if(enemyType >= 3 && y > SY/12 && shipSet == false) {
             Random randDirection = new Random();
             int checkDirection = randDirection.nextInt(2);
 
@@ -253,6 +286,13 @@ public class EnemyShip {
                         return true;
                     }
                 }
+                else if(enemyType == 7) {
+                    randomNumber = shootGen.nextInt(3);
+                    if (randomNumber == 0) {
+                        lastShot = System.currentTimeMillis();
+                        return true;
+                    }
+                }
                 else {
                     randomNumber = shootGen.nextInt(10);
                     if (randomNumber == 0) {
@@ -264,13 +304,21 @@ public class EnemyShip {
 
             //Fire Randomly regardless of player (1/1500)
             if(enemyType <= 2) {
-                randomNumber = shootGen.nextInt(750);
+                randomNumber = shootGen.nextInt(300);
                 if (randomNumber == 0) {
                     lastShot = System.currentTimeMillis();
                     return true;
                 }
-            } else {
-                randomNumber = shootGen.nextInt(250);
+            }
+            else if(enemyType == 7) {
+                randomNumber = shootGen.nextInt(30);
+                if (randomNumber == 0) {
+                    lastShot = System.currentTimeMillis();
+                    return true;
+                }
+            }
+            else {
+                randomNumber = shootGen.nextInt(100);
                 if (randomNumber == 0) {
                     lastShot = System.currentTimeMillis();
                     return true;

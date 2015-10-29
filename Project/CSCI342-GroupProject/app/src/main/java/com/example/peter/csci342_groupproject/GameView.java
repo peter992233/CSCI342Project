@@ -74,7 +74,7 @@ public class GameView extends SurfaceView implements Runnable {
     ArrayList<Integer> currExFrames = new ArrayList<Integer>();
 
     ArrayList<EnemyShip> EnemyList = new ArrayList<EnemyShip>();
-    int maxEnemies = 40;
+    int maxEnemies = 1;
 
     int score = 0;
     private int lives = 0;
@@ -129,6 +129,8 @@ public class GameView extends SurfaceView implements Runnable {
         lives = gd.getBaseLives() + 3;
         currency = gd.getCurrency();
         pWeaponDamage = gd.getBaseDamage().intValue();
+
+        lives = 500;
 
         // Load the sounds
         soundPool = new SoundPool(10, AudioManager.STREAM_MUSIC, 0);
@@ -229,13 +231,31 @@ public class GameView extends SurfaceView implements Runnable {
             //If not pause the game should update
             if (!paused) {
                 if(EnemyList.size() == 0 && spawnedBoss == false && GameLevel == 1) {
-                    EnemyShip newEnemy = new EnemyShip(context, screenX, screenY, 15, 3);
+                    EnemyShip newEnemy = new EnemyShip(context, screenX, screenY, 5, 3);
                     newEnemy.setIsVisible(false);
                     EnemyList.add(newEnemy);
                     spawnedBoss = true;
                 }
                 if(EnemyList.size() == 0 && spawnedBoss == false && GameLevel == 2) {
-                    EnemyShip newEnemy = new EnemyShip(context, screenX, screenY, 30, 4);
+                    EnemyShip newEnemy = new EnemyShip(context, screenX, screenY, 5, 4);
+                    newEnemy.setIsVisible(false);
+                    EnemyList.add(newEnemy);
+                    spawnedBoss = true;
+                }
+                if(EnemyList.size() == 0 && spawnedBoss == false && GameLevel == 3) {
+                    EnemyShip newEnemy = new EnemyShip(context, screenX, screenY, 5, 5);
+                    newEnemy.setIsVisible(false);
+                    EnemyList.add(newEnemy);
+                    spawnedBoss = true;
+                }
+                if(EnemyList.size() == 0 && spawnedBoss == false && GameLevel == 4) {
+                    EnemyShip newEnemy = new EnemyShip(context, screenX, screenY, 5, 6);
+                    newEnemy.setIsVisible(false);
+                    EnemyList.add(newEnemy);
+                    spawnedBoss = true;
+                }
+                if(EnemyList.size() == 0 && spawnedBoss == false && GameLevel == 5) {
+                    EnemyShip newEnemy = new EnemyShip(context, screenX, screenY, 5, 7);
                     newEnemy.setIsVisible(false);
                     EnemyList.add(newEnemy);
                     spawnedBoss = true;
@@ -354,6 +374,40 @@ public class GameView extends SurfaceView implements Runnable {
                                 enemyBullets.add(p);
                                 p = new Projectile(context, screenY, screenX, true, 0);
                                 p.shoot(e.getX() + e.getLength() / 2 + 75, e.getRect().bottom, projectile.DOWN);
+                                enemyBullets.add(p);
+                            }
+                            if(e.getEnemyType() == 5) {
+                                Projectile p = new Projectile(context, screenY, screenX, true, 0);
+                                p.shoot(e.getX() + e.getLength() / 2, e.getRect().bottom, projectile.DOWN);
+                                enemyBullets.add(p);
+                                p = new Projectile(context, screenY, screenX, true, 0);
+                                p.shoot(e.getX() + e.getLength() / 2 - 150, e.getRect().bottom - 75, projectile.DOWN);
+                                enemyBullets.add(p);
+                                p = new Projectile(context, screenY, screenX, true, 0);
+                                p.shoot(e.getX() + e.getLength() / 2 + 150, e.getRect().bottom - 75, projectile.DOWN);
+                                enemyBullets.add(p);
+                            }
+                            if(e.getEnemyType() == 6) {
+                                Projectile p = new Projectile(context, screenY, screenX, true, 0);
+                                p.shoot(e.getX() + e.getLength() / 2 - 250, e.getRect().bottom, projectile.DOWN);
+                                enemyBullets.add(p);
+                                p = new Projectile(context, screenY, screenX, true, 0);
+                                p.shoot(e.getX() + e.getLength() / 2 - 200, e.getRect().bottom, projectile.DOWN);
+                                enemyBullets.add(p);
+                                p = new Projectile(context, screenY, screenX, true, 0);
+                                p.shoot(e.getX() + e.getLength() / 2 + 200, e.getRect().bottom, projectile.DOWN);
+                                enemyBullets.add(p);
+                                p = new Projectile(context, screenY, screenX, true, 0);
+                                p.shoot(e.getX() + e.getLength() / 2 + 250, e.getRect().bottom, projectile.DOWN);
+                                enemyBullets.add(p);
+                            }
+                            if(e.getEnemyType() == 7) {
+                                Random randBullet = new Random();
+                                int bulletCheck = randBullet.nextInt(6);
+                                bulletCheck = bulletCheck - 3;
+
+                                Projectile p = new Projectile(context, screenY, screenX, true, 0);
+                                p.shoot(e.getX() + e.getLength() / 2 + (bulletCheck * 100), e.getRect().bottom, projectile.DOWN);
                                 enemyBullets.add(p);
                             }
                         }
@@ -487,7 +541,7 @@ public class GameView extends SurfaceView implements Runnable {
                                     explX.add((int) EnemyList.get(j).getX());
                                     explY.add((int) EnemyList.get(j).getY());
 
-                                    if(e.getEnemyType() > 3) {
+                                    if(e.getEnemyType() >= 3) {
                                         explSize.add(400);
                                     }
                                     else {
@@ -935,6 +989,7 @@ public class GameView extends SurfaceView implements Runnable {
             powerups.clear();
 
             explDraws.clear();
+            explSize.clear();
             explX.clear();
             explY.clear();
             currExFrames.clear();
