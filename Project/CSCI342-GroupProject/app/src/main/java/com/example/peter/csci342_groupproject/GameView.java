@@ -268,7 +268,7 @@ public class GameView extends SurfaceView implements Runnable {
                 EnemyList.add(newEnemy);
             }
         }
-        EnemyShip newEnemy = new EnemyShip(context, screenX, screenY, 5, 3);
+        EnemyShip newEnemy = new EnemyShip(context, screenX, screenY, 15, 3);
         newEnemy.setIsVisible(false);
         EnemyList.add(newEnemy);
     }
@@ -445,7 +445,7 @@ public class GameView extends SurfaceView implements Runnable {
                                     }
 
                                     Random randPowerup = new Random();
-                                    int powerupCheck = randPowerup.nextInt(5);
+                                    int powerupCheck = randPowerup.nextInt(10);
 
                                     for (int k = 0; k < 3; k++) {
                                         if (powerupCheck == k) {

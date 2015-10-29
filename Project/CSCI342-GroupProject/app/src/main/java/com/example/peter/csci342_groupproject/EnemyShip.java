@@ -56,6 +56,8 @@ public class EnemyShip {
 
     int SY;
 
+    boolean shipSet = false;
+
     private long lastShot = System.currentTimeMillis();
 
     public long getLastShot() {
@@ -136,15 +138,15 @@ public class EnemyShip {
             x = pushX - length;
         }
         if(enemyType == 3) {
-            length = screenX / 22;
-            height = screenY / 6;
+            length = screenX / 20;
+            height = screenY / 4;
 
             enemyBMP = BitmapFactory.decodeResource(context.getResources(), R.drawable.boss);
             enemyBMP = Bitmap.createScaledBitmap(enemyBMP, (int) length, (int) height, false);
 
-            Random r = new Random();
-            int pushX = (int) length * 2 + r.nextInt(screenX - (int) length * 3 + 1);
-            x = pushX - length;
+            shipMoved = 60;
+
+            x = screenX / 2;
         }
 
         //Set The Enemy Movespeed
@@ -153,7 +155,16 @@ public class EnemyShip {
 
     public void update(long fps) {
 
-        if(shipMoved > 50) {
+        if(shipMoved > 50 && enemyType == 2) {
+            if(shipMoving[0] == LEFT) {
+                shipMoving[0] = RIGHT;
+            }
+            else if(shipMoving[0] == RIGHT) {
+                shipMoving[0] = LEFT;
+            }
+            shipMoved = 0;
+        }
+        if(shipMoved > 120 && enemyType == 3) {
             if(shipMoving[0] == LEFT) {
                 shipMoving[0] = RIGHT;
             }
@@ -189,8 +200,22 @@ public class EnemyShip {
         if(enemyType == 2) {
             shipMoved++;
         }
-        if(enemyType == 3 && y > SY/3) {
-            shipMoving[1] = 0;
+        if(enemyType == 3 && y > SY/3 && shipSet == false) {
+            Random randDirection = new Random();
+            int checkDirection = randDirection.nextInt(2);
+
+            if(checkDirection == 0) {
+                shipMoving[0] = LEFT;
+            }
+            if(checkDirection == 1) {
+                shipMoving[0] = RIGHT;
+            }
+            shipMoving[1] = EMPTY;
+
+            shipSet = true;
+        }
+        if(enemyType == 3 && shipMoving[1] == EMPTY) {
+            shipMoved++;
         }
     }
 
