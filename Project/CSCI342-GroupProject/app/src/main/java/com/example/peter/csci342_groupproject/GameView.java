@@ -68,6 +68,7 @@ public class GameView extends SurfaceView implements Runnable {
     final AnimationDrawable animDraw = createAnimationDrawable();
 
     final ArrayList<AnimationDrawable> explDraws = new ArrayList<AnimationDrawable>();
+    ArrayList<Integer> explSize = new ArrayList<Integer>();
     ArrayList<Integer> explX = new ArrayList<Integer>();
     ArrayList<Integer> explY = new ArrayList<Integer>();
     ArrayList<Integer> currExFrames = new ArrayList<Integer>();
@@ -111,6 +112,7 @@ public class GameView extends SurfaceView implements Runnable {
     private boolean powerLoaded = false;
     private int powerID = 0;
 
+    boolean spawnedBoss = false;
 
     public GameView(Context context, int x, int y) {
         super(context);
@@ -226,6 +228,18 @@ public class GameView extends SurfaceView implements Runnable {
 
             //If not pause the game should update
             if (!paused) {
+                if(EnemyList.size() == 0 && spawnedBoss == false && GameLevel == 1) {
+                    EnemyShip newEnemy = new EnemyShip(context, screenX, screenY, 15, 3);
+                    newEnemy.setIsVisible(false);
+                    EnemyList.add(newEnemy);
+                    spawnedBoss = true;
+                }
+                if(EnemyList.size() == 0 && spawnedBoss == false && GameLevel == 2) {
+                    EnemyShip newEnemy = new EnemyShip(context, screenX, screenY, 30, 4);
+                    newEnemy.setIsVisible(false);
+                    EnemyList.add(newEnemy);
+                    spawnedBoss = true;
+                }
                 update();
             }
 
@@ -268,9 +282,7 @@ public class GameView extends SurfaceView implements Runnable {
                 EnemyList.add(newEnemy);
             }
         }
-        EnemyShip newEnemy = new EnemyShip(context, screenX, screenY, 15, 3);
-        newEnemy.setIsVisible(false);
-        EnemyList.add(newEnemy);
+        spawnedBoss = false;
     }
 
     public void respawnPlayer() {
@@ -331,9 +343,19 @@ public class GameView extends SurfaceView implements Runnable {
                         if (e.shouldShoot(pShip.getX(), pShip.getWidth()) && e.getEnemyType() != 2) {
                             if ((gd.getSoundFX() && (bulletLoaded)))
                                 soundPool.play(bulletID, gd.getVolume().floatValue(), gd.getVolume().floatValue(), 1, 0, 1f);
-                            Projectile p = new Projectile(context, screenY, screenX, true, 0);
-                            p.shoot(e.getX() + e.getLength() / 2, e.getRect().bottom, projectile.DOWN);
-                            enemyBullets.add(p);
+                            if(e.getEnemyType() <= 3) {
+                                Projectile p = new Projectile(context, screenY, screenX, true, 0);
+                                p.shoot(e.getX() + e.getLength() / 2, e.getRect().bottom, projectile.DOWN);
+                                enemyBullets.add(p);
+                            }
+                            if(e.getEnemyType() == 4) {
+                                Projectile p = new Projectile(context, screenY, screenX, true, 0);
+                                p.shoot(e.getX() + e.getLength() / 2 - 75, e.getRect().bottom, projectile.DOWN);
+                                enemyBullets.add(p);
+                                p = new Projectile(context, screenY, screenX, true, 0);
+                                p.shoot(e.getX() + e.getLength() / 2 + 75, e.getRect().bottom, projectile.DOWN);
+                                enemyBullets.add(p);
+                            }
                         }
                     }
 
@@ -391,6 +413,8 @@ public class GameView extends SurfaceView implements Runnable {
 
                         explX.add((int) EnemyList.get(i).getX());
                         explY.add((int) EnemyList.get(i).getY());
+
+                        explSize.add(100);
 
                         EnemyList.remove(i);
                         Log.d("Crash", "Hope You Have Insurance Buddy");
@@ -463,12 +487,20 @@ public class GameView extends SurfaceView implements Runnable {
                                     explX.add((int) EnemyList.get(j).getX());
                                     explY.add((int) EnemyList.get(j).getY());
 
+                                    if(e.getEnemyType() > 3) {
+                                        explSize.add(400);
+                                    }
+                                    else {
+                                        explSize.add(100);
+                                    }
+
                                     e.setIsVisible(false);
                                     EnemyList.remove(e);
+
+                                    score += 100;
                                 }
                                 p.setInactive();
                                 playerBullets.remove(p);
-                                score += 100;
                             }
                         }
                     }
@@ -623,7 +655,7 @@ public class GameView extends SurfaceView implements Runnable {
                 for (int i = 0; i < explDraws.size(); i++) {
                     if (currExFrames.get(i) < explDraws.get(i).getNumberOfFrames()) {
                         Drawable ex = explDraws.get(i).getFrame(currExFrames.get(i));
-                        ex.setBounds(explX.get(i), explY.get(i), explX.get(i) + 100, explY.get(i) + 100);
+                        ex.setBounds(explX.get(i), explY.get(i), explX.get(i) + explSize.get(i), explY.get(i) + explSize.get(i));
                         ex.draw(canvas);
                     }
                 }
@@ -710,42 +742,54 @@ public class GameView extends SurfaceView implements Runnable {
                     if (motionEvent.getY() < screenY - screenY / 4) {
                         if ((gd.getSoundFX() && (bulletLoaded)))
                             soundPool.play(bulletID, gd.getVolume().floatValue(), gd.getVolume().floatValue(), 1, 0, 1f);
-                        if (pWeaponLevel == 0 || pWeaponType == 2) {
-                            projectile.shoot(pShip.getX() + pShip.getWidth() / 2, pShip.getRect().top, projectile.UP);
+                        if (pWeaponLevel == 0 && pWeaponType != 0) {
+                            projectile.shoot(pShip.getX() + pShip.getWidth() / 2 - 30, pShip.getRect().top, projectile.UP);
+                            playerBullets.add(projectile);
+                        }
+                        if(pWeaponLevel == 0 && pWeaponType == 0) {
+                            projectile.shoot(pShip.getX() + pShip.getWidth() / 2 - 8, pShip.getRect().top, projectile.UP);
                             playerBullets.add(projectile);
                         }
                         if (pWeaponType == 0 && pWeaponLevel == 1) {
-                            projectile.shoot(pShip.getX() + pShip.getWidth() / 2 - 50, pShip.getRect().top, projectile.UP);
+                            projectile.shoot(pShip.getX() + pShip.getWidth() / 2 - 58, pShip.getRect().top, projectile.UP);
                             playerBullets.add(projectile);
                             projectile = new Projectile(context, screenY, screenX, pWeaponType, pWeaponLevel);
-                            projectile.shoot((pShip.getX() + pShip.getWidth() / 2) + 50, pShip.getRect().top, projectile.UP);
+                            projectile.shoot((pShip.getX() + pShip.getWidth() / 2) + 42, pShip.getRect().top, projectile.UP);
                             playerBullets.add(projectile);
                         }
                         if (pWeaponType == 0 && pWeaponLevel == 2) {
-                            projectile.shoot(pShip.getX() + pShip.getWidth() / 2, pShip.getRect().top, projectile.UP);
+                            projectile.shoot(pShip.getX() + pShip.getWidth() / 2 - 8, pShip.getRect().top, projectile.UP);
                             playerBullets.add(projectile);
                             projectile = new Projectile(context, screenY, screenX, pWeaponType, pWeaponLevel);
-                            projectile.shoot((pShip.getX() + pShip.getWidth() / 2) - 100, pShip.getRect().top, projectile.UP);
+                            projectile.shoot((pShip.getX() + pShip.getWidth() / 2) - 108, pShip.getRect().top, projectile.UP);
                             playerBullets.add(projectile);
                             projectile = new Projectile(context, screenY, screenX, pWeaponType, pWeaponLevel);
-                            projectile.shoot((pShip.getX() + pShip.getWidth() / 2) + 100, pShip.getRect().top, projectile.UP);
+                            projectile.shoot((pShip.getX() + pShip.getWidth() / 2) + 92, pShip.getRect().top, projectile.UP);
                             playerBullets.add(projectile);
                         }
                         if (pWeaponType == 1 && pWeaponLevel == 1) {
-                            projectile.shoot(pShip.getX() + pShip.getWidth() / 2 - 50, pShip.getRect().top, projectile.LEFT);
+                            projectile.shoot(pShip.getX() + pShip.getWidth() / 2 - 80, pShip.getRect().top, projectile.LEFT);
                             playerBullets.add(projectile);
                             projectile = new Projectile(context, screenY, screenX, pWeaponType, pWeaponLevel);
-                            projectile.shoot((pShip.getX() + pShip.getWidth() / 2) + 50, pShip.getRect().top, projectile.RIGHT);
+                            projectile.shoot((pShip.getX() + pShip.getWidth() / 2) + 20, pShip.getRect().top, projectile.RIGHT);
                             playerBullets.add(projectile);
                         }
                         if (pWeaponType == 1 && pWeaponLevel == 2) {
-                            projectile.shoot(pShip.getX() + pShip.getWidth() / 2, pShip.getRect().top, projectile.UP);
+                            projectile.shoot(pShip.getX() + pShip.getWidth() / 2 - 30, pShip.getRect().top, projectile.UP);
                             playerBullets.add(projectile);
                             projectile = new Projectile(context, screenY, screenX, pWeaponType, pWeaponLevel);
-                            projectile.shoot((pShip.getX() + pShip.getWidth() / 2) - 100, pShip.getRect().top, projectile.LEFT);
+                            projectile.shoot((pShip.getX() + pShip.getWidth() / 2) - 130, pShip.getRect().top, projectile.LEFT);
                             playerBullets.add(projectile);
                             projectile = new Projectile(context, screenY, screenX, pWeaponType, pWeaponLevel);
-                            projectile.shoot((pShip.getX() + pShip.getWidth() / 2) + 100, pShip.getRect().top, projectile.RIGHT);
+                            projectile.shoot((pShip.getX() + pShip.getWidth() / 2) + 70, pShip.getRect().top, projectile.RIGHT);
+                            playerBullets.add(projectile);
+                        }
+                        if (pWeaponType == 2 && pWeaponLevel == 1) {
+                            projectile.shoot((pShip.getX() + pShip.getWidth() / 2) - 62, pShip.getRect().top, projectile.UP);
+                            playerBullets.add(projectile);
+                        }
+                        if (pWeaponType == 2 && pWeaponLevel == 2) {
+                            projectile.shoot((pShip.getX() + pShip.getWidth() / 2) - 92, pShip.getRect().top, projectile.UP);
                             playerBullets.add(projectile);
                         }
                     }
@@ -785,10 +829,73 @@ public class GameView extends SurfaceView implements Runnable {
                     if (yPos < screenY - screenY / 4) {
                         projectile = new Projectile(context, screenY, screenX, pWeaponType, pWeaponLevel); // reset projectile
                         if (projectile.shoot(pShip.getX() + pShip.getWidth() / 2, pShip.getRect().top, projectile.UP)) {
-                            playerBullets.add(projectile);
+                            if ((gd.getSoundFX() && (bulletLoaded)))
+                                soundPool.play(bulletID, gd.getVolume().floatValue(), gd.getVolume().floatValue(), 1, 0, 1f);
+                            if (pWeaponLevel == 0 && pWeaponType != 0) {
+                                projectile.shoot(pShip.getX() + pShip.getWidth() / 2 - 30, pShip.getRect().top, projectile.UP);
+                                playerBullets.add(projectile);
+                            }
+                            if (pWeaponLevel == 0 && pWeaponType == 0) {
+                                projectile.shoot(pShip.getX() + pShip.getWidth() / 2 - 8, pShip.getRect().top, projectile.UP);
+                                playerBullets.add(projectile);
+                            }
+                            if (pWeaponType == 0 && pWeaponLevel == 1) {
+                                projectile.shoot(pShip.getX() + pShip.getWidth() / 2 - 58, pShip.getRect().top, projectile.UP);
+                                playerBullets.add(projectile);
+                                projectile = new Projectile(context, screenY, screenX, pWeaponType, pWeaponLevel);
+                                projectile.shoot((pShip.getX() + pShip.getWidth() / 2) + 42, pShip.getRect().top, projectile.UP);
+                                playerBullets.add(projectile);
+                            }
+                            if (pWeaponType == 0 && pWeaponLevel == 2) {
+                                projectile.shoot(pShip.getX() + pShip.getWidth() / 2 - 8, pShip.getRect().top, projectile.UP);
+                                playerBullets.add(projectile);
+                                projectile = new Projectile(context, screenY, screenX, pWeaponType, pWeaponLevel);
+                                projectile.shoot((pShip.getX() + pShip.getWidth() / 2) - 108, pShip.getRect().top, projectile.UP);
+                                playerBullets.add(projectile);
+                                projectile = new Projectile(context, screenY, screenX, pWeaponType, pWeaponLevel);
+                                projectile.shoot((pShip.getX() + pShip.getWidth() / 2) + 92, pShip.getRect().top, projectile.UP);
+                                playerBullets.add(projectile);
+                            }
+                            if (pWeaponType == 1 && pWeaponLevel == 1) {
+                                projectile.shoot(pShip.getX() + pShip.getWidth() / 2 - 80, pShip.getRect().top, projectile.LEFT);
+                                playerBullets.add(projectile);
+                                projectile = new Projectile(context, screenY, screenX, pWeaponType, pWeaponLevel);
+                                projectile.shoot((pShip.getX() + pShip.getWidth() / 2) + 20, pShip.getRect().top, projectile.RIGHT);
+                                playerBullets.add(projectile);
+                            }
+                            if (pWeaponType == 1 && pWeaponLevel == 2) {
+                                projectile.shoot(pShip.getX() + pShip.getWidth() / 2 - 30, pShip.getRect().top, projectile.UP);
+                                playerBullets.add(projectile);
+                                projectile = new Projectile(context, screenY, screenX, pWeaponType, pWeaponLevel);
+                                projectile.shoot((pShip.getX() + pShip.getWidth() / 2) - 130, pShip.getRect().top, projectile.LEFT);
+                                playerBullets.add(projectile);
+                                projectile = new Projectile(context, screenY, screenX, pWeaponType, pWeaponLevel);
+                                projectile.shoot((pShip.getX() + pShip.getWidth() / 2) + 70, pShip.getRect().top, projectile.RIGHT);
+                                playerBullets.add(projectile);
+                            }
+                            if (pWeaponType == 2 && pWeaponLevel == 1) {
+                                projectile.shoot((pShip.getX() + pShip.getWidth() / 2) - 62, pShip.getRect().top, projectile.UP);
+                                playerBullets.add(projectile);
+                            }
+                            if (pWeaponType == 2 && pWeaponLevel == 2) {
+                                projectile.shoot((pShip.getX() + pShip.getWidth() / 2) - 92, pShip.getRect().top, projectile.UP);
+                                playerBullets.add(projectile);
+                            }
                         }
                     }
                     nextShot = 250;
+
+                    if (pWeaponType == 0) {
+                        nextShot = 450;
+                    }
+                    if (pWeaponType == 1) {
+                        nextShot = 500;
+                    }
+                    if (pWeaponType == 3) {
+                        nextShot = 400;
+                    }
+
+                    nextShot = nextShot - (pWeaponDamage * 25);
                 }
                 break;
             }

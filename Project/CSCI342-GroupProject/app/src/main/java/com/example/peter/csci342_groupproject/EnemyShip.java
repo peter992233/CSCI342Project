@@ -110,7 +110,7 @@ public class EnemyShip {
             enemyBMP = Bitmap.createScaledBitmap(enemyBMP, (int) length, (int) height, false);
 
             Random r = new Random();
-            int pushY = (int) height * 2 + r.nextInt((screenY - screenY/6) - (int) height * 3 + 1);
+            int pushY = (int) height * 2 + r.nextInt((screenY - screenY/3) - (int) height * 3 + 1);
             y = pushY - height;
             if(shipMoving[0] == LEFT) {
                 x = screenX;
@@ -141,12 +141,25 @@ public class EnemyShip {
             length = screenX / 20;
             height = screenY / 4;
 
-            enemyBMP = BitmapFactory.decodeResource(context.getResources(), R.drawable.boss);
+            enemyBMP = BitmapFactory.decodeResource(context.getResources(), R.drawable.boss_1);
             enemyBMP = Bitmap.createScaledBitmap(enemyBMP, (int) length, (int) height, false);
 
             shipMoved = 60;
 
             x = screenX / 2;
+            y = 0;
+        }
+        if(enemyType == 4) {
+            length = screenX / 6;
+            height = screenY / 4;
+
+            enemyBMP = BitmapFactory.decodeResource(context.getResources(), R.drawable.boss_2);
+            enemyBMP = Bitmap.createScaledBitmap(enemyBMP, (int) length, (int) height, false);
+
+            shipMoved = 60;
+
+            x = screenX / 2;
+            y = 0;
         }
 
         //Set The Enemy Movespeed
@@ -164,7 +177,7 @@ public class EnemyShip {
             }
             shipMoved = 0;
         }
-        if(shipMoved > 120 && enemyType == 3) {
+        if(shipMoved > 120 && enemyType >= 3) {
             if(shipMoving[0] == LEFT) {
                 shipMoving[0] = RIGHT;
             }
@@ -200,7 +213,7 @@ public class EnemyShip {
         if(enemyType == 2) {
             shipMoved++;
         }
-        if(enemyType == 3 && y > SY/3 && shipSet == false) {
+        if(enemyType >= 3 && y > SY/3 && shipSet == false) {
             Random randDirection = new Random();
             int checkDirection = randDirection.nextInt(2);
 
@@ -214,7 +227,7 @@ public class EnemyShip {
 
             shipSet = true;
         }
-        if(enemyType == 3 && shipMoving[1] == EMPTY) {
+        if(enemyType >= 3 && shipMoving[1] == EMPTY) {
             shipMoved++;
         }
     }
@@ -233,19 +246,35 @@ public class EnemyShip {
                     (playerShipX > x && playerShipX < x + length)) {
 
                 //The random Gen with 1 in 50 chance to shoot
-                randomNumber = shootGen.nextInt(50);
+                if(enemyType <= 2) {
+                    randomNumber = shootGen.nextInt(30);
+                    if (randomNumber == 0) {
+                        lastShot = System.currentTimeMillis();
+                        return true;
+                    }
+                }
+                else {
+                    randomNumber = shootGen.nextInt(10);
+                    if (randomNumber == 0) {
+                        lastShot = System.currentTimeMillis();
+                        return true;
+                    }
+                }
+            }
+
+            //Fire Randomly regardless of player (1/1500)
+            if(enemyType <= 2) {
+                randomNumber = shootGen.nextInt(750);
                 if (randomNumber == 0) {
                     lastShot = System.currentTimeMillis();
                     return true;
                 }
-
-            }
-
-            //Fire Randomly regardless of player (1/1500)
-            randomNumber = shootGen.nextInt(750);
-            if (randomNumber == 0) {
-                lastShot = System.currentTimeMillis();
-                return true;
+            } else {
+                randomNumber = shootGen.nextInt(250);
+                if (randomNumber == 0) {
+                    lastShot = System.currentTimeMillis();
+                    return true;
+                }
             }
         }
 
