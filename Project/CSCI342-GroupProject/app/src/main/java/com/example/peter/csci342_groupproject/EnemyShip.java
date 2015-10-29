@@ -54,6 +54,8 @@ public class EnemyShip {
 
     int enemyLives;
 
+    int SY;
+
     private long lastShot = System.currentTimeMillis();
 
     public long getLastShot() {
@@ -72,6 +74,8 @@ public class EnemyShip {
         //Set the length of the Ship
         length = screenX / 16;
         height = screenY / 12;
+
+        SY = screenY;
 
         //Set the ship to display as visible
         isVisible = true;
@@ -184,6 +188,9 @@ public class EnemyShip {
 
         if(enemyType == 2) {
             shipMoved++;
+        }
+        if(enemyType == 3 && y > SY/3) {
+            shipMoving[1] = 0;
         }
     }
 
