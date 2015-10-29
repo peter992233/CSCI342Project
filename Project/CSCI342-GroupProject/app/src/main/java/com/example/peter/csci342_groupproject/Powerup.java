@@ -25,8 +25,8 @@ public class Powerup {
     int powerupType;
 
     public Powerup(Context context, int screenY, int screenX, int pType) {
-        width = screenX / 22;
-        height = screenY / 22;
+        width = screenX / 20;
+        height = screenY / 20;
 
         isActive = false;
         rect = new RectF();

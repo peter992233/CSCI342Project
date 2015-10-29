@@ -136,7 +136,7 @@ public class EnemyShip {
             x = pushX - length;
         }
         if(enemyType == 3) {
-            length = screenX / 14;
+            length = screenX / 22;
             height = screenY / 6;
 
             enemyBMP = BitmapFactory.decodeResource(context.getResources(), R.drawable.boss);
