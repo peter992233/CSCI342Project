@@ -1,69 +1,69 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/backboard">
+    android:background="@drawable/backboard"
+    android:orientation="vertical">
 
     <ImageView
         android:id="@+id/Heading"
         android:layout_width="350dp"
         android:layout_height="60dp"
         android:layout_centerHorizontal="true"
-        android:background="@drawable/upgrades"
-        android:layout_marginTop="25dp"/>
+        android:layout_marginTop="25dp"
+        android:background="@drawable/upgrades" />
 
     <TextView
         android:id="@+id/ScoreDialog"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
         android:layout_below="@+id/Heading"
+        android:layout_centerHorizontal="true"
         android:text="Score: 7200"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textColor="#fff325"/>
+        android:textColor="#fff325" />
 
     <TextView
         android:id="@+id/instructions"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
         android:layout_below="@+id/ScoreDialog"
-        android:text="Enter a username to enter your score into the games high scores.\nEntering a username is not required to continue."
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:layout_weight="1"
-        android:textColor="#fff325"
+        android:layout_centerHorizontal="true"
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:text="Enter a username to enter your score into the games high scores.\nEntering a username is not required to continue."
         android:textAlignment="center"
-        android:gravity="center"/>
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textColor="#fff325" />
 
     <EditText
         android:id="@+id/username"
-        android:inputType="textEmailAddress"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
         android:layout_below="@+id/instructions"
-        android:hint="Username"
-        android:textAlignment="center"
-        android:gravity="center"
-        android:textColor="#fff325"
-        android:textColorHint="#fff325"
+        android:layout_centerHorizontal="true"
         android:layout_marginLeft="30dp"
-        android:layout_marginRight="30dp"/>
+        android:layout_marginRight="30dp"
+        android:gravity="center"
+        android:hint="Username"
+        android:inputType="textEmailAddress"
+        android:textAlignment="center"
+        android:textColor="#fff325"
+        android:textColorHint="#fff325" />
 
     <Button
         android:id="@+id/mainMenu"
         android:layout_width="120dp"
         android:layout_height="45dp"
-        android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/username"
         android:layout_marginLeft="30dp"
         android:background="@drawable/button_small"
         android:text="Main Menu"
         android:textColor="#fff325"
-        android:textSize="10dp"
-        android:layout_below="@+id/username"/>
+        android:textSize="10dp" />
 
     <Button
         android:id="@+id/playagain"
@@ -71,11 +71,11 @@
         android:layout_height="45dp"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
+        android:layout_below="@+id/username"
         android:layout_marginRight="30dp"
         android:background="@drawable/button_small"
         android:text="Play Again"
         android:textColor="#fff325"
-        android:textSize="10dp"
-        android:layout_below="@+id/username"/>
+        android:textSize="10dp" />
 
 </RelativeLayout>

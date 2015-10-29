@@ -33,15 +33,13 @@ public class Powerup {
 
         powerupType = pType;
 
-        if(pType == 0) {
+        if (pType == 0) {
             bmp = BitmapFactory.decodeResource(context.getResources(), R.drawable.powerup_bullet);
             bmp = Bitmap.createScaledBitmap(bmp, (int) width, (int) height, false);
-        }
-        else if(pType == 1) {
+        } else if (pType == 1) {
             bmp = BitmapFactory.decodeResource(context.getResources(), R.drawable.powerup_orb);
             bmp = Bitmap.createScaledBitmap(bmp, (int) width, (int) height, false);
-        }
-        else if(pType == 2) {
+        } else if (pType == 2) {
             bmp = BitmapFactory.decodeResource(context.getResources(), R.drawable.powerup_lazer);
             bmp = Bitmap.createScaledBitmap(bmp, (int) width, (int) height, false);
         }

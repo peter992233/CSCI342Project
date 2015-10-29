@@ -14,7 +14,7 @@ import android.view.MenuItem;
 
 import java.io.IOException;
 
-public class GameActivity extends AppCompatActivity implements MediaPlayer.OnErrorListener, MediaPlayer.OnPreparedListener{
+public class GameActivity extends AppCompatActivity implements MediaPlayer.OnErrorListener, MediaPlayer.OnPreparedListener {
 
 
     Context context;
@@ -73,7 +73,6 @@ public class GameActivity extends AppCompatActivity implements MediaPlayer.OnErr
     public boolean onError(MediaPlayer arg0, int arg1, int arg2) {
         return false;
     }
-
 
 
     @Override

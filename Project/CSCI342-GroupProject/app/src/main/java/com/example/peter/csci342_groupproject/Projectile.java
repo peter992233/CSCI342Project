@@ -44,21 +44,21 @@ public class Projectile {
         weaponType = wType;
         weaponLevel = wLevel;
 
-        if(weaponType == 0) {
+        if (weaponType == 0) {
             //Create the Bitmap
             bmp = BitmapFactory.decodeResource(context.getResources(), R.drawable.player_bullet);
             bmp = Bitmap.createScaledBitmap(bmp, (int) width, (int) height, false);
         }
-        if(weaponType == 1) {
+        if (weaponType == 1) {
             //Create the Bitmap
-            width = screenX/30;
-            height = screenY/30;
+            width = screenX / 30;
+            height = screenY / 30;
             bmp = BitmapFactory.decodeResource(context.getResources(), R.drawable.player_orb);
             bmp = Bitmap.createScaledBitmap(bmp, (int) width, (int) height, false);
         }
-        if(weaponType == 2) {
-            width = screenX/30 * (weaponLevel + 1);
-            height = screenY/30 * (weaponLevel + 1);
+        if (weaponType == 2) {
+            width = screenX / 30 * (weaponLevel + 1);
+            height = screenY / 30 * (weaponLevel + 1);
             bmp = BitmapFactory.decodeResource(context.getResources(), R.drawable.player_lazer);
             bmp = Bitmap.createScaledBitmap(bmp, (int) width, (int) height, false);
         }
@@ -143,16 +143,15 @@ public class Projectile {
 
         if (heading == UP || heading == LEFT || heading == RIGHT) {
             y = y - speed / fps;
-        }
-        else {
+        } else {
             y = y + speed / fps;
         }
 
-        if(heading == LEFT) {
-            x = x - speed/fps;
+        if (heading == LEFT) {
+            x = x - speed / fps;
         }
-        if(heading == RIGHT) {
-            x = x + speed/fps;
+        if (heading == RIGHT) {
+            x = x + speed / fps;
         }
 
         //update the rect

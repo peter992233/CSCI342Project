@@ -1,12 +1,10 @@
 package com.example.peter.csci342_groupproject;
 
-import android.content.Intent;
 import android.content.res.AssetFileDescriptor;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -69,7 +67,7 @@ public class OptionsActivity extends AppCompatActivity implements MediaPlayer.On
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 // TODO Auto-generated method stub
                 if (mp != null) {
-                    Double vol = ((progress*1.0)/100);
+                    Double vol = ((progress * 1.0) / 100);
                     mp.setVolume(vol.floatValue(), vol.floatValue());
                 }
 
@@ -113,7 +111,7 @@ public class OptionsActivity extends AppCompatActivity implements MediaPlayer.On
         } else {
             gd.setSoundFX(0, dbHelper);
         }
-        Double vol = ((volume.getProgress()*1.0)/100);
+        Double vol = ((volume.getProgress() * 1.0) / 100);
         gd.setVolume(vol, dbHelper);
     }
 
