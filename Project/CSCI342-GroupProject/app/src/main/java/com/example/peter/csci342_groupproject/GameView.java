@@ -329,7 +329,7 @@ public class GameView extends SurfaceView implements Runnable {
                         }
                     }
 
-                    if(e.getX() < -e.getLength() * 2 || e.getX() > screenY + e.getHeight() * 2) {
+                    if(e.getX() < -e.getLength() * 2 || e.getX() > screenX + e.getLength() * 2) {
                         if(e.getEnemyDirection() == 1) {
                             EnemyList.remove(e);
 
