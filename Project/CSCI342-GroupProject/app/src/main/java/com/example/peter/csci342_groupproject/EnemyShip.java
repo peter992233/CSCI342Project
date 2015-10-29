@@ -112,7 +112,7 @@ public class EnemyShip {
         }
         if(enemyType == 2) {
             length = screenX / 16;
-            height = screenX / 16;
+            height = screenY / 12;
 
             Random randDirection = new Random();
             int checkDirection = randDirection.nextInt(2);
@@ -125,6 +125,17 @@ public class EnemyShip {
             }
 
             enemyBMP = BitmapFactory.decodeResource(context.getResources(), R.drawable.enemy_diagonal);
+            enemyBMP = Bitmap.createScaledBitmap(enemyBMP, (int) length, (int) height, false);
+
+            Random r = new Random();
+            int pushX = (int) length * 2 + r.nextInt(screenX - (int) length * 3 + 1);
+            x = pushX - length;
+        }
+        if(enemyType == 3) {
+            length = screenX / 14;
+            height = screenY / 6;
+
+            enemyBMP = BitmapFactory.decodeResource(context.getResources(), R.drawable.boss);
             enemyBMP = Bitmap.createScaledBitmap(enemyBMP, (int) length, (int) height, false);
 
             Random r = new Random();
