@@ -91,6 +91,8 @@ public class GameView extends SurfaceView implements Runnable {
     int pWeaponLevel = 0;
     int pWeaponDamage = 0;
 
+    int timeTillNextLevel = 2000;
+
     GameData gd = GameData.getInstance();
 
     public GameView(Context context, int x, int y) {
@@ -210,14 +212,17 @@ public class GameView extends SurfaceView implements Runnable {
                 fps = 1000 / timeThisFrame;
             }
 
-
             //Update the Events handler variables by the elapsed time
             nextShot -= timeThisFrame;
             nextEnemy -= timeThisFrame;
-
+            if(EnemyList.isEmpty()) {
+                timeTillNextLevel -= timeTillNextLevel;
+            }
+            if(timeTillNextLevel < 0) {
+                prepareLevel(GameLevel);
+                timeTillNextLevel = 2000;
+            }
         }
-
-
     }
 
 
@@ -316,9 +321,24 @@ public class GameView extends SurfaceView implements Runnable {
                     if (e.getY() < -e.getHeight() * 2 || e.getY() > screenY + e.getHeight() * 2) {
                         EnemyList.remove(e);
 
+                        Log.d("Oops", "Enemy ship has gotten past you");
+
                         //Decrease score if enemy gets past player
                         if (score != 0) {
                             score -= 100;
+                        }
+                    }
+
+                    if(e.getX() < -e.getLength() * 2 || e.getX() > screenX + e.getLength() * 2) {
+                        if(e.getEnemyDirection() == 1) {
+                            EnemyList.remove(e);
+
+                            Log.d("Oops", "Enemy ship has gotten past you");
+
+                            //Decrease score if enemy gets past player
+                            if (score != 0) {
+                                score -= 100;
+                            }
                         }
                     }
 
