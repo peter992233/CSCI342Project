@@ -211,7 +211,7 @@ public class EnemyShip {
         if (enemyType == 2) {
             shipMoved++;
         }
-        if (enemyType >= 3 && y > SY / 3 && shipSet == false) {
+        if (enemyType >= 3 && y > SY / 3 && !shipSet) {
             Random randDirection = new Random();
             int checkDirection = randDirection.nextInt(2);
 

@@ -31,7 +31,7 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="20dp"
-            android:text="Coins: 560"
+            android:text="Coins: 0"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="#fff325" />
 
@@ -42,8 +42,9 @@
             android:layout_below="@+id/Currency"
             android:layout_marginTop="20dp"
             android:layout_toLeftOf="@+id/Lives1"
+            android:layout_toStartOf="@+id/Lives1"
             android:background="@drawable/lives"
-            android:gravity="right" />
+            android:gravity="end" />
 
         <ImageView
             android:id="@+id/DamageText"
@@ -52,8 +53,9 @@
             android:layout_below="@+id/LivesText"
             android:layout_marginTop="20dp"
             android:layout_toLeftOf="@+id/Damage1"
+            android:layout_toStartOf="@+id/Damage1"
             android:background="@drawable/damage"
-            android:gravity="right" />
+            android:gravity="end" />
 
         <ImageView
             android:id="@+id/SpeedText"
@@ -62,8 +64,9 @@
             android:layout_below="@+id/DamageText"
             android:layout_marginTop="20dp"
             android:layout_toLeftOf="@+id/Speed1"
+            android:layout_toStartOf="@+id/Speed1"
             android:background="@drawable/speed"
-            android:gravity="right" />
+            android:gravity="end" />
 
         <ImageView
             android:id="@+id/Lives1"
@@ -73,6 +76,7 @@
             android:layout_marginLeft="20dp"
             android:layout_marginStart="20dp"
             android:layout_toLeftOf="@+id/Lives2"
+            android:layout_toStartOf="@+id/Lives2"
             android:background="@drawable/upgrade_true" />
 
         <ImageView
@@ -83,6 +87,7 @@
             android:layout_marginLeft="20dp"
             android:layout_marginStart="20dp"
             android:layout_toLeftOf="@+id/Lives3"
+            android:layout_toStartOf="@+id/Lives3"
             android:background="@drawable/upgrade_false" />
 
         <ImageView
@@ -125,12 +130,13 @@
             android:layout_marginLeft="20dp"
             android:layout_marginStart="20dp"
             android:layout_marginTop="-10dp"
+            android:layout_toEndOf="@+id/Lives5"
             android:layout_toRightOf="@+id/Lives5"
             android:background="@drawable/button_small"
             android:onClick="buyLife"
             android:text="Buy"
             android:textColor="#fff325"
-            android:textSize="10dp" />
+            android:textSize="14sp" />
 
         <ImageView
             android:id="@+id/Damage1"
@@ -140,6 +146,7 @@
             android:layout_marginLeft="20dp"
             android:layout_marginStart="20dp"
             android:layout_toLeftOf="@+id/Damage2"
+            android:layout_toStartOf="@+id/Damage2"
             android:background="@drawable/upgrade_true" />
 
         <ImageView
@@ -150,6 +157,7 @@
             android:layout_marginLeft="20dp"
             android:layout_marginStart="20dp"
             android:layout_toLeftOf="@+id/Damage3"
+            android:layout_toStartOf="@+id/Damage3"
             android:background="@drawable/upgrade_false" />
 
         <ImageView
@@ -192,12 +200,13 @@
             android:layout_marginLeft="20dp"
             android:layout_marginStart="20dp"
             android:layout_marginTop="-10dp"
+            android:layout_toEndOf="@+id/Lives5"
             android:layout_toRightOf="@+id/Lives5"
             android:background="@drawable/button_small"
             android:onClick="buyDamage"
             android:text="Buy"
             android:textColor="#fff325"
-            android:textSize="10dp" />
+            android:textSize="14sp" />
 
         <ImageView
             android:id="@+id/Speed1"
@@ -207,6 +216,7 @@
             android:layout_marginLeft="20dp"
             android:layout_marginStart="20dp"
             android:layout_toLeftOf="@+id/Speed2"
+            android:layout_toStartOf="@+id/Speed2"
             android:background="@drawable/upgrade_true" />
 
         <ImageView
@@ -217,6 +227,7 @@
             android:layout_marginLeft="20dp"
             android:layout_marginStart="20dp"
             android:layout_toLeftOf="@+id/Speed3"
+            android:layout_toStartOf="@+id/Speed3"
             android:background="@drawable/upgrade_false" />
 
         <ImageView
@@ -259,12 +270,13 @@
             android:layout_marginLeft="20dp"
             android:layout_marginStart="20dp"
             android:layout_marginTop="-10dp"
+            android:layout_toEndOf="@+id/Lives5"
             android:layout_toRightOf="@+id/Lives5"
             android:background="@drawable/button_small"
             android:onClick="buySpeed"
             android:text="Buy"
             android:textColor="#fff325"
-            android:textSize="10dp" />
+            android:textSize="14sp" />
 
     </RelativeLayout>
 

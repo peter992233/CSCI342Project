@@ -584,12 +584,14 @@ public class GameView extends SurfaceView implements Runnable {
                     enemyBullets.remove(p);
                     lives--;
                     if (lives <= 0) {
+                        waitRestart = true;
                         gameOver();
                     }
                 }
             }
 
             if (lives <= 0) {
+                waitRestart = true;
                 gameOver();
             }
 
@@ -956,7 +958,6 @@ public class GameView extends SurfaceView implements Runnable {
 
         try {
             //Do Restart
-            waitRestart = true;
             playing = false;
             paused = true;
             EnemyList.clear();

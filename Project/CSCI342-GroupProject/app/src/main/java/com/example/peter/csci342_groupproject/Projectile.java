@@ -72,7 +72,7 @@ public class Projectile {
         rect = new RectF();
         isEnemy = enemy;
 
-        if (enemy == true) {
+        if (enemy) {
             heading = DOWN;
             //Create the Bitmap
             bmp = BitmapFactory.decodeResource(context.getResources(), R.drawable.enemy_bullet);

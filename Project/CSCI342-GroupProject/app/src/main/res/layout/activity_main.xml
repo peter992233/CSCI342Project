@@ -12,69 +12,51 @@
     <ImageView
         android:id="@+id/Heading"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:background="@drawable/title"
-        android:gravity="center_horizontal" />
+        android:layout_height="60dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="-5dp"
+        android:background="@drawable/title" />
 
-    <LinearLayout
-        android:id="@+id/buttLayout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+    <Button
+        android:id="@+id/startGameButton"
+        android:layout_width="400dp"
+        android:layout_height="55dp"
         android:layout_below="@+id/Heading"
-        android:orientation="vertical">
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/start_button"
+        android:onClick="startGame" />
 
-        <Button
-            android:id="@+id/startGameButton"
-            android:layout_width="match_parent"
-            android:layout_height="55dp"
-            android:layout_above="@+id/button2"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentStart="true"
-            android:background="@drawable/start_button"
-            android:onClick="startGame" />
+    <Button
+        android:id="@+id/UpgradeButton"
+        android:layout_width="400dp"
+        android:layout_height="55dp"
+        android:layout_below="@+id/startGameButton"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/upgrades_button"
+        android:onClick="viewUpgrades" />
 
-        <Button
-            android:id="@+id/UpgradeButton"
-            android:layout_width="match_parent"
-            android:layout_height="55dp"
-            android:layout_above="@+id/button3"
-            android:layout_alignEnd="@+id/button3"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_alignRight="@+id/button3"
-            android:background="@drawable/upgrades_button"
-            android:onClick="viewUpgrades" />
+    <Button
+        android:id="@+id/HighScoreButton"
+        android:layout_width="400dp"
+        android:layout_height="55dp"
+        android:layout_below="@+id/UpgradeButton"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/highscores_button"
+        android:onClick="viewHighScores" />
 
-        <Button
-            android:id="@+id/HighScoreButton"
-            android:layout_width="match_parent"
-            android:layout_height="55dp"
-            android:layout_above="@+id/button4"
-            android:layout_alignEnd="@+id/button4"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_alignRight="@+id/button4"
-            android:background="@drawable/highscores_button"
-            android:onClick="viewHighScores" />
-
-        <Button
-            android:id="@+id/OptionsButton"
-            android:layout_width="match_parent"
-            android:layout_height="55dp"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentStart="true"
-            android:background="@drawable/options_button"
-            android:onClick="viewOptions" />
-    </LinearLayout>
+    <Button
+        android:id="@+id/OptionsButton"
+        android:layout_width="400dp"
+        android:layout_height="55dp"
+        android:layout_below="@+id/HighScoreButton"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/options_button"
+        android:onClick="viewOptions" />
 
 </RelativeLayout>

@@ -1,6 +1,5 @@
 package com.example.peter.csci342_groupproject;
 
-import android.content.res.Resources;
 import android.media.AudioManager;
 import android.media.SoundPool;
 import android.os.Bundle;
@@ -29,7 +28,6 @@ public class UpgradesActivity extends AppCompatActivity {
         TextView coins = (TextView) this.findViewById(R.id.Currency);
         String coinsText = "Coins: " + gd.getCurrency().toString();
         coins.setText(coinsText);
-        Resources res = getResources();
 
         //set lives
         updateLives();
