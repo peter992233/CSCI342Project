@@ -244,7 +244,9 @@ public class GameView extends SurfaceView implements Runnable {
                 EnemyList.add(newEnemy);
             }
         }
-
+        EnemyShip newEnemy = new EnemyShip(context, screenX, screenY, 5, 3);
+        newEnemy.setIsVisible(false);
+        EnemyList.add(newEnemy);
     }
 
     public void respawnPlayer() {

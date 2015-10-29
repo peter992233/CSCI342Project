@@ -54,6 +54,8 @@ public class EnemyShip {
 
     int enemyLives;
 
+    int SY;
+
     private long lastShot = System.currentTimeMillis();
 
     public long getLastShot() {
@@ -72,6 +74,8 @@ public class EnemyShip {
         //Set the length of the Ship
         length = screenX / 16;
         height = screenY / 12;
+
+        SY = screenY;
 
         //Set the ship to display as visible
         isVisible = true;
@@ -112,7 +116,7 @@ public class EnemyShip {
         }
         if(enemyType == 2) {
             length = screenX / 16;
-            height = screenX / 16;
+            height = screenY / 12;
 
             Random randDirection = new Random();
             int checkDirection = randDirection.nextInt(2);
@@ -125,6 +129,17 @@ public class EnemyShip {
             }
 
             enemyBMP = BitmapFactory.decodeResource(context.getResources(), R.drawable.enemy_diagonal);
+            enemyBMP = Bitmap.createScaledBitmap(enemyBMP, (int) length, (int) height, false);
+
+            Random r = new Random();
+            int pushX = (int) length * 2 + r.nextInt(screenX - (int) length * 3 + 1);
+            x = pushX - length;
+        }
+        if(enemyType == 3) {
+            length = screenX / 14;
+            height = screenY / 6;
+
+            enemyBMP = BitmapFactory.decodeResource(context.getResources(), R.drawable.boss);
             enemyBMP = Bitmap.createScaledBitmap(enemyBMP, (int) length, (int) height, false);
 
             Random r = new Random();
@@ -147,7 +162,7 @@ public class EnemyShip {
             }
             shipMoved = 0;
         }
-
+        
         //Movement Left, Right, Up and Down Movement
         if (shipMoving[0] == LEFT) {
             x = x - shipSpeed / fps;
@@ -173,6 +188,9 @@ public class EnemyShip {
 
         if(enemyType == 2) {
             shipMoved++;
+        }
+        if(enemyType == 3 && y > SY/3) {
+            shipMoving[1] = 0;
         }
     }
 
