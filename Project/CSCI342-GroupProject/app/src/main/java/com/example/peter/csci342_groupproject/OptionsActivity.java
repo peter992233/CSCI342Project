@@ -101,8 +101,11 @@ public class OptionsActivity extends AppCompatActivity implements MediaPlayer.On
 
         if (music.isChecked()) {
             gd.setMusic(1, dbHelper);
+            if (!mp.isPlaying())
+                mp.start();
         } else {
             gd.setMusic(0, dbHelper);
+            mp.pause();
         }
 
         if (soundFX.isChecked()) {

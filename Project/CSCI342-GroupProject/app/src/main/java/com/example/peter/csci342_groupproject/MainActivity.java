@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnErr
             e.printStackTrace();
         }
 
-        Log.d("START", "Starting Game");
+        Log.d("START", "Starting Game");//delete me
     }
 
     @Override
@@ -70,7 +70,7 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnErr
 
 
     public void startGame(View view) {
-        Log.d("START", "Starting Game");
+        Log.d("START", "Starting Game");//delete me
         Intent intent = new Intent(this, GameActivity.class);
         startActivity(intent);
         mp.pause();

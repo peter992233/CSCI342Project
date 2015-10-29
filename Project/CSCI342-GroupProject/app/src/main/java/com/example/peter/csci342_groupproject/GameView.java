@@ -8,6 +8,7 @@ import android.graphics.Paint;
 import android.graphics.RectF;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;
+import android.media.MediaPlayer;
 import android.support.v4.view.MotionEventCompat;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -25,6 +26,9 @@ public class GameView extends SurfaceView implements Runnable {
 
 
     Context context;
+
+    //sound effects music player
+    private MediaPlayer mp = null;
 
     //This is the game thread
     private Thread gameThread = null;
@@ -303,6 +307,10 @@ public class GameView extends SurfaceView implements Runnable {
 
                     if (e.getY() > 0) {
                         if (e.shouldShoot(pShip.getX(), pShip.getWidth()) && e.getEnemyType() != 2) {
+                            if (gd.getSoundFX()) {
+                                mp = MediaPlayer.create(context, R.raw.bullet);
+                                mp.start();
+                            }
                             Projectile p = new Projectile(context, screenY, screenX, true, 0);
                             p.shoot(e.getX() + e.getLength() / 2, e.getRect().bottom, projectile.DOWN);
                             enemyBullets.add(p);
@@ -351,6 +359,10 @@ public class GameView extends SurfaceView implements Runnable {
 
 
                     if (RectF.intersects(e.getRect(), pShip.getRect())) {
+                        if (gd.getSoundFX()) {
+                            mp = MediaPlayer.create(context, R.raw.explosion);
+                            mp.start();
+                        }
                         lives--;
                         if (lives == 0) {
                             gameOver();
@@ -408,6 +420,11 @@ public class GameView extends SurfaceView implements Runnable {
                                 e.setEnemyLives();
 
                                 if(e.getEnemyLives() == 0) {
+                                    if (gd.getSoundFX()) {
+                                        mp = MediaPlayer.create(context, R.raw.explosion);
+                                        mp.start();
+                                    }
+
                                     Random randCoin = new Random();
                                     int coinCheck = randCoin.nextInt(3);
 
@@ -462,6 +479,10 @@ public class GameView extends SurfaceView implements Runnable {
                 if (RectF.intersects(c.getRect(), pShip.getRect())) {
                     c.setInactive();
                     coins.remove(c);
+                    if (gd.getSoundFX()) {
+                        mp = MediaPlayer.create(context, R.raw.coin);
+                        mp.start();
+                    }
                     currency = currency + 10;
                 }
             }
@@ -479,6 +500,10 @@ public class GameView extends SurfaceView implements Runnable {
 
                 if (RectF.intersects(u.getRect(), pShip.getRect())) {
                     u.setInactive();
+                    if (gd.getSoundFX()) {
+                        mp = MediaPlayer.create(context, R.raw.powerup);
+                        mp.start();
+                    }
                     if(pWeaponType == powerups.get(i).getPowerupType()) {
                         if(pWeaponLevel < 2) {
                             pWeaponLevel++;
@@ -701,6 +726,10 @@ public class GameView extends SurfaceView implements Runnable {
                 if (nextShot < 0) {
                     projectile = new Projectile(context, screenY, screenX, pWeaponType, pWeaponLevel); // reset projectile
                     if (motionEvent.getY() < screenY - screenY / 4) {
+                        if (gd.getSoundFX()) {
+                            mp = MediaPlayer.create(context, R.raw.bullet);
+                            mp.start();
+                        }
                         if(pWeaponLevel == 0 || pWeaponType == 2) {
                             projectile.shoot(pShip.getX() + pShip.getWidth() / 2, pShip.getRect().top, projectile.UP);
                             playerBullets.add(projectile);
