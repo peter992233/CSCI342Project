@@ -224,7 +224,7 @@ public class GameView extends SurfaceView implements Runnable {
         //Build Enemy array
         for (int i = 0; i < GameLevel * maxEnemies; i++) {
 
-            EnemyShip newEnemy = new EnemyShip(context, screenX, screenY);
+            EnemyShip newEnemy = new EnemyShip(context, screenX, screenY, 2);
 
             //Start with 3 Enemies on screen
             newEnemy.setIsVisible(false);
@@ -366,40 +366,42 @@ public class GameView extends SurfaceView implements Runnable {
                             if (RectF.intersects(p.getRect(), e.getRect())) {
                                 Log.d("BOOM", "Enemy Ship Killed");
 
-                                Random randCoin = new Random();
-                                int coinCheck = randCoin.nextInt(3);
+                                e.setEnemyLives();
 
-                                if (coinCheck == 0) {
-                                    Coin c = new Coin(context, screenY, screenX);
-                                    c.spawn(e.getX(), e.getY());
-                                    coins.add(c);
-                                }
+                                if(e.getEnemyLives() == 0) {
+                                    Random randCoin = new Random();
+                                    int coinCheck = randCoin.nextInt(3);
 
-                                Random randPowerup = new Random();
-                                int powerupCheck = randPowerup.nextInt(5);
-
-                                for(int k = 0; k < 3; k++) {
-                                    if(powerupCheck == k) {
-                                        Powerup u = new Powerup(context, screenY, screenX, powerupCheck);
-                                        u.spawn(e.getX(), e.getY());
-                                        powerups.add(u);
+                                    if (coinCheck == 0) {
+                                        Coin c = new Coin(context, screenY, screenX);
+                                        c.spawn(e.getX(), e.getY());
+                                        coins.add(c);
                                     }
+
+                                    Random randPowerup = new Random();
+                                    int powerupCheck = randPowerup.nextInt(5);
+
+                                    for(int k = 0; k < 3; k++) {
+                                        if(powerupCheck == k) {
+                                            Powerup u = new Powerup(context, screenY, screenX, powerupCheck);
+                                            u.spawn(e.getX(), e.getY());
+                                            powerups.add(u);
+                                        }
+                                    }
+
+                                    AnimationDrawable explDraw = createExplosionDrawable();
+                                    explDraws.add(explDraw);
+
+                                    currExFrames.add(0);
+
+                                    explX.add((int) EnemyList.get(j).getX());
+                                    explY.add((int) EnemyList.get(j).getY());
+
+                                    e.setIsVisible(false);
+                                    EnemyList.remove(e);
                                 }
-
-                                AnimationDrawable explDraw = createExplosionDrawable();
-                                explDraws.add(explDraw);
-
-                                currExFrames.add(0);
-
-                                explX.add((int) EnemyList.get(j).getX());
-                                explY.add((int) EnemyList.get(j).getY());
-
-                                e.setIsVisible(false);
-                                EnemyList.remove(e);
-                                if(pWeaponType != 2) {
-                                    p.setInactive();
-                                    playerBullets.remove(p);
-                                }
+                                p.setInactive();
+                                playerBullets.remove(p);
                                 score += 100;
                             }
                         }
@@ -699,8 +701,19 @@ public class GameView extends SurfaceView implements Runnable {
                             playerBullets.add(projectile);
                         }
                     }
-
                     nextShot = 250;
+
+                    if(pWeaponType == 0) {
+                        nextShot = 250;
+                    }
+                    if(pWeaponType == 1) {
+                        nextShot = 300;
+                    }
+                    if(pWeaponType == 3) {
+                        nextShot = 200;
+                    }
+
+                    nextShot = nextShot - (pWeaponLevel * 50);
                 }
 
 
@@ -781,6 +794,8 @@ public class GameView extends SurfaceView implements Runnable {
             explY.clear();
             currExFrames.clear();
 
+            pWeaponType = 0;
+            pWeaponLevel = 0;
             lives = 3;
             currBgFrame = 0;
             GameLevel = 0;

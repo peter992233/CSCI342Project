@@ -48,6 +48,7 @@ public class EnemyShip {
     //Is the Enemy visible
     boolean isVisible;
 
+    int enemyLives;
 
     private long lastShot = System.currentTimeMillis();
 
@@ -59,7 +60,7 @@ public class EnemyShip {
         this.lastShot = lastShot;
     }
 
-    public EnemyShip(Context context, int screenX, int screenY) {
+    public EnemyShip(Context context, int screenX, int screenY, int eLives) {
 
         // Initialize a blank RectF
         rect = new RectF();
@@ -68,9 +69,10 @@ public class EnemyShip {
         length = screenX / 16;
         height = screenY / 12;
 
-
         //Set the ship to display as visible
         isVisible = true;
+
+        enemyLives = eLives;
 
         Random r = new Random();
         int pushX = (int) length * 2 + r.nextInt(screenX - (int) length * 3 + 1);
@@ -154,6 +156,10 @@ public class EnemyShip {
 
 
     // - - - - - - - Getters & Setters - - - - - - -
+
+    public int getEnemyLives() {return enemyLives;}
+
+    public void setEnemyLives() {enemyLives--;}
 
     public RectF getRect() {
         return rect;

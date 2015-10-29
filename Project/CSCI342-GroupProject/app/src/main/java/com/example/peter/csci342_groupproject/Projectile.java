@@ -57,10 +57,8 @@ public class Projectile {
             bmp = Bitmap.createScaledBitmap(bmp, (int) width, (int) height, false);
         }
         if(weaponType == 2) {
-            for(int i = 0; i < 3; i++) {
-                width = (screenX/40) * (weaponLevel + 1);
-            }
-            height = screenY/25;
+            width = screenX/30 * (weaponLevel + 1);
+            height = screenY/30 * (weaponLevel + 1);
             bmp = BitmapFactory.decodeResource(context.getResources(), R.drawable.player_lazer);
             bmp = Bitmap.createScaledBitmap(bmp, (int) width, (int) height, false);
         }
