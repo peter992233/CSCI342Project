@@ -51,6 +51,8 @@ public class GameView extends SurfaceView implements Runnable {
     //Set the default mode to be paused at the start
     public boolean paused = true;
 
+    private boolean firstTap = true;
+
     //Canvas and paint object for drawing
     private Canvas canvas;
     private Paint paint;
@@ -797,7 +799,7 @@ public class GameView extends SurfaceView implements Runnable {
                     }
                 }
 
-                if (nextShot < 0) {
+                if ((nextShot < 0) && (!firstTap)) {
                     projectile = new Projectile(context, screenY, screenX, pWeaponType, pWeaponLevel); // reset projectile
                     if (motionEvent.getY() < screenY - screenY / 4) {
                         if ((gd.getSoundFX() && (playerBulletLoaded)))
@@ -885,7 +887,7 @@ public class GameView extends SurfaceView implements Runnable {
                     }
                 }
 
-                if (nextShot < 0) {
+                if ((nextShot < 0) && (!firstTap)) {
                     if (yPos < screenY - screenY / 4) {
                         projectile = new Projectile(context, screenY, screenX, pWeaponType, pWeaponLevel); // reset projectile
                         if (projectile.shoot(pShip.getX() + pShip.getWidth() / 2, pShip.getRect().top, projectile.UP)) {
@@ -966,6 +968,7 @@ public class GameView extends SurfaceView implements Runnable {
                 break;
             }
         }
+        firstTap = false;
         return true;
     }
 
@@ -1007,6 +1010,7 @@ public class GameView extends SurfaceView implements Runnable {
         DBHelper db = new DBHelper(getContext());
         gd.setCurrency(currency, db);
 
+        firstTap = true;
         playing = false;
         paused = true;
         EnemyList.clear();
