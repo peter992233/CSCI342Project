@@ -58,6 +58,8 @@ public class GameCompleteDialog extends DialogFragment {
     @Override
     public void onDismiss(DialogInterface dialogInterface) {
         ((GameActivity) getActivity()).gmv.score = 0;
+        ((GameActivity) getActivity()).gmv.Resume();
         ((GameActivity) getActivity()).gmv.waitRestart = false;
+        ((GameActivity) getActivity()).gmv.paused = true;
     }
 }

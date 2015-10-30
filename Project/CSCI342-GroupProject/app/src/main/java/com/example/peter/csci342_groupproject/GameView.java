@@ -50,7 +50,7 @@ public class GameView extends SurfaceView implements Runnable {
     private volatile boolean playing;
 
     //Set the default mode to be paused at the start
-    private boolean paused = true;
+    public boolean paused = true;
 
     //Canvas and paint object for drawing
     private Canvas canvas;
@@ -965,6 +965,7 @@ public class GameView extends SurfaceView implements Runnable {
 
 
     public void gameOver() {
+        Pause();
         restartGame();
 
         FragmentTransaction ft = fragmentManager.beginTransaction();
