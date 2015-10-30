@@ -112,13 +112,21 @@ public class GameView extends SurfaceView implements Runnable {
     private boolean coinLoaded = false;
     private int coinID = 0;
 
-    //bullet sound
-    private boolean bulletLoaded = false;
-    private int bulletID = 0;
+    //player bullet sound
+    private boolean playerBulletLoaded = false;
+    private int playerBulletID = 0;
 
     //explosion sound
     private boolean explosionLoaded = false;
     private int explosionID = 0;
+
+    //playerHit sound
+    private boolean playerHitLoaded = false;
+    private int playerHitID = 0;
+
+    //enemy bullet sound
+    private boolean enemyBulletLoaded = false;
+    private int enemyBulletID = 0;
 
     //power up sound
     private boolean powerLoaded = false;
@@ -156,21 +164,30 @@ public class GameView extends SurfaceView implements Runnable {
                         coinLoaded = true;
                         break;
                     case 1:
-                        bulletLoaded = true;
+                        playerBulletLoaded = true;
                         break;
                     case 2:
                         explosionLoaded = true;
                         break;
                     case 3:
                         powerLoaded = true;
+                        break;
+                    case 4:
+                        playerHitLoaded = true;
+                        break;
+                    case 5:
+                        enemyBulletLoaded = true;
+                        break;
                 }
                 soundCount++;
             }
         });
         coinID = soundPool.load(context, R.raw.coin, 1);
-        bulletID = soundPool.load(context, R.raw.bullet, 1);
+        playerBulletID = soundPool.load(context, R.raw.bullet, 1);
         explosionID = soundPool.load(context, R.raw.explosion, 1);
         powerID = soundPool.load(context, R.raw.powerup, 1);
+        playerHitID = soundPool.load(context, R.raw.hit, 1);
+        enemyBulletID = soundPool.load(context, R.raw.enemy_bullet, 1);
 
         try {
             backGround = new ImageView(context);
@@ -373,8 +390,8 @@ public class GameView extends SurfaceView implements Runnable {
 
                     if (e.getY() > 0) {
                         if (e.shouldShoot(pShip.getX(), pShip.getWidth()) && e.getEnemyType() != 2) {
-                            if ((gd.getSoundFX() && (bulletLoaded)))
-                                soundPool.play(bulletID, gd.getVolume().floatValue(), gd.getVolume().floatValue(), 1, 0, 1f);
+                            if ((gd.getSoundFX() && (enemyBulletLoaded)))
+                                soundPool.play(enemyBulletID, gd.getVolume().floatValue(), gd.getVolume().floatValue(), 1, 0, 1f);
                             if (e.getEnemyType() <= 3) {
                                 Projectile p = new Projectile(context, screenY, screenX, true, 0);
                                 p.shoot(e.getX() + e.getLength() / 2, e.getRect().bottom, projectile.DOWN);
@@ -518,9 +535,7 @@ public class GameView extends SurfaceView implements Runnable {
                         if (e.isVisible()) {
                             if (RectF.intersects(p.getRect(), e.getRect())) {
                                 Log.d("BOOM", "Enemy Ship Killed");
-
                                 e.setEnemyLives();
-
                                 if (e.getEnemyLives() == 0) {
                                     if ((gd.getSoundFX() && (explosionLoaded)))
                                         soundPool.play(explosionID, gd.getVolume().floatValue(), gd.getVolume().floatValue(), 1, 0, 1f);
@@ -558,6 +573,10 @@ public class GameView extends SurfaceView implements Runnable {
                                     EnemyList.remove(e);
 
                                     score += 100;
+                                }
+                                else {
+                                    if ((gd.getSoundFX() && (playerHitLoaded)))
+                                        soundPool.play(playerHitID, gd.getVolume().floatValue(), gd.getVolume().floatValue(), 1, 0, 1f);
                                 }
                                 p.setInactive();
                                 playerBullets.remove(p);
@@ -626,6 +645,8 @@ public class GameView extends SurfaceView implements Runnable {
 
                 if (RectF.intersects(p.getRect(), pShip.getRect())) {
                     Log.d("POW", "You got Hit");
+                    if ((gd.getSoundFX() && (playerHitLoaded)))
+                        soundPool.play(playerHitID, gd.getVolume().floatValue(), gd.getVolume().floatValue(), 1, 0, 1f);
                     p.setInactive();
                     enemyBullets.remove(p);
                     lives--;
@@ -795,8 +816,8 @@ public class GameView extends SurfaceView implements Runnable {
                 if (nextShot < 0) {
                     projectile = new Projectile(context, screenY, screenX, pWeaponType, pWeaponLevel); // reset projectile
                     if (motionEvent.getY() < screenY - screenY / 4) {
-                        if ((gd.getSoundFX() && (bulletLoaded)))
-                            soundPool.play(bulletID, gd.getVolume().floatValue(), gd.getVolume().floatValue(), 1, 0, 1f);
+                        if ((gd.getSoundFX() && (playerBulletLoaded)))
+                            soundPool.play(playerBulletID, gd.getVolume().floatValue(), gd.getVolume().floatValue(), 1, 0, 1f);
                         if (pWeaponLevel == 0 && pWeaponType != 0) {
                             projectile.shoot(pShip.getX() + pShip.getWidth() / 2 - 30, pShip.getRect().top, projectile.UP);
                             playerBullets.add(projectile);
@@ -884,8 +905,8 @@ public class GameView extends SurfaceView implements Runnable {
                     if (yPos < screenY - screenY / 4) {
                         projectile = new Projectile(context, screenY, screenX, pWeaponType, pWeaponLevel); // reset projectile
                         if (projectile.shoot(pShip.getX() + pShip.getWidth() / 2, pShip.getRect().top, projectile.UP)) {
-                            if ((gd.getSoundFX() && (bulletLoaded)))
-                                soundPool.play(bulletID, gd.getVolume().floatValue(), gd.getVolume().floatValue(), 1, 0, 1f);
+                            if ((gd.getSoundFX() && (playerBulletLoaded)))
+                                soundPool.play(playerBulletID, gd.getVolume().floatValue(), gd.getVolume().floatValue(), 1, 0, 1f);
                             if (pWeaponLevel == 0 && pWeaponType != 0) {
                                 projectile.shoot(pShip.getX() + pShip.getWidth() / 2 - 30, pShip.getRect().top, projectile.UP);
                                 playerBullets.add(projectile);
