@@ -16,7 +16,6 @@ import android.media.AudioManager;
 import android.media.SoundPool;
 import android.os.AsyncTask;
 import android.support.v4.view.MotionEventCompat;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -242,11 +241,8 @@ public class GameView extends SurfaceView implements Runnable {
 
 
     private void prepareLevel() {
-
         //Init game Objects
         GameLevel++;
-        Log.d("LEVELSTART", "" + GameLevel);
-
         respawnPlayer();
         respawnEnemies();
         playing = true;
@@ -374,7 +370,6 @@ public class GameView extends SurfaceView implements Runnable {
                 } else {
                     nextEnemy = 2000;
                     prepareLevel();
-                    Log.d("LEVELUP", "YOU DID IT!");
                 }
             }
 
@@ -446,8 +441,6 @@ public class GameView extends SurfaceView implements Runnable {
                     if (e.getY() < -e.getHeight() * 2 || e.getY() > screenY + e.getHeight() * 2) {
                         EnemyList.remove(e);
 
-                        Log.d("Oops", "Enemy ship has gotten past you");
-
                         //Decrease score if enemy gets past player
                         if (score != 0) {
                             score -= 100;
@@ -459,8 +452,6 @@ public class GameView extends SurfaceView implements Runnable {
                             if (e.getEnemyDirection() == 1) {
                                 EnemyList.remove(e);
 
-                                Log.d("Oops", "Enemy ship has gotten past you");
-
                                 //Decrease score if enemy gets past player
                                 if (score != 0) {
                                     score -= 100;
@@ -471,8 +462,6 @@ public class GameView extends SurfaceView implements Runnable {
                         if (e.getX() > -e.getLength() * 2 || e.getX() < screenX + e.getLength() * 2) {
                             if (e.getEnemyDirection() == 2) {
                                 EnemyList.remove(e);
-
-                                Log.d("Oops", "Enemy ship has gotten past you");
 
                                 //Decrease score if enemy gets past player
                                 if (score != 0) {
@@ -499,7 +488,6 @@ public class GameView extends SurfaceView implements Runnable {
                         explY.add((int) EnemyList.get(i).getY());
 
                         EnemyList.remove(i);
-                        Log.d("Crash", "Hope You Have Insurance Buddy");
                     }
                 }
             }
@@ -534,7 +522,6 @@ public class GameView extends SurfaceView implements Runnable {
                         EnemyShip e = EnemyList.get(j);
                         if (e.isVisible()) {
                             if (RectF.intersects(p.getRect(), e.getRect())) {
-                                Log.d("BOOM", "Enemy Ship Killed");
                                 e.setEnemyLives();
                                 if (e.getEnemyLives() == 0) {
                                     if ((gd.getSoundFX() && (explosionLoaded)))
@@ -573,8 +560,7 @@ public class GameView extends SurfaceView implements Runnable {
                                     EnemyList.remove(e);
 
                                     score += 100;
-                                }
-                                else {
+                                } else {
                                     if ((gd.getSoundFX() && (playerHitLoaded)))
                                         soundPool.play(playerHitID, gd.getVolume().floatValue(), gd.getVolume().floatValue(), 1, 0, 1f);
                                 }
@@ -602,7 +588,7 @@ public class GameView extends SurfaceView implements Runnable {
                     coins.remove(c);
                     if ((gd.getSoundFX() && (coinLoaded)))
                         soundPool.play(coinID, gd.getVolume().floatValue(), gd.getVolume().floatValue(), 1, 0, 1f);
-                    currency = currency + 250;
+                    currency = currency + 10;
                 }
             }
 
@@ -644,7 +630,6 @@ public class GameView extends SurfaceView implements Runnable {
                 }
 
                 if (RectF.intersects(p.getRect(), pShip.getRect())) {
-                    Log.d("POW", "You got Hit");
                     if ((gd.getSoundFX() && (playerHitLoaded)))
                         soundPool.play(playerHitID, gd.getVolume().floatValue(), gd.getVolume().floatValue(), 1, 0, 1f);
                     p.setInactive();
@@ -783,7 +768,6 @@ public class GameView extends SurfaceView implements Runnable {
         try {
             gameThread.join();
         } catch (Exception e) {
-            Log.d("CERROR", "Error Pause()");
             e.printStackTrace();
         }
     }
@@ -1097,8 +1081,6 @@ public class GameView extends SurfaceView implements Runnable {
                     response.append('\r');
                 }
                 rd.close();
-
-                Log.d("SERVER", "Response: " + response.toString());
 
             } catch (Exception e) {
                 e.printStackTrace();

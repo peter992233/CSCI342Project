@@ -25,11 +25,6 @@ public class GameActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        DBHelper dbHelper = new DBHelper(getApplicationContext());
-        gd.populateFromDB(dbHelper);
-
-        Log.d("START", "Starting Game");
-
         Display display = getWindowManager().getDefaultDisplay();
         Point size = new Point();
         display.getSize(size);

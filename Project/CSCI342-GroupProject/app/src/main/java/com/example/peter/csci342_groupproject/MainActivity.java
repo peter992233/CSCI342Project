@@ -5,7 +5,6 @@ import android.media.AudioManager;
 import android.media.SoundPool;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -25,9 +24,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //Useful for testing:
-        this.deleteDatabase(DBHelper.DATABASE_NAME);//delete me
-
         DBHelper dbHelper = new DBHelper(getApplicationContext());
         gd.populateFromDB(dbHelper);
 
@@ -44,12 +40,9 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         soundID = sp.load(this, R.raw.mainmenumusic, 1);
-
-        Log.d("START", "Starting Game");//delete me
     }
 
     public void startGame(View view) {
-        Log.d("START", "Starting Game");//delete me
         Intent intent = new Intent(this, GameActivity.class);
         startActivity(intent);
         if (sp != null) {

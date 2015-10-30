@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.RectF;
-import android.util.Log;
 
 import java.util.Random;
 
@@ -161,7 +160,7 @@ public class EnemyShip {
             x = screenX / 2;
             y = 0 - height;
         }
-        if(enemyType == 5) {
+        if (enemyType == 5) {
             length = screenX / 6;
             height = screenY / 4;
 
@@ -172,7 +171,7 @@ public class EnemyShip {
             x = screenX / 2;
             y = 0 - height;
         }
-        if(enemyType == 6) {
+        if (enemyType == 6) {
             length = screenX / 4;
             height = screenY / 4;
 
@@ -183,7 +182,7 @@ public class EnemyShip {
             x = screenX / 2;
             y = 0 - height;
         }
-        if(enemyType == 7) {
+        if (enemyType == 7) {
             length = screenX / 3;
             height = screenY / 4;
 
@@ -209,8 +208,8 @@ public class EnemyShip {
             }
             shipMoved = 0;
         }
-        if(shipMoved > 200 && enemyType >= 3) {
-            if(shipMoving[0] == LEFT) {
+        if (shipMoved > 200 && enemyType >= 3) {
+            if (shipMoving[0] == LEFT) {
                 shipMoving[0] = RIGHT;
             } else if (shipMoving[0] == RIGHT) {
                 shipMoving[0] = LEFT;
@@ -244,7 +243,7 @@ public class EnemyShip {
         if (enemyType == 2) {
             shipMoved++;
         }
-        if(enemyType >= 3 && y > SY/12 && shipSet == false) {
+        if (enemyType >= 3 && y > SY / 12 && shipSet == false) {
             Random randDirection = new Random();
             int checkDirection = randDirection.nextInt(2);
 
@@ -283,15 +282,13 @@ public class EnemyShip {
                         lastShot = System.currentTimeMillis();
                         return true;
                     }
-                }
-                else if (enemyType == 7) {
+                } else if (enemyType == 7) {
                     randomNumber = shootGen.nextInt(3);
                     if (randomNumber == 0) {
                         lastShot = System.currentTimeMillis();
                         return true;
                     }
-                }
-                else {
+                } else {
                     randomNumber = shootGen.nextInt(10);
                     if (randomNumber == 0) {
                         lastShot = System.currentTimeMillis();
@@ -306,11 +303,9 @@ public class EnemyShip {
                         lastShot = System.currentTimeMillis();
                         return true;
                     }
-                }
-                else if (enemyType == 7) {
+                } else if (enemyType == 7) {
                     randomNumber = shootGen.nextInt(30);
-                }
-                else {
+                } else {
                     randomNumber = shootGen.nextInt(100);
                     if (randomNumber == 0) {
                         lastShot = System.currentTimeMillis();

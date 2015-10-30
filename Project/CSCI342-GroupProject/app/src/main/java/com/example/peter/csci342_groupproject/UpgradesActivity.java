@@ -176,14 +176,14 @@ public class UpgradesActivity extends AppCompatActivity {
     public void buyLife(View view) {
 
         int coins = gd.getCurrency();
-        if (coins >= 500){
+        if (coins >= 500) {
             if (gd.getBaseLives() < 5) {
                 DBHelper dbHelper = new DBHelper(getApplicationContext());
 
                 if (gd.setBaseLives((gd.getBaseLives() + 1), dbHelper)) {
                     updateLives();
                     gd.setCurrency((coins - 500), dbHelper);
-                    showCoins((coins-500));
+                    showCoins((coins - 500));
                 }
             }
         }
