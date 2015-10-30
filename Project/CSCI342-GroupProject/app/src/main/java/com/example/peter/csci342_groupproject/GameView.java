@@ -602,7 +602,7 @@ public class GameView extends SurfaceView implements Runnable {
                     coins.remove(c);
                     if ((gd.getSoundFX() && (coinLoaded)))
                         soundPool.play(coinID, gd.getVolume().floatValue(), gd.getVolume().floatValue(), 1, 0, 1f);
-                    currency = currency + 10;
+                    currency = currency + 250;
                 }
             }
 

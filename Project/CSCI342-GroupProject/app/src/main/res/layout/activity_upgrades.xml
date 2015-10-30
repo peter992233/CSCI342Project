@@ -278,6 +278,22 @@
             android:textColor="#fff325"
             android:textSize="14sp" />
 
+        <TextView
+            android:id="@+id/upgradeCost"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/Speed3"
+            android:layout_centerHorizontal="true"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:layout_marginTop="10dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="All upgrades cost 500 Coins"
+            android:textAlignment="center"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="#fff325" />
+
     </RelativeLayout>
 
 

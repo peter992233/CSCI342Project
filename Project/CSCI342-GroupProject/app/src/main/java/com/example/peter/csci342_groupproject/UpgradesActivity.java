@@ -25,9 +25,7 @@ public class UpgradesActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_upgrades);
 
-        TextView coins = (TextView) this.findViewById(R.id.Currency);
-        String coinsText = "Coins: " + gd.getCurrency().toString();
-        coins.setText(coinsText);
+        showCoins(gd.getCurrency());
 
         //set lives
         updateLives();
@@ -52,6 +50,12 @@ public class UpgradesActivity extends AppCompatActivity {
         });
         soundID = sp.load(this, R.raw.mainmenumusic, 1);
 
+    }
+
+    private void showCoins(int coins) {
+        TextView coinText = (TextView) this.findViewById(R.id.Currency);
+        String coinsText = "Coins: " + coins;
+        coinText.setText(coinsText);
     }
 
     private void updateLives() {
@@ -171,32 +175,49 @@ public class UpgradesActivity extends AppCompatActivity {
 
     public void buyLife(View view) {
 
-        if (gd.getBaseLives() < 5) {
-            DBHelper dbHelper = new DBHelper(getApplicationContext());
+        int coins = gd.getCurrency();
+        if (coins >= 500){
+            if (gd.getBaseLives() < 5) {
+                DBHelper dbHelper = new DBHelper(getApplicationContext());
 
-            if (gd.setBaseLives((gd.getBaseLives() + 1), dbHelper))
-                updateLives();
+                if (gd.setBaseLives((gd.getBaseLives() + 1), dbHelper)) {
+                    updateLives();
+                    gd.setCurrency((coins - 500), dbHelper);
+                    showCoins((coins-500));
+                }
+            }
         }
     }
 
     public void buyDamage(View view) {
 
-        if (gd.getBaseDamage() < 5) {
-            DBHelper dbHelper = new DBHelper(getApplicationContext());
+        int coins = gd.getCurrency();
+        if (coins >= 500) {
+            if (gd.getBaseDamage() < 5) {
+                DBHelper dbHelper = new DBHelper(getApplicationContext());
 
-            if (gd.setBaseDamage((gd.getBaseDamage() + 1), dbHelper))
-                updateDamage();
+                if (gd.setBaseDamage((gd.getBaseDamage() + 1), dbHelper)) {
+                    updateDamage();
+                    gd.setCurrency((coins - 500), dbHelper);
+                    showCoins((coins - 500));
+                }
+            }
         }
     }
 
     public void buySpeed(View view) {
-        GameData gd = GameData.getInstance();
 
-        if (gd.getBaseSpeed() < 5) {
-            DBHelper dbHelper = new DBHelper(getApplicationContext());
+        int coins = gd.getCurrency();
+        if (coins >= 500) {
+            if (gd.getBaseSpeed() < 5) {
+                DBHelper dbHelper = new DBHelper(getApplicationContext());
 
-            if (gd.setBaseSpeed((gd.getBaseSpeed() + 1), dbHelper))
-                updateSpeed();
+                if (gd.setBaseSpeed((gd.getBaseSpeed() + 1), dbHelper)) {
+                    updateSpeed();
+                    gd.setCurrency((coins - 500), dbHelper);
+                    showCoins((coins - 500));
+                }
+            }
         }
     }
 
