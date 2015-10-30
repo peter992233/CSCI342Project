@@ -1,7 +1,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/backboard"
+    android:background="@drawable/backboard_square"
     android:orientation="vertical">
 
     <ImageView
@@ -10,7 +10,7 @@
         android:layout_height="60dp"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="25dp"
-        android:background="@drawable/upgrades" />
+        android:background="@drawable/game_over" />
 
     <TextView
         android:id="@+id/ScoreDialog"
