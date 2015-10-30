@@ -244,18 +244,12 @@ public class GameView extends SurfaceView implements Runnable {
 
             //If not pause the game should update
             if (!paused) {
-<<<<<<< HEAD
                 if(EnemyList.size() == 0 && spawnedBoss == false && GameLevel == 1) {
                     EnemyShip newEnemy = new EnemyShip(context, screenX, screenY, 10, 3);
-=======
-                if (EnemyList.size() == 0 && !spawnedBoss && GameLevel == 1) {
-                    EnemyShip newEnemy = new EnemyShip(context, screenX, screenY, 15, 3);
->>>>>>> origin/master
                     newEnemy.setIsVisible(false);
                     EnemyList.add(newEnemy);
                     spawnedBoss = true;
                 }
-<<<<<<< HEAD
                 if(EnemyList.size() == 0 && spawnedBoss == false && GameLevel == 2) {
                     EnemyShip newEnemy = new EnemyShip(context, screenX, screenY, 20, 4);
                     newEnemy.setIsVisible(false);
@@ -276,10 +270,6 @@ public class GameView extends SurfaceView implements Runnable {
                 }
                 if(EnemyList.size() == 0 && spawnedBoss == false && GameLevel == 5) {
                     EnemyShip newEnemy = new EnemyShip(context, screenX, screenY, 50, 7);
-=======
-                if (EnemyList.size() == 0 && !spawnedBoss && GameLevel == 2) {
-                    EnemyShip newEnemy = new EnemyShip(context, screenX, screenY, 30, 4);
->>>>>>> origin/master
                     newEnemy.setIsVisible(false);
                     EnemyList.add(newEnemy);
                     spawnedBoss = true;
@@ -559,18 +549,8 @@ public class GameView extends SurfaceView implements Runnable {
 
                                         currExFrames.add(0);
 
-<<<<<<< HEAD
                                         explX.add((int) EnemyList.get(j).getX());
                                         explY.add((int) EnemyList.get(j).getY());
-=======
-                                    explX.add((int) EnemyList.get(j).getX());
-                                    explY.add((int) EnemyList.get(j).getY());
-
-                                    if (e.getEnemyType() > 3) {
-                                        explSize.add(400);
-                                    } else {
-                                        explSize.add(100);
->>>>>>> origin/master
                                     }
 
                                     e.setIsVisible(false);

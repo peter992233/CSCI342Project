@@ -137,15 +137,9 @@ public class EnemyShip {
             int pushX = (int) length * 2 + r.nextInt(screenX - (int) length * 3 + 1);
             x = pushX - length;
         }
-<<<<<<< HEAD
-        if(enemyType == 3) {
-            length = screenX / 12;
-            height = screenY / 3;
-=======
         if (enemyType == 3) {
             length = screenX / 20;
             height = screenY / 4;
->>>>>>> origin/master
 
             enemyBMP = BitmapFactory.decodeResource(context.getResources(), R.drawable.boss_1);
             enemyBMP = Bitmap.createScaledBitmap(enemyBMP, (int) length, (int) height, false);
@@ -215,13 +209,8 @@ public class EnemyShip {
             }
             shipMoved = 0;
         }
-<<<<<<< HEAD
         if(shipMoved > 200 && enemyType >= 3) {
             if(shipMoving[0] == LEFT) {
-=======
-        if (shipMoved > 120 && enemyType >= 3) {
-            if (shipMoving[0] == LEFT) {
->>>>>>> origin/master
                 shipMoving[0] = RIGHT;
             } else if (shipMoving[0] == RIGHT) {
                 shipMoving[0] = LEFT;
@@ -255,11 +244,7 @@ public class EnemyShip {
         if (enemyType == 2) {
             shipMoved++;
         }
-<<<<<<< HEAD
         if(enemyType >= 3 && y > SY/12 && shipSet == false) {
-=======
-        if (enemyType >= 3 && y > SY / 3 && !shipSet) {
->>>>>>> origin/master
             Random randDirection = new Random();
             int checkDirection = randDirection.nextInt(2);
 
@@ -298,9 +283,8 @@ public class EnemyShip {
                         lastShot = System.currentTimeMillis();
                         return true;
                     }
-<<<<<<< HEAD
                 }
-                else if(enemyType == 7) {
+                else if (enemyType == 7) {
                     randomNumber = shootGen.nextInt(3);
                     if (randomNumber == 0) {
                         lastShot = System.currentTimeMillis();
@@ -308,42 +292,30 @@ public class EnemyShip {
                     }
                 }
                 else {
-=======
-                } else {
->>>>>>> origin/master
                     randomNumber = shootGen.nextInt(10);
                     if (randomNumber == 0) {
                         lastShot = System.currentTimeMillis();
                         return true;
                     }
                 }
-            }
 
-            //Fire Randomly regardless of player (1/1500)
-<<<<<<< HEAD
-            if(enemyType <= 2) {
-                randomNumber = shootGen.nextInt(300);
-                if (randomNumber == 0) {
-                    lastShot = System.currentTimeMillis();
-                    return true;
+                //Fire Randomly regardless of player (1/1500)
+                if (enemyType <= 2) {
+                    randomNumber = shootGen.nextInt(300);
+                    if (randomNumber == 0) {
+                        lastShot = System.currentTimeMillis();
+                        return true;
+                    }
                 }
-            }
-            else if(enemyType == 7) {
-                randomNumber = shootGen.nextInt(30);
-=======
-            if (enemyType <= 2) {
-                randomNumber = shootGen.nextInt(750);
->>>>>>> origin/master
-                if (randomNumber == 0) {
-                    lastShot = System.currentTimeMillis();
-                    return true;
+                else if (enemyType == 7) {
+                    randomNumber = shootGen.nextInt(30);
                 }
-            }
-            else {
-                randomNumber = shootGen.nextInt(100);
-                if (randomNumber == 0) {
-                    lastShot = System.currentTimeMillis();
-                    return true;
+                else {
+                    randomNumber = shootGen.nextInt(100);
+                    if (randomNumber == 0) {
+                        lastShot = System.currentTimeMillis();
+                        return true;
+                    }
                 }
             }
         }
