@@ -244,31 +244,31 @@ public class GameView extends SurfaceView implements Runnable {
 
             //If not pause the game should update
             if (!paused) {
-                if(EnemyList.size() == 0 && spawnedBoss == false && GameLevel == 1) {
+                if (EnemyList.size() == 0 && spawnedBoss == false && GameLevel == 1) {
                     EnemyShip newEnemy = new EnemyShip(context, screenX, screenY, 10, 3);
                     newEnemy.setIsVisible(false);
                     EnemyList.add(newEnemy);
                     spawnedBoss = true;
                 }
-                if(EnemyList.size() == 0 && spawnedBoss == false && GameLevel == 2) {
+                if (EnemyList.size() == 0 && spawnedBoss == false && GameLevel == 2) {
                     EnemyShip newEnemy = new EnemyShip(context, screenX, screenY, 20, 4);
                     newEnemy.setIsVisible(false);
                     EnemyList.add(newEnemy);
                     spawnedBoss = true;
                 }
-                if(EnemyList.size() == 0 && spawnedBoss == false && GameLevel == 3) {
+                if (EnemyList.size() == 0 && spawnedBoss == false && GameLevel == 3) {
                     EnemyShip newEnemy = new EnemyShip(context, screenX, screenY, 30, 5);
                     newEnemy.setIsVisible(false);
                     EnemyList.add(newEnemy);
                     spawnedBoss = true;
                 }
-                if(EnemyList.size() == 0 && spawnedBoss == false && GameLevel == 4) {
+                if (EnemyList.size() == 0 && spawnedBoss == false && GameLevel == 4) {
                     EnemyShip newEnemy = new EnemyShip(context, screenX, screenY, 40, 6);
                     newEnemy.setIsVisible(false);
                     EnemyList.add(newEnemy);
                     spawnedBoss = true;
                 }
-                if(EnemyList.size() == 0 && spawnedBoss == false && GameLevel == 5) {
+                if (EnemyList.size() == 0 && spawnedBoss == false && GameLevel == 5) {
                     EnemyShip newEnemy = new EnemyShip(context, screenX, screenY, 50, 7);
                     newEnemy.setIsVisible(false);
                     EnemyList.add(newEnemy);
@@ -388,7 +388,7 @@ public class GameView extends SurfaceView implements Runnable {
                                 p.shoot(e.getX() + e.getLength() / 2 + 75, e.getRect().bottom, projectile.DOWN);
                                 enemyBullets.add(p);
                             }
-                            if(e.getEnemyType() == 5) {
+                            if (e.getEnemyType() == 5) {
                                 Projectile p = new Projectile(context, screenY, screenX, true, 0);
                                 p.shoot(e.getX() + e.getLength() / 2, e.getRect().bottom, projectile.DOWN);
                                 enemyBullets.add(p);
@@ -399,7 +399,7 @@ public class GameView extends SurfaceView implements Runnable {
                                 p.shoot(e.getX() + e.getLength() / 2 + 150, e.getRect().bottom - 75, projectile.DOWN);
                                 enemyBullets.add(p);
                             }
-                            if(e.getEnemyType() == 6) {
+                            if (e.getEnemyType() == 6) {
                                 Projectile p = new Projectile(context, screenY, screenX, true, 0);
                                 p.shoot(e.getX() + e.getLength() / 2 - 225, e.getRect().bottom, projectile.DOWN);
                                 enemyBullets.add(p);
@@ -413,7 +413,7 @@ public class GameView extends SurfaceView implements Runnable {
                                 p.shoot(e.getX() + e.getLength() / 2 + 175, e.getRect().bottom, projectile.DOWN);
                                 enemyBullets.add(p);
                             }
-                            if(e.getEnemyType() == 7) {
+                            if (e.getEnemyType() == 7) {
                                 Random randBullet = new Random();
                                 int bulletCheck = randBullet.nextInt(6);
                                 bulletCheck = bulletCheck - 3;
@@ -470,6 +470,7 @@ public class GameView extends SurfaceView implements Runnable {
                             soundPool.play(explosionID, gd.getVolume().floatValue(), gd.getVolume().floatValue(), 1, 0, 1f);
                         lives--;
                         if (lives == 0) {
+                            waitRestart = true;
                             gameOver();
                         }
                         AnimationDrawable explDraw = createExplosionDrawable();
@@ -543,7 +544,7 @@ public class GameView extends SurfaceView implements Runnable {
                                         }
                                     }
 
-                                    if(e.getEnemyType() <= 2) {
+                                    if (e.getEnemyType() <= 2) {
                                         AnimationDrawable explDraw = createExplosionDrawable();
                                         explDraws.add(explDraw);
 
@@ -965,7 +966,6 @@ public class GameView extends SurfaceView implements Runnable {
 
 
     public void gameOver() {
-        Pause();
         restartGame();
 
         FragmentTransaction ft = fragmentManager.beginTransaction();
@@ -1002,34 +1002,29 @@ public class GameView extends SurfaceView implements Runnable {
         DBHelper db = new DBHelper(getContext());
         gd.setCurrency(currency, db);
 
-        try {
-            //Do Restart
-            playing = false;
-            paused = true;
-            EnemyList.clear();
-            enemyBullets.clear();
-            playerBullets.clear();
-            nextShot = 0; //When is the next shot
-            nextEnemy = 5000;//When to display the next enemy
+        playing = false;
+        paused = true;
+        EnemyList.clear();
+        enemyBullets.clear();
+        playerBullets.clear();
+        nextShot = 0; //When is the next shot
+        nextEnemy = 5000;//When to display the next enemy
 
-            coins.clear();
-            powerups.clear();
+        coins.clear();
+        powerups.clear();
 
-            explDraws.clear();
-            explX.clear();
-            explY.clear();
-            currExFrames.clear();
+        explDraws.clear();
+        explX.clear();
+        explY.clear();
+        currExFrames.clear();
 
-            pWeaponType = 0;
-            pWeaponLevel = 0;
-            lives = gd.getBaseLives() + 3;
-            currBgFrame = 0;
-            GameLevel = 0;
-        } catch (Exception ignored) {
+        pWeaponType = 0;
+        pWeaponLevel = 0;
+        lives = gd.getBaseLives() + 3;
+        currBgFrame = 0;
+        GameLevel = 0;
 
-        } finally {
-            prepareLevel();
-        }
+        prepareLevel();
     }
 
     private class SendHighScore extends AsyncTask<String, Void, String> {
