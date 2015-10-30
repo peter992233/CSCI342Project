@@ -85,23 +85,23 @@ public class EnemyShip {
         enemyLives = eLives;
         enemyType = eType;
 
-        if(enemyType == 0) {
+        if (enemyType == 0) {
             enemyBMP = BitmapFactory.decodeResource(context.getResources(), R.drawable.enemy_vertical);
             enemyBMP = Bitmap.createScaledBitmap(enemyBMP, (int) length, (int) height, false);
             Random r = new Random();
             int pushX = (int) length * 2 + r.nextInt(screenX - (int) length * 3 + 1);
             x = pushX - length;
         }
-        if(enemyType == 1) {
+        if (enemyType == 1) {
             length = screenX / 20;
             height = screenX / 26;
 
             Random randDirection = new Random();
             int checkDirection = randDirection.nextInt(2);
-            if(checkDirection == 0) {
+            if (checkDirection == 0) {
                 shipMoving[0] = LEFT;
             }
-            if(checkDirection == 1) {
+            if (checkDirection == 1) {
                 shipMoving[0] = RIGHT;
             }
             shipMoving[1] = EMPTY;
@@ -110,23 +110,23 @@ public class EnemyShip {
             enemyBMP = Bitmap.createScaledBitmap(enemyBMP, (int) length, (int) height, false);
 
             Random r = new Random();
-            int pushY = (int) height * 2 + r.nextInt((screenY - screenY/3) - (int) height * 3 + 1);
+            int pushY = (int) height * 2 + r.nextInt((screenY - screenY / 3) - (int) height * 3 + 1);
             y = pushY - height;
-            if(shipMoving[0] == LEFT) {
+            if (shipMoving[0] == LEFT) {
                 x = screenX;
             }
         }
-        if(enemyType == 2) {
+        if (enemyType == 2) {
             length = screenX / 16;
             height = screenY / 12;
 
             Random randDirection = new Random();
             int checkDirection = randDirection.nextInt(2);
 
-            if(checkDirection == 0) {
+            if (checkDirection == 0) {
                 shipMoving[0] = LEFT;
             }
-            if(checkDirection == 1) {
+            if (checkDirection == 1) {
                 shipMoving[0] = RIGHT;
             }
 
@@ -137,9 +137,15 @@ public class EnemyShip {
             int pushX = (int) length * 2 + r.nextInt(screenX - (int) length * 3 + 1);
             x = pushX - length;
         }
+<<<<<<< HEAD
         if(enemyType == 3) {
             length = screenX / 12;
             height = screenY / 3;
+=======
+        if (enemyType == 3) {
+            length = screenX / 20;
+            height = screenY / 4;
+>>>>>>> origin/master
 
             enemyBMP = BitmapFactory.decodeResource(context.getResources(), R.drawable.boss_1);
             enemyBMP = Bitmap.createScaledBitmap(enemyBMP, (int) length, (int) height, false);
@@ -149,7 +155,7 @@ public class EnemyShip {
             x = screenX / 2;
             y = 0 - height;
         }
-        if(enemyType == 4) {
+        if (enemyType == 4) {
             length = screenX / 6;
             height = screenY / 4;
 
@@ -201,25 +207,28 @@ public class EnemyShip {
 
     public void update(long fps) {
 
-        if(shipMoved > 50 && enemyType == 2) {
-            if(shipMoving[0] == LEFT) {
+        if (shipMoved > 50 && enemyType == 2) {
+            if (shipMoving[0] == LEFT) {
                 shipMoving[0] = RIGHT;
-            }
-            else if(shipMoving[0] == RIGHT) {
+            } else if (shipMoving[0] == RIGHT) {
                 shipMoving[0] = LEFT;
             }
             shipMoved = 0;
         }
+<<<<<<< HEAD
         if(shipMoved > 200 && enemyType >= 3) {
             if(shipMoving[0] == LEFT) {
+=======
+        if (shipMoved > 120 && enemyType >= 3) {
+            if (shipMoving[0] == LEFT) {
+>>>>>>> origin/master
                 shipMoving[0] = RIGHT;
-            }
-            else if(shipMoving[0] == RIGHT) {
+            } else if (shipMoving[0] == RIGHT) {
                 shipMoving[0] = LEFT;
             }
             shipMoved = 0;
         }
-        
+
         //Movement Left, Right, Up and Down Movement
         if (shipMoving[0] == LEFT) {
             x = x - shipSpeed / fps;
@@ -243,24 +252,28 @@ public class EnemyShip {
         rect.left = x;
         rect.right = x + length;
 
-        if(enemyType == 2) {
+        if (enemyType == 2) {
             shipMoved++;
         }
+<<<<<<< HEAD
         if(enemyType >= 3 && y > SY/12 && shipSet == false) {
+=======
+        if (enemyType >= 3 && y > SY / 3 && !shipSet) {
+>>>>>>> origin/master
             Random randDirection = new Random();
             int checkDirection = randDirection.nextInt(2);
 
-            if(checkDirection == 0) {
+            if (checkDirection == 0) {
                 shipMoving[0] = LEFT;
             }
-            if(checkDirection == 1) {
+            if (checkDirection == 1) {
                 shipMoving[0] = RIGHT;
             }
             shipMoving[1] = EMPTY;
 
             shipSet = true;
         }
-        if(enemyType >= 3 && shipMoving[1] == EMPTY) {
+        if (enemyType >= 3 && shipMoving[1] == EMPTY) {
             shipMoved++;
         }
     }
@@ -279,12 +292,13 @@ public class EnemyShip {
                     (playerShipX > x && playerShipX < x + length)) {
 
                 //The random Gen with 1 in 50 chance to shoot
-                if(enemyType <= 2) {
+                if (enemyType <= 2) {
                     randomNumber = shootGen.nextInt(30);
                     if (randomNumber == 0) {
                         lastShot = System.currentTimeMillis();
                         return true;
                     }
+<<<<<<< HEAD
                 }
                 else if(enemyType == 7) {
                     randomNumber = shootGen.nextInt(3);
@@ -294,6 +308,9 @@ public class EnemyShip {
                     }
                 }
                 else {
+=======
+                } else {
+>>>>>>> origin/master
                     randomNumber = shootGen.nextInt(10);
                     if (randomNumber == 0) {
                         lastShot = System.currentTimeMillis();
@@ -303,6 +320,7 @@ public class EnemyShip {
             }
 
             //Fire Randomly regardless of player (1/1500)
+<<<<<<< HEAD
             if(enemyType <= 2) {
                 randomNumber = shootGen.nextInt(300);
                 if (randomNumber == 0) {
@@ -312,6 +330,10 @@ public class EnemyShip {
             }
             else if(enemyType == 7) {
                 randomNumber = shootGen.nextInt(30);
+=======
+            if (enemyType <= 2) {
+                randomNumber = shootGen.nextInt(750);
+>>>>>>> origin/master
                 if (randomNumber == 0) {
                     lastShot = System.currentTimeMillis();
                     return true;
@@ -334,13 +356,21 @@ public class EnemyShip {
 
     // - - - - - - - Getters & Setters - - - - - - -
 
-    public int getEnemyLives() {return enemyLives;}
+    public int getEnemyLives() {
+        return enemyLives;
+    }
 
-    public void setEnemyLives() {enemyLives--;}
+    public void setEnemyLives() {
+        enemyLives--;
+    }
 
-    public int getEnemyType() {return enemyType;}
+    public int getEnemyType() {
+        return enemyType;
+    }
 
-    public int getEnemyDirection() {return shipMoving[0];}
+    public int getEnemyDirection() {
+        return shipMoving[0];
+    }
 
     public RectF getRect() {
         return rect;

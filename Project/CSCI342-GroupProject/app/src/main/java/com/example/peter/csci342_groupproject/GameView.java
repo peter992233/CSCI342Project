@@ -1,5 +1,9 @@
 package com.example.peter.csci342_groupproject;
 
+import android.app.Activity;
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Canvas;
@@ -10,13 +14,22 @@ import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
 import android.media.SoundPool;
+import android.os.AsyncTask;
 import android.support.v4.view.MotionEventCompat;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.widget.EditText;
 import android.widget.ImageView;
 
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -25,7 +38,7 @@ import java.util.Random;
  */
 public class GameView extends SurfaceView implements Runnable {
 
-    Context context;
+    private Context context;
 
     //This is the game thread
     private Thread gameThread = null;
@@ -75,7 +88,7 @@ public class GameView extends SurfaceView implements Runnable {
     ArrayList<EnemyShip> EnemyList = new ArrayList<EnemyShip>();
     int maxEnemies = 20;
 
-    int score = 0;
+    public int score = 0;
     private int lives = 0;
     int currency = 0;
 
@@ -83,13 +96,13 @@ public class GameView extends SurfaceView implements Runnable {
     int currBgFrame = 0;
 
     int GameLevel = 0;
-    boolean waitRestart = false;
+    public boolean waitRestart = false;
 
     int pWeaponType = 0;
     int pWeaponLevel = 0;
     int pWeaponDamage = 0;
 
-    GameData gd = GameData.getInstance();
+    private GameData gd = GameData.getInstance();
 
     //the sound pool that holds all the game sounds
     private SoundPool soundPool = null;
@@ -113,10 +126,14 @@ public class GameView extends SurfaceView implements Runnable {
 
     boolean spawnedBoss = false;
 
-    public GameView(Context context, int x, int y) {
+    private FragmentManager fragmentManager = null;
+
+    public GameView(Context context, FragmentManager fm, int x, int y) {
         super(context);
 
         this.context = context;
+
+        this.fragmentManager = fm;
 
         ourHolder = getHolder();
         paint = new Paint();
@@ -227,12 +244,18 @@ public class GameView extends SurfaceView implements Runnable {
 
             //If not pause the game should update
             if (!paused) {
+<<<<<<< HEAD
                 if(EnemyList.size() == 0 && spawnedBoss == false && GameLevel == 1) {
                     EnemyShip newEnemy = new EnemyShip(context, screenX, screenY, 10, 3);
+=======
+                if (EnemyList.size() == 0 && !spawnedBoss && GameLevel == 1) {
+                    EnemyShip newEnemy = new EnemyShip(context, screenX, screenY, 15, 3);
+>>>>>>> origin/master
                     newEnemy.setIsVisible(false);
                     EnemyList.add(newEnemy);
                     spawnedBoss = true;
                 }
+<<<<<<< HEAD
                 if(EnemyList.size() == 0 && spawnedBoss == false && GameLevel == 2) {
                     EnemyShip newEnemy = new EnemyShip(context, screenX, screenY, 20, 4);
                     newEnemy.setIsVisible(false);
@@ -253,6 +276,10 @@ public class GameView extends SurfaceView implements Runnable {
                 }
                 if(EnemyList.size() == 0 && spawnedBoss == false && GameLevel == 5) {
                     EnemyShip newEnemy = new EnemyShip(context, screenX, screenY, 50, 7);
+=======
+                if (EnemyList.size() == 0 && !spawnedBoss && GameLevel == 2) {
+                    EnemyShip newEnemy = new EnemyShip(context, screenX, screenY, 30, 4);
+>>>>>>> origin/master
                     newEnemy.setIsVisible(false);
                     EnemyList.add(newEnemy);
                     spawnedBoss = true;
@@ -314,9 +341,7 @@ public class GameView extends SurfaceView implements Runnable {
 
     private void update() {
 
-        boolean lost = false;
-
-        if (paused != true) {
+        if (!paused) {
 
             if (nextEnemy < 0) {
                 Random nextEnemyRand = new Random();
@@ -360,12 +385,12 @@ public class GameView extends SurfaceView implements Runnable {
                         if (e.shouldShoot(pShip.getX(), pShip.getWidth()) && e.getEnemyType() != 2) {
                             if ((gd.getSoundFX() && (bulletLoaded)))
                                 soundPool.play(bulletID, gd.getVolume().floatValue(), gd.getVolume().floatValue(), 1, 0, 1f);
-                            if(e.getEnemyType() <= 3) {
+                            if (e.getEnemyType() <= 3) {
                                 Projectile p = new Projectile(context, screenY, screenX, true, 0);
                                 p.shoot(e.getX() + e.getLength() / 2, e.getRect().bottom, projectile.DOWN);
                                 enemyBullets.add(p);
                             }
-                            if(e.getEnemyType() == 4) {
+                            if (e.getEnemyType() == 4) {
                                 Projectile p = new Projectile(context, screenY, screenX, true, 0);
                                 p.shoot(e.getX() + e.getLength() / 2 - 75, e.getRect().bottom, projectile.DOWN);
                                 enemyBullets.add(p);
@@ -534,8 +559,18 @@ public class GameView extends SurfaceView implements Runnable {
 
                                         currExFrames.add(0);
 
+<<<<<<< HEAD
                                         explX.add((int) EnemyList.get(j).getX());
                                         explY.add((int) EnemyList.get(j).getY());
+=======
+                                    explX.add((int) EnemyList.get(j).getX());
+                                    explY.add((int) EnemyList.get(j).getY());
+
+                                    if (e.getEnemyType() > 3) {
+                                        explSize.add(400);
+                                    } else {
+                                        explSize.add(100);
+>>>>>>> origin/master
                                     }
 
                                     e.setIsVisible(false);
@@ -614,12 +649,14 @@ public class GameView extends SurfaceView implements Runnable {
                     enemyBullets.remove(p);
                     lives--;
                     if (lives <= 0) {
+                        waitRestart = true;
                         gameOver();
                     }
                 }
             }
 
             if (lives <= 0) {
+                waitRestart = true;
                 gameOver();
             }
 
@@ -643,7 +680,7 @@ public class GameView extends SurfaceView implements Runnable {
 
     private void draw() {
 
-        if (waitRestart == false) {
+        if (!waitRestart) {
             if (ourHolder.getSurface().isValid()) {
 
                 canvas = ourHolder.lockCanvas();
@@ -691,7 +728,7 @@ public class GameView extends SurfaceView implements Runnable {
                 //Draw the Enemies
                 for (int i = 0; i < EnemyList.size(); i++) {
                     EnemyShip e = EnemyList.get(i);
-                    if (e.isVisible() == true) {
+                    if (e.isVisible()) {
                         canvas.drawBitmap(e.getEnemyBMP(), e.getX(), e.getY(), paint);
                     }
                 }
@@ -731,8 +768,6 @@ public class GameView extends SurfaceView implements Runnable {
                 paint.setTextSize(50);
 
                 paint.setTextAlign(Paint.Align.CENTER);
-                canvas.drawText("Game Over, You Scored: " + score, canvas.getWidth() / 2,
-                        (int) ((canvas.getHeight() / 2) - ((paint.descent() + paint.ascent()) / 2)), paint);
 
                 ourHolder.unlockCanvasAndPost(canvas);
             }
@@ -764,11 +799,6 @@ public class GameView extends SurfaceView implements Runnable {
 
         switch (motionEvent.getAction() & MotionEvent.ACTION_MASK) {
             case MotionEvent.ACTION_DOWN: {
-                //You are not waiting to restart
-                if (waitRestart != false) {
-                    waitRestart = false;
-                    score = 0;
-                }
 
                 paused = false;
                 pShip.setMovementState(pShip.STOPPED);
@@ -790,7 +820,7 @@ public class GameView extends SurfaceView implements Runnable {
                             projectile.shoot(pShip.getX() + pShip.getWidth() / 2 - 30, pShip.getRect().top, projectile.UP);
                             playerBullets.add(projectile);
                         }
-                        if(pWeaponLevel == 0 && pWeaponType == 0) {
+                        if (pWeaponLevel == 0 && pWeaponType == 0) {
                             projectile.shoot(pShip.getX() + pShip.getWidth() / 2 - 8, pShip.getRect().top, projectile.UP);
                             playerBullets.add(projectile);
                         }
@@ -955,15 +985,41 @@ public class GameView extends SurfaceView implements Runnable {
 
 
     public void gameOver() {
+        restartGame();
 
+        FragmentTransaction ft = fragmentManager.beginTransaction();
+        Fragment prev = fragmentManager.findFragmentByTag("gcd");
+        if (prev != null) {
+            ft.remove(prev);
+        }
+        ft.addToBackStack(null);
 
-        //Display highscore
+        GameCompleteDialog gcd = GameCompleteDialog.newInstance(score);
+        gcd.show(ft, "gcd");
+    }
 
+    public void doPlayAgainClick(GameCompleteDialog dialog) {
+        EditText et = (EditText) dialog.getDialog().findViewById(R.id.username);
+        if (!et.getText().toString().equals("")) {
+            new SendHighScore().execute(et.getText().toString(), Integer.toString(score));
+        }
+        dialog.getDialog().dismiss();
+    }
 
-        //Ask restart
+    public void doMenuClick(GameCompleteDialog dialog) {
+        EditText et = (EditText) dialog.getDialog().findViewById(R.id.username);
+        if (!et.getText().toString().equals("")) {
+            new SendHighScore().execute(et.getText().toString(), Integer.toString(score));
+        }
+
+        dialog.getDialog().dismiss();
+        ((Activity) context).finish();
+    }
+
+    public void restartGame() {
+
         DBHelper db = new DBHelper(getContext());
         gd.setCurrency(currency, db);
-
 
         try {
             //Do Restart
@@ -988,13 +1044,78 @@ public class GameView extends SurfaceView implements Runnable {
             lives = gd.getBaseLives() + 3;
             currBgFrame = 0;
             GameLevel = 0;
-            waitRestart = true;
-
-
-        } catch (Exception e) {
+        } catch (Exception ignored) {
 
         } finally {
             prepareLevel();
+        }
+    }
+
+    private class SendHighScore extends AsyncTask<String, Void, String> {
+
+        String urlString = "http://203.143.84.128/csci342/addScore.php";
+        String urlParameters = "";
+
+        @Override
+        protected String doInBackground(String... data) {
+
+            try {
+                urlParameters = "uName=" + URLEncoder.encode(data[0], "UTF-8") + "&score=" + URLEncoder.encode(data[1], "UTF-8");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            URL url;
+            HttpURLConnection connection = null;
+            try {
+                //Create connection
+                url = new URL(urlString);
+                connection = (HttpURLConnection) url.openConnection();
+                connection.setRequestMethod("POST");
+                connection.setRequestProperty("Content-Type",
+                        "application/x-www-form-urlencoded");
+
+                connection.setRequestProperty("Content-Length", "" +
+                        Integer.toString(urlParameters.getBytes().length));
+                connection.setRequestProperty("Content-Language", "en-US");
+
+                connection.setUseCaches(false);
+                connection.setDoInput(true);
+                connection.setDoOutput(true);
+
+                //Send request
+                DataOutputStream wr = new DataOutputStream(
+                        connection.getOutputStream());
+                wr.writeBytes(urlParameters);
+                wr.flush();
+                wr.close();
+
+                //Get Response
+                InputStream is = connection.getInputStream();
+                BufferedReader rd = new BufferedReader(new InputStreamReader(is));
+                String line;
+                StringBuilder response = new StringBuilder();
+                while ((line = rd.readLine()) != null) {
+                    response.append(line);
+                    response.append('\r');
+                }
+                rd.close();
+
+                Log.d("SERVER", "Response: " + response.toString());
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                if (connection != null) {
+                    connection.disconnect();
+                }
+            }
+            return urlParameters;
+        }
+
+        @Override
+        protected void onPostExecute(String jString) {
+            super.onPostExecute(jString);
         }
     }
 }

@@ -2,21 +2,21 @@
 
 header('Content-type: application/json');
 
-if (isset($_GET["uName"])) {
-    $uName = $_GET["uName"];
+if (isset($_POST["uName"])) {
+    $uName = $_POST["uName"];
 } else {
     echo json_encode("error");
     exit();
 }
 
-if (isset($_GET["score"])) {
-    $score = $_GET["score"];
+if (isset($_POST["score"])) {
+    $score = $_POST["score"];
 } else {
     echo json_encode("error");
     exit();
 }
 
-$link = mysql_connect('localhost:3306', 'root', ‘csci321kw1’);
+$link = mysql_connect('localhost:3306', 'root', 'csci321kw1');
 if (!$link) {
     echo json_encode("error");
     exit();
@@ -46,6 +46,6 @@ mysql_free_result($result);
 
 mysql_close($link);
 
-header('Location: http://localhost:8888/CSCI342ServerScript/getScores.php');
+echo json_encode("OK");
 
 ?>

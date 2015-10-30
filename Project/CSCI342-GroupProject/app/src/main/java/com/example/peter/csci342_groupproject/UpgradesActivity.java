@@ -1,9 +1,7 @@
 package com.example.peter.csci342_groupproject;
 
-import android.content.res.AssetFileDescriptor;
-import android.content.res.Resources;
 import android.media.AudioManager;
-import android.media.MediaPlayer;
+import android.media.SoundPool;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -13,68 +11,50 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.io.IOException;
+public class UpgradesActivity extends AppCompatActivity {
 
-public class UpgradesActivity extends AppCompatActivity implements MediaPlayer.OnErrorListener, MediaPlayer.OnPreparedListener {
-
-    MediaPlayer mp = null;
+    private SoundPool sp = null;
+    private boolean soundLoaded = false;
+    private boolean playing = false;
+    private int playID = 0;
+    private int soundID = 0;
+    GameData gd = GameData.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_upgrades);
 
-        GameData gd = GameData.getInstance();
-
         TextView coins = (TextView) this.findViewById(R.id.Currency);
         String coinsText = "Coins: " + gd.getCurrency().toString();
         coins.setText(coinsText);
-        Resources res = getResources();
 
         //set lives
-        updateLives(gd);
+        updateLives();
 
         //set damage
-        updateDamage(gd);
+        updateDamage();
 
         //set speed
-        updateSpeed(gd);
+        updateSpeed();
 
-        mp = new MediaPlayer();
-        mp.setAudioStreamType(AudioManager.STREAM_MUSIC);
-        try {
-            AssetFileDescriptor afd = this.getResources().openRawResourceFd(R.raw.mainmenumusic);
-            if (afd == null) return;
-            mp.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
-            afd.close();
-            mp.setOnErrorListener(this);
-            mp.setOnPreparedListener(this);
-            mp.prepareAsync();
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-        } catch (IllegalStateException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        sp = new SoundPool(10, AudioManager.STREAM_MUSIC, 0);
+        sp.setOnLoadCompleteListener(new SoundPool.OnLoadCompleteListener() {
+            @Override
+            public void onLoadComplete(SoundPool soundPool, int sampleId, int status) {
+                soundLoaded = true;
+                GameData gd = GameData.getInstance();
+                if (gd.getMusic()) {
+                    playID = sp.play(soundID, gd.getVolume().floatValue(), gd.getVolume().floatValue(), 1, -1, 1f);
+                    playing = true;
+                }
+            }
+        });
+        soundID = sp.load(this, R.raw.mainmenumusic, 1);
+
     }
 
-    @Override
-    public void onPrepared(MediaPlayer play) {
-        GameData gd = GameData.getInstance();
-        play.setVolume(gd.getVolume().floatValue(), gd.getVolume().floatValue());
-        play.setLooping(true);
-        if (gd.getMusic()) {
-            play.start();
-        }
-    }
-
-    @Override
-    public boolean onError(MediaPlayer arg0, int arg1, int arg2) {
-        return false;
-    }
-
-    private void updateLives(GameData gd) {
+    private void updateLives() {
         ImageView life1 = (ImageView) this.findViewById(R.id.Lives1);
         ImageView life2 = (ImageView) this.findViewById(R.id.Lives2);
         ImageView life3 = (ImageView) this.findViewById(R.id.Lives3);
@@ -113,7 +93,7 @@ public class UpgradesActivity extends AppCompatActivity implements MediaPlayer.O
         }
     }
 
-    private void updateDamage(GameData gd) {
+    private void updateDamage() {
         ImageView damage1 = (ImageView) this.findViewById(R.id.Damage1);
         ImageView damage2 = (ImageView) this.findViewById(R.id.Damage2);
         ImageView damage3 = (ImageView) this.findViewById(R.id.Damage3);
@@ -151,7 +131,7 @@ public class UpgradesActivity extends AppCompatActivity implements MediaPlayer.O
         }
     }
 
-    private void updateSpeed(GameData gd) {
+    private void updateSpeed() {
         ImageView speed1 = (ImageView) this.findViewById(R.id.Speed1);
         ImageView speed2 = (ImageView) this.findViewById(R.id.Speed2);
         ImageView speed3 = (ImageView) this.findViewById(R.id.Speed3);
@@ -190,24 +170,22 @@ public class UpgradesActivity extends AppCompatActivity implements MediaPlayer.O
     }
 
     public void buyLife(View view) {
-        GameData gd = GameData.getInstance();
 
         if (gd.getBaseLives() < 5) {
             DBHelper dbHelper = new DBHelper(getApplicationContext());
 
             if (gd.setBaseLives((gd.getBaseLives() + 1), dbHelper))
-                updateLives(gd);
+                updateLives();
         }
     }
 
     public void buyDamage(View view) {
-        GameData gd = GameData.getInstance();
 
         if (gd.getBaseDamage() < 5) {
             DBHelper dbHelper = new DBHelper(getApplicationContext());
 
             if (gd.setBaseDamage((gd.getBaseDamage() + 1), dbHelper))
-                updateDamage(gd);
+                updateDamage();
         }
     }
 
@@ -218,7 +196,7 @@ public class UpgradesActivity extends AppCompatActivity implements MediaPlayer.O
             DBHelper dbHelper = new DBHelper(getApplicationContext());
 
             if (gd.setBaseSpeed((gd.getBaseSpeed() + 1), dbHelper))
-                updateSpeed(gd);
+                updateSpeed();
         }
     }
 
@@ -247,32 +225,35 @@ public class UpgradesActivity extends AppCompatActivity implements MediaPlayer.O
 
     @Override
     protected void onPause() {
-
         super.onPause();
-        if (mp != null) {
-            if (mp.isPlaying())
-                mp.pause();
+        if (sp != null) {
+            if (soundLoaded) {
+                sp.pause(playID);
+                playing = false;
+            }
         }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        if (mp != null) {
-            GameData gd = GameData.getInstance();
-            mp.setVolume(gd.getVolume().floatValue(), gd.getVolume().floatValue());
-            mp.setLooping(true);
-            if (gd.getMusic())
-                mp.start();
+        if ((sp != null) && (soundLoaded) && (!playing) && (gd.getMusic())) {
+            playing = true;
+            if (playID == 0) {
+                playID = sp.play(soundID, gd.getVolume().floatValue(), gd.getVolume().floatValue(), 1, -1, 1f);
+            } else {
+                sp.resume(playID);
+            }
         }
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (mp != null) {
-            mp.release();
-            mp = null;
+        if (sp != null) {
+            sp.stop(playID);
+            sp.release();
+            sp = null;
         }
     }
 }

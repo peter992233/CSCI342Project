@@ -1,9 +1,8 @@
 package com.example.peter.csci342_groupproject;
 
 import android.content.Context;
-import android.content.res.AssetFileDescriptor;
 import android.media.AudioManager;
-import android.media.MediaPlayer;
+import android.media.SoundPool;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -21,7 +20,6 @@ import org.json.JSONObject;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
@@ -32,51 +30,35 @@ import java.util.ArrayList;
  * Created by jas899 on 22/10/2015.
  */
 
-public class HighScoresActivity extends AppCompatActivity implements MediaPlayer.OnErrorListener, MediaPlayer.OnPreparedListener {
+public class HighScoresActivity extends AppCompatActivity {
 
-    MediaPlayer mp = null;
+    private SoundPool sp = null;
+    private boolean soundLoaded = false;
+    private boolean playing = false;
+    private int playID = 0;
+    private int soundID = 0;
+    GameData gd = GameData.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_high_scores);
 
-        GameData gd = GameData.getInstance();
-
         new GetHighScores().execute("");
 
-        mp = new MediaPlayer();
-        mp.setAudioStreamType(AudioManager.STREAM_MUSIC);
-        try {
-            AssetFileDescriptor afd = this.getResources().openRawResourceFd(R.raw.mainmenumusic);
-            if (afd == null) return;
-            mp.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
-            afd.close();
-            mp.setOnErrorListener(this);
-            mp.setOnPreparedListener(this);
-            mp.prepareAsync();
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-        } catch (IllegalStateException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    public void onPrepared(MediaPlayer play) {
-        GameData gd = GameData.getInstance();
-        play.setVolume(gd.getVolume().floatValue(), gd.getVolume().floatValue());
-        play.setLooping(true);
-        if (gd.getMusic()) {
-            play.start();
-        }
-    }
-
-    @Override
-    public boolean onError(MediaPlayer arg0, int arg1, int arg2) {
-        return false;
+        sp = new SoundPool(10, AudioManager.STREAM_MUSIC, 0);
+        sp.setOnLoadCompleteListener(new SoundPool.OnLoadCompleteListener() {
+            @Override
+            public void onLoadComplete(SoundPool soundPool, int sampleId, int status) {
+                soundLoaded = true;
+                GameData gd = GameData.getInstance();
+                if (gd.getMusic()) {
+                    playID = sp.play(soundID, gd.getVolume().floatValue(), gd.getVolume().floatValue(), 1, -1, 1f);
+                    playing = true;
+                }
+            }
+        });
+        soundID = sp.load(this, R.raw.mainmenumusic, 1);
     }
 
     @Override
@@ -104,13 +86,6 @@ public class HighScoresActivity extends AppCompatActivity implements MediaPlayer
 
     private class GetHighScores extends AsyncTask<String, Void, JSONArray> {
 
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-
-        }
-
         @Override
         protected JSONArray doInBackground(String... urls) {
             JSONArray jsonArray = null;
@@ -128,7 +103,7 @@ public class HighScoresActivity extends AppCompatActivity implements MediaPlayer
                 if (data != null) {
                     jsonArray = new JSONArray(data);
                 }
-            } catch (Exception e) {
+            } catch (Exception ignored) {
             }
             return jsonArray;
         }
@@ -141,7 +116,7 @@ public class HighScoresActivity extends AppCompatActivity implements MediaPlayer
                     total.append(line);
                 }
                 return total.toString();
-            } catch (Exception e) {
+            } catch (Exception ignored) {
             }
             return null;
         }
@@ -160,7 +135,7 @@ public class HighScoresActivity extends AppCompatActivity implements MediaPlayer
                     for (int i = 0; i < result.length(); i++) {
                         tempArray.add(i, result.getJSONObject(i));
                     }
-                } catch (Exception e) {
+                } catch (Exception ignored) {
                 }
                 ListView lv = (ListView) findViewById(R.id.ScoresList);
                 HSAdapter hsAdapter = new HSAdapter(getApplicationContext(), tempArray);
@@ -199,32 +174,35 @@ public class HighScoresActivity extends AppCompatActivity implements MediaPlayer
 
     @Override
     protected void onPause() {
-
         super.onPause();
-        if (mp != null) {
-            if (mp.isPlaying())
-                mp.pause();
+        if (sp != null) {
+            if (soundLoaded) {
+                sp.pause(playID);
+                playing = false;
+            }
         }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        if (mp != null) {
-            GameData gd = GameData.getInstance();
-            mp.setVolume(gd.getVolume().floatValue(), gd.getVolume().floatValue());
-            mp.setLooping(true);
-            if (gd.getMusic())
-                mp.start();
+        if ((sp != null) && (soundLoaded) && (!playing) && (gd.getMusic())) {
+            playing = true;
+            if (playID == 0) {
+                playID = sp.play(soundID, gd.getVolume().floatValue(), gd.getVolume().floatValue(), 1, -1, 1f);
+            } else {
+                sp.resume(playID);
+            }
         }
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (mp != null) {
-            mp.release();
-            mp = null;
+        if (sp != null) {
+            sp.stop(playID);
+            sp.release();
+            sp = null;
         }
     }
 }

@@ -57,6 +57,8 @@ public class GameData {
         this.setMusic(cursor.getInt(cursor.getColumnIndex(MainTable.MainEntry.COLUMN_NAME_OPTION_MUSIC)), dbHelper);
         this.volume = cursor.getDouble(cursor.getColumnIndex(MainTable.MainEntry.COLUMN_NAME_OPTION_SOUND));
 
+        cursor.close();
+
     }
 
     private void createPlayer(DBHelper dbHelper) {
